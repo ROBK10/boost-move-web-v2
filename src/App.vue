@@ -4,18 +4,22 @@
       <router-view />
     </div>
 
-    <BottomNav v-if="showNav" />
+    <BottomNav />
   </div>
 </template>
 
 <script setup>
-import { computed } from 'vue'
-import { useRoute } from 'vue-router'
+import { onMounted } from 'vue'
+import { useAppStore } from './stores/appStore'
 import BottomNav from './components/ui/BottomNav.vue'
 
-const route = useRoute()
-const showNav = computed(() => route.path !== '/login')
+const appStore = useAppStore()
+
+onMounted(() => {
+  appStore.loadFromStorage()
+})
 </script>
+
 
 <style scoped>
 .app {

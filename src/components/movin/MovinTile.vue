@@ -1,4 +1,7 @@
 <script setup>
+import BaseCard from '../ui/BaseCard.vue'
+import { RouterLink } from 'vue-router'
+
 defineProps({
   title: String,
   to: String,
@@ -19,6 +22,7 @@ defineProps({
   color: inherit;
   display: block;
 }
+
 .title {
   font-weight: 700;
 }

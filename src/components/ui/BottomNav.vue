@@ -1,5 +1,6 @@
 <template>
   <nav class="nav">
+    <RouterLink class="link" to="/hjem">Hjem</RouterLink>
     <RouterLink class="link" to="/movin">Movin</RouterLink>
     <RouterLink class="link" to="/min-helse">Min Helse</RouterLink>
     <RouterLink class="link" to="/chat">Chat</RouterLink>
