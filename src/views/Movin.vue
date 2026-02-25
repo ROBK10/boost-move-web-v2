@@ -1,41 +1,38 @@
 <script setup>
+import { useRoute } from 'vue-router'
 import { movinTiles } from '../data/movinTiles'
 import MovinTile from '../components/movin/MovinTile.vue'
+
+const route = useRoute()
+
+// Vi er på "Movin oversikt" kun når path er akkurat /movin
+const isMovinIndex = () => route.path === '/movin'
 </script>
 
 <template>
-  <div class="page">
-    <h1>Movin</h1>
+  <div>
+    <!-- Vis grid kun på /movin -->
+    <div v-if="isMovinIndex()">
+      <h1>Movin</h1>
 
-    <!-- Tiles / meny -->
-    <div class="grid">
-      <MovinTile
-        v-for="tile in movinTiles"
-        :key="tile.to"
-        :title="tile.title"
-        :to="tile.to"
-      />
+      <div class="grid">
+        <MovinTile
+          v-for="tile in movinTiles"
+          :key="tile.to"
+          :title="tile.title"
+          :to="tile.to"
+        />
+      </div>
     </div>
 
-    <!-- Her rendres undersidene: BoostMoment, KomIGang, osv -->
-    <div class="content">
-      <router-view />
-    </div>
+    <!-- Her rendres child routes: /movin/boost-moment osv -->
+    <router-view v-else />
   </div>
 </template>
 
 <style scoped>
-.page {
-  display: grid;
-  gap: 16px;
-}
-
 .grid {
   display: grid;
   gap: 12px;
-}
-
-.content {
-  margin-top: 8px;
 }
 </style>

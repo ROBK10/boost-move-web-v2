@@ -10,13 +10,21 @@
 
 <script setup>
 import { onMounted } from 'vue'
-import { useAppStore } from './stores/appStore'
+
 import BottomNav from './components/ui/BottomNav.vue'
 
+import { useAppStore } from './stores/appStore'
+import { useMinHelseStore } from './stores/minHelseStore'
+
 const appStore = useAppStore()
+const minHelseStore = useMinHelseStore()
 
 onMounted(() => {
+  // eksisterende app-state
   appStore.loadFromStorage()
+
+  // min helse historikk (localStorage -> pinia)
+  minHelseStore.hydrateFromLocalStorage()
 })
 </script>
 

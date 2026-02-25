@@ -1,37 +1,42 @@
 <script setup>
-import { watch } from 'vue'
+import { computed, ref } from 'vue'
+import BaseCard from '../ui/BaseCard.vue'
+import { useMinHelseStore } from '@/stores/minHelseStore'
 import { useAppStore } from '../../stores/appStore'
 
 const appStore = useAppStore()
-
-watch(score, (newScore) => {
-  appStore.setHealthScore(newScore)
-})
-
-import { computed } from 'vue'
-import BaseCard from '../ui/BaseCard.vue'
-import { ref } from 'vue'
-
+const minHelseStore = useMinHelseStore()
 const showTip = ref(false)
+
 const props = defineProps({
   sleep: [String, Number],     // timer
   food: [String, Number],      // 1-5 eller tekst
   workout: [String, Number],   // minutter
   weight: [String, Number],    // kg (V1: mest for “logg-bonus”)
-  movement: [String, Number],  // skritt (eller minutter)
+  movement: [String, Number],  // NB: <300 = minutter, >=300 = skritt (din regel)
 })
+
+function todayISO() {
+  return new Date().toISOString().slice(0, 10)
+}
 
 function toNumber(v) {
   const n = Number(String(v ?? '').replace(',', '.'))
   return Number.isFinite(n) ? n : null
 }
 
+function normalizeMovement(rawValue) {
+  const n = toNumber(rawValue)
+  if (n === null) return undefined
+  if (n > 0 && n < 300) return { raw: n, interpretedAs: 'minutes', minutes: n }
+  return { raw: n, interpretedAs: 'steps', steps: n }
+}
+
 function foodToScore(foodValue) {
-  // V1: aksepter 1-5 eller tekst som "bra/ok/dårlig"
   const n = toNumber(foodValue)
   if (n !== null) {
     const clamped = Math.min(5, Math.max(1, n))
-    return (clamped / 5) * 15 // maks 15 poeng
+    return (clamped / 5) * 15
   }
 
   const t = String(foodValue ?? '').toLowerCase().trim()
@@ -39,7 +44,7 @@ function foodToScore(foodValue) {
   if (t.includes('bra') || t.includes('sunn') || t.includes('god')) return 13
   if (t.includes('ok') || t.includes('grei')) return 9
   if (t.includes('dårlig') || t.includes('junk') || t.includes('pizza')) return 4
-  return 7 // “ukjent tekst” => midt på
+  return 7
 }
 
 const sleepPoints = computed(() => {
@@ -55,9 +60,7 @@ const movementPoints = computed(() => {
   const v = toNumber(props.movement)
   if (v === null) return 0
 
-  // V1-triks: hvis tallet er "lite", tolker vi det som minutter (f.eks 45)
-  // hvis det er "stort", tolker vi det som skritt (f.eks 8000)
-  const isMinutes = v <= 300
+  const isMinutes = v < 300 // NB: < 300 = minutter, >= 300 = skritt (din regel)
 
   if (isMinutes) {
     if (v >= 45) return 25
@@ -84,8 +87,6 @@ const workoutPoints = computed(() => {
 const foodPoints = computed(() => foodToScore(props.food))
 
 const weightPoints = computed(() => {
-  // V1: vekt påvirker ikke helse-score uten høyde/trend,
-  // men gir litt bonus for at du faktisk logger.
   const w = toNumber(props.weight)
   return w === null ? 0 : 5
 })
@@ -98,7 +99,7 @@ const rawTotal = computed(() =>
   weightPoints.value
 )
 
-// maks i denne modellen: 25 + 25 + 20 + 15 + 5 = 90, vi skalerer til 0-100
+// total max = 25 + 25 + 20 + 15 + 5 = 90
 const score = computed(() => Math.round((rawTotal.value / 90) * 100))
 
 const level = computed(() => {
@@ -106,6 +107,9 @@ const level = computed(() => {
   if (score.value >= 50) return 'Gul'
   return 'Rød'
 })
+
+// Hvis dere vil beholde dette for "header score" eller lignende:
+appStore.setHealthScore(score.value)
 
 const tips = {
   søvn: [
@@ -138,8 +142,7 @@ const tips = {
 function pickTip(category) {
   const list = tips[category] || []
   if (list.length === 0) return ''
-  const idx = Math.floor(Math.random() * list.length)
-  return list[idx]
+  return list[Math.floor(Math.random() * list.length)]
 }
 
 const nextTip = computed(() => {
@@ -149,10 +152,28 @@ const nextTip = computed(() => {
     { key: 'trening', pts: workoutPoints.value },
     { key: 'kost', pts: foodPoints.value },
   ]
-
   candidates.sort((a, b) => a.pts - b.pts)
   return pickTip(candidates[0].key)
 })
+
+/**
+ * ✅ Dette er “Steg 3”:
+ * Kalkulatoren lagrer entry i minHelseStore (som igjen lagrer til localStorage).
+ * Du kan trigge denne fra parent med ref.
+ */
+function saveEntry(date = todayISO()) {
+  minHelseStore.upsertEntry({
+    date,
+    sleepHours: toNumber(props.sleep) ?? undefined,
+    trainingMinutes: toNumber(props.workout) ?? undefined,
+    movementRaw: toNumber(props.movement) ?? undefined,
+    costScore: toNumber(props.food) ?? undefined, // hvis food er 1-5
+    weightLogged: toNumber(props.weight) !== null, // V1: true om noe er logget
+  })
+}
+
+// Gjør saveEntry tilgjengelig for parent (MinHelse.vue / MinHelseForm.vue)
+defineExpose({ saveEntry })
 </script>
 
 <template>
@@ -173,29 +194,25 @@ const nextTip = computed(() => {
     </div>
 
     <div style="margin-top: 14px;">
-  <button
-    v-if="!showTip"
-    @click="showTip = true"
-    class="suggest-btn"
-  >
-    Ønsker du et enkelt forslag for å øke helsa ytterligere?
-  </button>
+      <button v-if="!showTip" @click="showTip = true" class="suggest-btn">
+        Ønsker du et enkelt forslag for å øke helsa ytterligere?
+      </button>
 
-  <div v-else>
-    <div style="font-weight: 700;">Forslag:</div>
-    <div style="margin-top: 6px;">
-      {{ nextTip }}
+      <div v-else>
+        <div style="font-weight: 700;">Forslag:</div>
+        <div style="margin-top: 6px;">
+          {{ nextTip }}
+        </div>
+
+        <button
+          @click="showTip = false"
+          class="suggest-btn small"
+          style="margin-top: 10px;"
+        >
+          Skjul forslag
+        </button>
+      </div>
     </div>
-
-    <button
-      @click="showTip = false"
-      class="suggest-btn small"
-      style="margin-top: 10px;"
-    >
-      Skjul forslag
-    </button>
-  </div>
-</div>
 
     <div style="margin-top: 12px; font-size: 12px; opacity: .7;">
       *V1-estimat for motivasjon – ikke medisinsk råd.
@@ -212,7 +229,6 @@ const nextTip = computed(() => {
   font-weight: 600;
   cursor: pointer;
 }
-
 .suggest-btn.small {
   font-size: 13px;
   opacity: 0.8;

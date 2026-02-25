@@ -1,95 +1,68 @@
 <script setup>
-import { ref } from 'vue'
-import TrackCard from './TrackCard.vue'
-import MinHelseKalkulator from './MinHelseKalkulator.vue'
+import { computed } from 'vue'
+import { useMinHelseStore } from '@/stores/minHelseStore'
 
-const date = ref(new Date().toISOString().slice(0, 10))
+const store = useMinHelseStore()
 
-const sleep = ref('')
-const food = ref('')
-const workout = ref('')
-const weight = ref('')
-const movement = ref('')
+// V-model helpers
+const sleep = computed({
+  get: () => store.draft.sleepHours,
+  set: (v) => (store.draft.sleepHours = v === '' || v === null ? null : Number(v)),
+})
 
-const error = ref('')
+const food = computed({
+  get: () => store.draft.foodQuality,
+  set: (v) => (store.draft.foodQuality = v === '' || v === null ? null : Number(v)),
+})
 
-const emit = defineEmits(['save'])
+const workout = computed({
+  get: () => store.draft.trainingMinutes,
+  set: (v) => (store.draft.trainingMinutes = v === '' || v === null ? null : Number(v)),
+})
 
-function onSave() {
-  error.value = ''
+const weight = computed({
+  get: () => store.draft.weightKg,
+  set: (v) => (store.draft.weightKg = v === '' || v === null ? null : Number(v)),
+})
 
-  if (!date.value) {
-    error.value = 'Velg dato'
-    return
-  }
+const movement = computed({
+  get: () => store.draft.movementRaw,
+  set: (v) => (store.draft.movementRaw = v === '' || v === null ? null : Number(v)),
+})
 
-  // valider at minst én boks er fylt ut
-  if (!sleep.value && !food.value && !workout.value && !weight.value && !movement.value) {
-    error.value = 'Fyll inn minst én boks'
-    return
-  }
-
-  emit('save', {
-    id: crypto.randomUUID(),
-    date: date.value,
-    sleep: sleep.value,
-    food: food.value,
-    workout: workout.value,
-    weight: weight.value,
-    movement: movement.value,
-  })
-
-  sleep.value = ''
-  food.value = ''
-  workout.value = ''
-  weight.value = ''
-  movement.value = ''
-}
+const movementHint = computed(() => {
+  const n = Number(store.draft.movementRaw || 0)
+  if (!n) return ''
+  return n < 300 ? 'Tolkes som minutter' : 'Tolkes som skritt'
+})
 </script>
 
 <template>
-  <div>
-    <h2>Logg i dag</h2>
-
-    <div class="field">
-      <label>Dato</label>
-      <input v-model="date" type="date" />
+  <div style="display:grid; gap:12px;">
+    <div>
+      <label>Søvn (timer)</label>
+      <input v-model.number="sleep" type="number" step="0.5" min="0" />
     </div>
 
-    <p v-if="error" class="error">{{ error }}</p>
-
-    <div class="grid">
-      <TrackCard title="Daglig søvn" unit="timer" placeholder="f.eks 7.5" v-model="sleep" />
-      <TrackCard title="Daglig kost" unit="" placeholder="kort tekst" v-model="food" />
-      <TrackCard title="Hvor mye trener du?" unit="min" placeholder="f.eks 30" v-model="workout" />
-      <TrackCard title="Vekt" unit="kg" placeholder="f.eks 83.2" v-model="weight" />
-      <TrackCard title="Daglig bevegelse" unit="skritt/min" placeholder="f.eks 8000" v-model="movement" />
-    <MinHelseKalkulator
-  :sleep="sleep"
-  :food="food"
-  :workout="workout"
-  :weight="weight"
-  :movement="movement"
-/>
-    
+    <div>
+      <label>Kosthold (1-10)</label>
+      <input v-model.number="food" type="number" min="1" max="10" />
     </div>
 
-    <button class="btn" @click="onSave">Lagre</button>
+    <div>
+      <label>Trening (minutter)</label>
+      <input v-model.number="workout" type="number" min="0" step="5" />
+    </div>
+
+    <div>
+      <label>Vekt (kg)</label>
+      <input v-model.number="weight" type="number" min="0" step="0.1" />
+    </div>
+
+    <div>
+      <label>Bevegelse (min eller skritt)</label>
+      <input v-model.number="movement" type="number" min="0" />
+      <small style="opacity:.7;">{{ movementHint }}</small>
+    </div>
   </div>
 </template>
-
-.field { display: grid; gap: 6px; margin: 12px 0; }
-input { padding: 10px; border: 1px solid #e5e7eb; border-radius: 10px; }
-.btn { margin-top: 14px; padding: 10px 14px; border: 0; border-radius: 10px; font-weight: 700; }
-
-.grid {
-  display: grid;
-  gap: 12px;
-  margin: 12px 0;
-}
-
-.error {
-  color: #b91c1c;
-  font-weight: 600;
-  margin-top: 8px;
-}

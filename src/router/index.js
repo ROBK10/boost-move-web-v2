@@ -1,7 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
 import Hjem from '../views/Hjem.vue'
-import Movin from '../views/Movin.vue'
+import MovinLayout from '../views/MovinLayout.vue'
+import MovinHome from '../views/Movin.vue'
 import MinHelse from '../views/MinHelse.vue'
 import Chat from '../views/Chat.vue'
 import Profil from '../views/Profil.vue'
@@ -17,14 +18,16 @@ import Fordeler from '../views/movin/Fordeler.vue'
 const routes = [
   { path: '/', redirect: '/hjem' },
   { path: '/hjem', component: Hjem },
-
   { path: '/login', component: Login },
+  { path: '/min-helse', component: MinHelse },
+  { path: '/chat', component: Chat },
+  { path: '/profil', component: Profil },
 
   {
     path: '/movin',
-    component: Movin,
+    component: MovinLayout,
     children: [
-      { path: '', redirect: 'boost-moment' },
+      { path: '', component: MovinHome }, // /movin viser tiles
       { path: 'boost-moment', component: BoostMoment },
       { path: 'kom-i-gang', component: KomIGang },
       { path: 'programmer', component: Programmer },
@@ -33,10 +36,6 @@ const routes = [
       { path: 'fordeler', component: Fordeler },
     ],
   },
-
-  { path: '/min-helse', component: MinHelse },
-  { path: '/chat', component: Chat },
-  { path: '/profil', component: Profil },
 ]
 
 const router = createRouter({

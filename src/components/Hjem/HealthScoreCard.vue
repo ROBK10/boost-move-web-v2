@@ -1,13 +1,15 @@
 <script setup>
-// Midlertidig mock-verdi (senere kobles til ekte data)
-const score = 78
+const props = defineProps({
+  score: { type: Number, default: 0 },
+})
 </script>
-
 <template>
-  <div class="card">
-    <h2 class="title">Helse score</h2>
-    <div class="score">{{ score }}</div>
-  </div>
+   <RouterLink to="/min-helse" class="link">
+    <div class="card">
+      <h2 class="title">Helse score</h2>
+      <div class="score">{{ score }}</div>
+    </div>
+  </RouterLink>
 </template>
 
 <style scoped>

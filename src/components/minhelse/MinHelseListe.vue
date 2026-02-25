@@ -1,55 +1,53 @@
 <script setup>
-defineProps({
-  items: Array
-})
+import { computed } from 'vue'
+import { useMinHelseStore } from '@/stores/minHelseStore'
 
-const emit = defineEmits(['remove'])
+const store = useMinHelseStore()
+
+const items = computed(() => {
+  return store.entriesList.map((e) => {
+    let movementText = '-'
+    if (e.movement?.interpretedAs === 'minutes') movementText = `${e.movement.minutes} min`
+    if (e.movement?.interpretedAs === 'steps') movementText = `${e.movement.steps} skritt`
+
+    return {
+      date: e.date,
+      sleep: e.sleepHours ?? '-',
+      workout: e.trainingMinutes ?? '-',
+      movement: movementText,
+      score: e.totalScore,
+      color: e.color,
+    }
+  })
+})
 </script>
 
 <template>
   <div>
-    <h2>Historikk</h2>
+    <h2 style="margin: 0 0 10px 0;">Historikk</h2>
 
-    <p v-if="!items || items.length === 0">Ingen logg enda.</p>
+    <p v-if="items.length === 0" style="opacity:.7;">
+      Ingen logg enda.
+    </p>
 
     <ul v-else class="list">
-      <li v-for="item in items" :key="item.id" class="row">
-        <div><strong>{{ item.date }}</strong></div>
+      <li v-for="item in items" :key="item.date" class="row">
+        <div class="date">{{ item.date }}</div>
 
-        <div v-if="item.sleep">Søvn: {{ item.sleep }} t</div>
-        <div v-if="item.food">Kost: {{ item.food }}</div>
-        <div v-if="item.workout">Trening: {{ item.workout }}</div>
-        <div v-if="item.weight">Vekt: {{ item.weight }} kg</div>
-        <div v-if="item.movement">Bevegelse: {{ item.movement }}</div>
-
-        <button class="delete" @click="emit('remove', item.id)">Slett</button>
+        <div class="meta">
+          <div>Søvn: <strong>{{ item.sleep }}</strong> t</div>
+          <div>Trening: <strong>{{ item.workout }}</strong> min</div>
+          <div>Bevegelse: <strong>{{ item.movement }}</strong></div>
+          <div>Score: <strong>{{ item.score }}</strong> ({{ item.color }})</div>
+        </div>
       </li>
     </ul>
   </div>
 </template>
 
 <style scoped>
-.list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: grid;
-  gap: 10px;
-}
-
-.row {
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
-  padding: 12px;
-  background: white;
-}
-
-.delete {
-  margin-top: 10px;
-  padding: 8px 10px;
-  border: 1px solid #e5e7eb;
-  border-radius: 10px;
-  background: white;
-  font-weight: 600;
-}
+.list { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
+.row { border: 1px solid #e5e7eb; border-radius: 16px; padding: 12px; background: white; }
+.date { font-weight: 800; margin-bottom: 6px; }
+.meta { display: grid; gap: 4px; opacity: .9; }
 </style>
