@@ -1,33 +1,29 @@
 <template>
   <div class="app">
-    <div class="page">
+    <main class="page">
       <router-view />
-    </div>
+    </main>
 
     <BottomNav />
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { onMounted } from 'vue'
 
-import BottomNav from './components/ui/BottomNav.vue'
+import BottomNav from '@/components/ui/BottomNav.vue'
+import { useMinHelseStore } from '@/stores/minHelseStore'
+import { useBoostMomentStore } from '@/stores/boostMomentStore'
 
-import { useAppStore } from './stores/appStore'
-import { useMinHelseStore } from './stores/minHelseStore'
-
-const appStore = useAppStore()
 const minHelseStore = useMinHelseStore()
+const boostMomentStore = useBoostMomentStore()
 
 onMounted(() => {
-  // eksisterende app-state
-  appStore.loadFromStorage()
-
-  // min helse historikk (localStorage -> pinia)
+  // Hydrér domene-stores ved oppstart
   minHelseStore.hydrateFromLocalStorage()
+  boostMomentStore.hydrate()
 })
 </script>
-
 
 <style scoped>
 .app {
@@ -38,7 +34,7 @@ onMounted(() => {
 .page {
   padding: 16px;
   padding-bottom: 80px; /* plass til bottom nav */
-  max-width: 900px;     /* desktop-optimalisert */
+  max-width: 900px;
   margin: 0 auto;
 }
 </style>

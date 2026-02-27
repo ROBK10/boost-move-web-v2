@@ -1,5 +1,5 @@
 <script setup>
-import BaseCard from '../ui/BaseCard.vue'
+import BaseCard from '@/components/ui/BaseCard.vue'
 import { RouterLink } from 'vue-router'
 
 defineProps({

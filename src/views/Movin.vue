@@ -1,7 +1,7 @@
 <script setup>
 import { useRoute } from 'vue-router'
-import { movinTiles } from '../data/movinTiles'
-import MovinTile from '../components/movin/MovinTile.vue'
+import { movinTiles } from '@/data/movinTiles'
+import MovinTile from '@/components/movin/MovinTile.vue'
 
 const route = useRoute()
 

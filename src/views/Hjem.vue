@@ -1,8 +1,8 @@
 <script setup>
-import HealthScoreCard from '../components/Hjem/HealthScoreCard.vue'
-import BoostMomentCard from '../components/Hjem/BoostMomentCard.vue'
-import DagensInnsiktCard from '../components/Hjem/DagensInnsiktCard.vue'
-import KomIGangMentaltCard from '../components/Hjem/KomIGangMentaltCard.vue'
+import HealthScoreCard from '@/components/Hjem/HealthScoreCard.vue'
+import BoostMomentCard from '@/components/Hjem/BoostMomentCard.vue'
+import DagensInnsiktCard from '@/components/Hjem/DagensInnsiktCard.vue'
+import KomIGangMentaltCard from '@/components/Hjem/KomIGangMentaltCard.vue'
 </script>
 
 <template>

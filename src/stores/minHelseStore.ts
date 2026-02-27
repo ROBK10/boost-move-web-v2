@@ -1,4 +1,5 @@
 import { defineStore } from "pinia"
+import { storageService } from "@/services/storageService"
 
 type MovementInput = {
   raw: number
@@ -64,7 +65,7 @@ function scoreColor(total: number): DailyEntry["color"] {
   return "Rød"
 }
 
-// --- Scoring (V1) basert på logikken dere allerede bruker i kalkulatoren ---
+// --- Scoring (V1) ---
 function sleepPoints(h?: number) {
   if (h == null) return 0
   if (h >= 7 && h <= 9) return 25
@@ -100,7 +101,6 @@ function trainingPoints(min?: number) {
 
 function foodPoints(q?: number) {
   if (q == null) return 0
-  // 1-10 -> 0-15 poeng
   const clamped = Math.min(10, Math.max(1, q))
   return Math.round((clamped / 10) * 15)
 }
@@ -124,7 +124,12 @@ function computeScore(input: {
     food: foodPoints(input.foodQuality),
     weight: weightPoints(input.weightKg),
   }
-  const totalRaw = breakdown.sleep + breakdown.movement + breakdown.training + breakdown.food + breakdown.weight // max 90
+  const totalRaw =
+    breakdown.sleep +
+    breakdown.movement +
+    breakdown.training +
+    breakdown.food +
+    breakdown.weight // max 90
   const totalScore = Math.round((totalRaw / 90) * 100)
   return { totalScore, breakdown, color: scoreColor(totalScore) }
 }
@@ -139,6 +144,10 @@ function pad2(n: number) {
 
 function dateISOFromParts(year: number, month0: number, day: number) {
   return `${year}-${pad2(month0 + 1)}-${pad2(day)}`
+}
+
+type PersistedMinHelseV1 = {
+  entriesByDate: Record<string, DailyEntry>
 }
 
 export const useMinHelseStore = defineStore("minHelse", {
@@ -184,7 +193,6 @@ export const useMinHelseStore = defineStore("minHelse", {
       return list[0]?.totalScore ?? 0
     },
 
-    // Til spirometer: en array med 28-31 “streker” (tracked/ikke)
     monthStatus(state) {
       const now = new Date()
       const y = now.getFullYear()
@@ -203,9 +211,10 @@ export const useMinHelseStore = defineStore("minHelse", {
   actions: {
     hydrateFromLocalStorage() {
       if (this.hydrated) return
-      const data = safeParse<{ entriesByDate: Record<string, DailyEntry> }>(
-        localStorage.getItem(LS_KEY)
-      )
+
+      const raw = storageService.getString(LS_KEY)
+      const data = safeParse<PersistedMinHelseV1>(raw)
+
       if (data?.entriesByDate) this.entriesByDate = data.entriesByDate
       this.hydrated = true
 
@@ -216,19 +225,20 @@ export const useMinHelseStore = defineStore("minHelse", {
         this.draft.foodQuality = e.foodQuality ?? null
         this.draft.trainingMinutes = e.trainingMinutes ?? null
         this.draft.weightKg = e.weightKg ?? null
-        if (e.movement?.interpretedAs === "minutes") this.draft.movementRaw = e.movement.minutes ?? null
-        else if (e.movement?.interpretedAs === "steps") this.draft.movementRaw = e.movement.steps ?? null
+
+        if (e.movement?.interpretedAs === "minutes") {
+          this.draft.movementRaw = e.movement.minutes ?? null
+        } else if (e.movement?.interpretedAs === "steps") {
+          this.draft.movementRaw = e.movement.steps ?? null
+        }
       }
     },
 
     persistToLocalStorage() {
-      localStorage.setItem(
-        LS_KEY,
-        JSON.stringify({ entriesByDate: this.entriesByDate })
-      )
+      const payload: PersistedMinHelseV1 = { entriesByDate: this.entriesByDate }
+      storageService.setString(LS_KEY, JSON.stringify(payload))
     },
 
-    // “Lagre dagens tall” (1 per dato – upsert)
     saveToday(date = todayISO()) {
       const movement = normalizeMovement(this.draft.movementRaw)
       const score = computeScore({

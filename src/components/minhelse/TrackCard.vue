@@ -1,6 +1,6 @@
 
 <script setup>
-import BaseCard from '../ui/BaseCard.vue'
+import BaseCard from '@/components/ui/BaseCard.vue' 
 
 defineProps({
   title: String,
