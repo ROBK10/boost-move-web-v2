@@ -1,108 +1,147 @@
-<template>
-  <RouterLink to="/movin/boost-moment" class="link">
-    <div class="card">
-      
-      <div class="top">
-        <div class="kicker">Boost Moment</div>
-        <div class="icon">⚡</div>
-      </div>
+<script setup lang="ts">
+const emit = defineEmits<{
+  (e: "open"): void
+}>()
 
-      <div class="content">
-        <div class="streak">
-          {{ streak }}
-          <span class="unit">dager streak</span>
-        </div>
-
-        <div class="cta">
-          <span>Start dagens boost</span>
-          <span class="arrow">→</span>
-        </div>
-      </div>
-
-    </div>
-  </RouterLink>
-</template>
-
-<script setup>
-import { computed } from 'vue'
-import { useAppStore } from '@/stores/appStore'
-
-const appStore = useAppStore()
-
-const streak = computed(() => appStore.boostStreak)
-</script>
-
-<style scoped>
-.link {
-  text-decoration: none;
-  color: inherit;
-  display: block;
+function open() {
+  emit("open")
 }
 
+function onKeydown(e: KeyboardEvent) {
+  if (e.key === "Enter" || e.key === " ") {
+    e.preventDefault()
+    open()
+  }
+}
+
+// Placeholder-data (kan kobles på senere)
+const monthLabel = "MAI 2024"
+const total = 12
+</script>
+
+<template>
+  <section
+    class="card"
+    role="button"
+    tabindex="0"
+    @click="open"
+    @keydown="onKeydown"
+    aria-label="Åpne BoostMoment"
+  >
+    <div class="top">
+      <div class="title">
+        <span class="bolt" aria-hidden="true"></span>
+        <span>Boost</span>
+      </div>
+    </div>
+
+    <div class="stat">
+      <div class="month">{{ monthLabel }}</div>
+      <div class="row">
+        <div class="num">{{ total }}</div>
+        <div class="txt">totalt</div>
+      </div>
+    </div>
+
+    <div class="cta">
+      <span>Start nå</span>
+      <span class="arrow" aria-hidden="true"></span>
+    </div>
+  </section>
+</template>
+
+<style scoped>
 .card {
-  background: white;
-  padding: 20px;
-  border-radius: 24px;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.05);
-  display: grid;
-  gap: 12px;
-  transition: transform 0.15s ease;
+  background: #0b0f17;
+  color: white;
+  border-radius: 26px;
+  padding: 18px;
+  box-shadow: 0 16px 40px rgba(17, 24, 39, 0.18);
+  min-height: 175px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  cursor: pointer;
+  user-select: none;
+  transition: transform 120ms ease, box-shadow 120ms ease;
 }
 
 .card:hover {
-  transform: translateY(-2px);
+  transform: translateY(-1px);
+  box-shadow: 0 20px 50px rgba(17, 24, 39, 0.22);
 }
 
-.top {
-  display: flex;
-  justify-content: space-between;
+.card:focus-visible {
+  outline: 3px solid rgba(99, 102, 241, 0.25);
+  outline-offset: 4px;
+}
+
+.title {
+  display: inline-flex;
   align-items: center;
+  gap: 10px;
+  font-weight: 900;
+  font-size: 18px;
 }
 
-.kicker {
-  font-size: 12px;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: #6b7280;
-}
-
-.icon {
-  width: 40px;
-  height: 40px;
+.bolt {
+  width: 34px;
+  height: 34px;
   border-radius: 999px;
-  display: grid;
-  place-items: center;
-  background: #f3f4f6;
+  background: rgba(255, 255, 255, 0.12);
 }
 
-.content {
-  display: grid;
+.stat {
+  margin-top: 6px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 16px;
+  padding: 14px;
+}
+
+.month {
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.row {
+  margin-top: 6px;
+  display: flex;
+  align-items: baseline;
   gap: 8px;
 }
 
-.streak {
-  font-size: 28px;
-  font-weight: 800;
-  color: #111827;
+.num {
+  font-size: 36px;
+  font-weight: 900;
+  line-height: 1;
 }
 
-.unit {
-  display: block;
+.txt {
   font-size: 14px;
-  font-weight: 600;
-  color: #6b7280;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.70);
 }
 
 .cta {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-weight: 700;
+  margin-top: 12px;
+  border-radius: 999px;
+  padding: 14px 16px;
+  background: white;
   color: #111827;
+  font-weight: 900;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
 }
 
 .arrow {
-  opacity: 0.7;
+  width: 14px;
+  height: 14px;
+  border-right: 2px solid rgba(17, 24, 39, 0.8);
+  border-top: 2px solid rgba(17, 24, 39, 0.8);
+  transform: rotate(45deg);
 }
 </style>
