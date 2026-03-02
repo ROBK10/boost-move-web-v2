@@ -10,9 +10,10 @@ import Login from "@/views/Login.vue"
 
 import BoostMoment from "@/views/movin/BoostMoment.vue"
 import KomIGang from "@/views/movin/KomIGang.vue"
-import KomIGangDetail from "@/views/movin/KomIGangDetail.vue" // ✅ NY
+import KomIGangDetail from "@/views/movin/KomIGangDetail.vue"
 import Programmer from "@/views/movin/Programmer.vue"
 import KnowZone from "@/views/movin/KnowZone.vue"
+import KnowZoneDetail from "@/views/movin/KnowZoneDetail.vue" // ✅ NY
 import Maler from "@/views/movin/Maler.vue"
 import Fordeler from "@/views/movin/Fordeler.vue"
 
@@ -28,7 +29,7 @@ const routes = [
     path: "/movin",
     component: MovinLayout,
     children: [
-      { path: "", component: MovinHome }, // /movin viser tiles/grid
+      { path: "", component: MovinHome },
       { path: "boost-moment", component: BoostMoment },
 
       // ✅ Kom i gang liste + detail
@@ -36,7 +37,11 @@ const routes = [
       { path: "kom-i-gang/:id", component: KomIGangDetail },
 
       { path: "programmer", component: Programmer },
+
+      // ✅ KnowZone liste + detail (samme pattern)
       { path: "knowzone", component: KnowZone },
+      { path: "knowzone/:id", component: KnowZoneDetail },
+
       { path: "maler", component: Maler },
       { path: "fordeler", component: Fordeler },
     ],
