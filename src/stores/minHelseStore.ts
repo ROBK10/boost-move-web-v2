@@ -37,8 +37,8 @@ type DailyEntry = {
 
 const LS_KEY = "boostmove:minHelse:v1"
 
-function todayISO(d = new Date()) {
-  return d.toISOString().slice(0, 10)
+export function todayISO(d = new Date()) {
+  return dateISOFromParts(d.getFullYear(), d.getMonth(), d.getDate())
 }
 
 function safeParse<T>(s: string | null): T | null {
@@ -50,7 +50,7 @@ function safeParse<T>(s: string | null): T | null {
   }
 }
 
-function normalizeMovement(raw: unknown): MovementInput | undefined {
+export function normalizeMovement(raw: unknown): MovementInput | undefined {
   const n = Number(raw)
   if (!Number.isFinite(n) || n <= 0) return undefined
 

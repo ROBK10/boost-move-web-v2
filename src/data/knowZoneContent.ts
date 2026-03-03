@@ -70,7 +70,7 @@ export const knowZoneCategories: KnowZoneCategory[] = [
       {
         id: "kt-06",
         title: "Trening og sykdom",
-        subtitle: "Hva må jeg tenke på når er syk?",
+        subtitle: "Hva må jeg tenke på når jeg er syk?",
         sections: [{ h: "Intro", p: "Placeholder..." }],
       },
       {

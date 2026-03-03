@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { computed, reactive, ref } from "vue"
+import { computed, reactive } from "vue"
 import { useRouter } from "vue-router"
 import { getKnowZoneCategories } from "@/data/knowZoneContent"
+import BaseAccordion from "@/components/ui/BaseAccordion.vue"
 
 const router = useRouter()
 
@@ -11,11 +12,6 @@ function goBack() {
 
 const categories = computed(() => getKnowZoneCategories())
 
-const openCategoryId = ref<string | null>(null)
-
-function toggleCategory(id: string) {
-  openCategoryId.value = openCategoryId.value === id ? null : id
-}
 
 /**
  * V1 UI state (ikke lagring enda)
@@ -54,67 +50,45 @@ function openItem(id: string) {
         </div>
       </header>
 
-      <section class="list">
-        <div v-for="cat in categories" :key="cat.id" class="catBlock">
-          <!-- Category pill -->
-          <button class="catRow" type="button" @click="toggleCategory(cat.id)">
-            <div class="catTitle">{{ cat.title }}</div>
-            <span class="catChev" :class="{ open: openCategoryId === cat.id }" aria-hidden="true"></span>
-          </button>
+      <BaseAccordion :categories="categories" @item-click="openItem">
+        <template #default="{ item: it }">
+          <div class="left">
+            <div class="thumb">
+              <div v-if="checked[it.id]" class="check" aria-hidden="true"></div>
+              <div v-else class="ghostMark" aria-hidden="true"></div>
 
-          <!-- Items under category -->
-          <div v-if="openCategoryId === cat.id" class="items">
-            <button
-              v-for="it in cat.items"
-              :key="it.id"
-              class="itemRow"
-              type="button"
-              @click="openItem(it.id)"
-            >
-              <div class="left">
-                <div class="thumb">
-                  <div v-if="checked[it.id]" class="check" aria-hidden="true"></div>
-                  <div v-else class="ghostMark" aria-hidden="true"></div>
+              <div class="docPreview" aria-hidden="true"></div>
+            </div>
 
-                  <!-- Placeholder “document preview” -->
-                  <div class="docPreview" aria-hidden="true"></div>
-                </div>
-
-                <div class="text">
-                  <div class="rowTitle">{{ it.title }}</div>
-                  <div class="rowSub">{{ it.subtitle }}</div>
-                </div>
-              </div>
-
-              <div class="actions" @click.stop>
-                <button
-                  class="iconBtn"
-                  type="button"
-                  :class="{ on: !!starred[it.id] }"
-                  @click="toggleStar(it.id)"
-                  aria-label="Favoritt"
-                >
-                  <span class="star" aria-hidden="true"></span>
-                </button>
-
-                <button
-                  class="iconBtn"
-                  type="button"
-                  :class="{ on: !!downloaded[it.id] }"
-                  @click="toggleDownload(it.id)"
-                  aria-label="Last ned"
-                >
-                  <span class="dl" aria-hidden="true"></span>
-                </button>
-              </div>
-            </button>
-
-            <div v-if="cat.items.length === 0" class="empty">
-              Innhold kommer snart.
+            <div class="text">
+              <div class="rowTitle">{{ it.title }}</div>
+              <div class="rowSub">{{ it.subtitle }}</div>
             </div>
           </div>
-        </div>
-      </section>
+
+          <div class="actions" @click.stop>
+            <button
+              class="iconBtn"
+              type="button"
+              :class="{ on: !!starred[it.id] }"
+              @click="toggleStar(it.id)"
+              aria-label="Favoritt"
+            >
+              <span class="star" aria-hidden="true"></span>
+            </button>
+
+            <button
+              class="iconBtn"
+              type="button"
+              :class="{ on: !!downloaded[it.id] }"
+              @click="toggleDownload(it.id)"
+              aria-label="Last ned"
+            >
+              <span class="dl" aria-hidden="true"></span>
+            </button>
+          </div>
+        </template>
+      </BaseAccordion>
     </div>
   </div>
 </template>
@@ -154,55 +128,6 @@ function openItem(id: string) {
   color:rgba(17,24,39,0.45);
 }
 
-.list{ display:flex; flex-direction:column; gap:12px; }
-
-/* Category pill */
-.catRow{
-  width:100%;
-  border:none;
-  background: rgba(17,24,39,0.04);
-  border-radius:18px;
-  padding: 18px 16px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  cursor:pointer;
-}
-.catTitle{
-  font-size:18px;
-  font-weight:900;
-  color: rgba(17,24,39,0.92);
-}
-.catChev{
-  width:10px;height:10px;
-  border-right:2px solid rgba(17,24,39,0.45);
-  border-bottom:2px solid rgba(17,24,39,0.45);
-  transform: rotate(45deg);
-  transition: transform 120ms ease;
-}
-.catChev.open{ transform: rotate(-135deg); }
-
-/* Items list */
-.items{
-  margin-top: 10px;
-  display:flex;
-  flex-direction:column;
-  gap: 12px;
-}
-
-/* Item row - same spirit as KomIGand rows */
-.itemRow{
-  width:100%;
-  border:none;
-  background: rgba(17,24,39,0.04);
-  border-radius:18px;
-  padding:14px 12px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:10px;
-  cursor:pointer;
-}
 
 .left{ display:flex; align-items:center; gap:12px; min-width:0; }
 
@@ -331,10 +256,4 @@ function openItem(id: string) {
   border-bottom-color: rgba(16,185,129,0.95);
 }
 
-.empty{
-  font-size:14px;
-  font-weight:800;
-  color: rgba(17,24,39,0.45);
-  padding: 10px 4px 0;
-}
 </style>

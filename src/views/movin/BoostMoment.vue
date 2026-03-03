@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from "vue"
 import { useRouter } from "vue-router"
-import { useBoostMomentStore } from "@/stores/boostMomentStore"
+import { useBoostMomentStore } from "@/stores/BoostMomentStore"
 import { microActions } from "@/data/microActions"
 
 const router = useRouter()

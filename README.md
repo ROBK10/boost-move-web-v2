@@ -1,38 +1,61 @@
-# Boost-Move-Web
+# Boost Move Web
 
-This template should help get you started developing with Vue 3 in Vite.
+Boost Move Web er en Vue 3-applikasjon for helserelatert egenoppfølging. Løsningen inneholder blant annet:
 
-## Recommended IDE Setup
+- **Min Helse** med daglig registrering og scoreberegning.
+- **Movin**-seksjoner for programmer, maler, fordeler og kunnskapsinnhold.
+- **Boost Moment** med daglig streak-lagring.
 
-[VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+## Teknologistack
 
-## Recommended Browser Setup
+- Vue 3 + TypeScript
+- Vite
+- Pinia (state management)
+- Vue Router
+- Node-basert testsjekk for kritisk scoringslogikk
 
-- Chromium-based browsers (Chrome, Edge, Brave, etc.):
-  - [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd)
-  - [Turn on Custom Object Formatter in Chrome DevTools](http://bit.ly/object-formatters)
-- Firefox:
-  - [Vue.js devtools](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
-  - [Turn on Custom Object Formatter in Firefox DevTools](https://fxdx.dev/firefox-devtools-custom-object-formatters/)
+## Kom i gang
 
-## Customize configuration
-
-See [Vite Configuration Reference](https://vite.dev/config/).
-
-## Project Setup
+### Installer avhengigheter
 
 ```sh
 npm install
 ```
 
-### Compile and Hot-Reload for Development
+### Start utviklingsserver
 
 ```sh
 npm run dev
 ```
 
-### Compile and Minify for Production
+## Kjøring og kvalitetssikring
+
+### Bygg produksjonsversjon
 
 ```sh
 npm run build
 ```
+
+### Forhåndsvis bygget lokalt
+
+```sh
+npm run preview
+```
+
+### Kjør enhetstester
+
+```sh
+npm run test
+```
+
+## Prosjektstruktur (utdrag)
+
+- `src/views/` – sidevisninger og layouts
+- `src/components/` – gjenbrukbare UI- og domenekomponenter
+- `src/stores/` – Pinia stores (for eksempel Min Helse og Boost Moment)
+- `src/data/` – innholdsdata brukt i appen
+- `src/services/` – tekniske tjenester (for eksempel localStorage-wrapper)
+
+## Konfigurasjon
+
+For Vite-spesifikk konfigurasjon, se `vite.config.ts`.
