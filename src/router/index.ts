@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router"
+import { useAuthStore } from "@/stores/authStore"
 
 import Hjem from "@/views/Hjem.vue"
 import MovinLayout from "@/views/MovinLayout.vue"
@@ -27,8 +28,9 @@ import FordelerDetail from "@/views/movin/FordelerDetail.vue"
 
 const routes = [
   { path: "/", redirect: "/hjem" },
-  { path: "/hjem", component: Hjem },
   { path: "/login", component: Login },
+
+  { path: "/hjem", component: Hjem },
   { path: "/min-helse", component: MinHelse },
   { path: "/chat", component: Chat },
   { path: "/profil", component: Profil },
@@ -61,6 +63,33 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(),
   routes,
+})
+
+// ✅ Auth guard
+router.beforeEach(async (to) => {
+  const auth = useAuthStore()
+
+  // Tillat alltid login-siden
+  if (to.path === "/login") {
+    // Hvis vi allerede er innlogget, send til hjem
+    if (!auth.user && !auth.isLoading) {
+      await auth.me()
+    }
+    if (auth.isAuthed) return "/hjem"
+    return true
+  }
+
+  // Prøv å hente bruker én gang hvis vi ikke vet ennå
+  if (!auth.user && !auth.isLoading) {
+    await auth.me()
+  }
+
+  // Hvis ikke authed -> send til login
+  if (!auth.isAuthed) {
+    return "/login"
+  }
+
+  return true
 })
 
 export default router

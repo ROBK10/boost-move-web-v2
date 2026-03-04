@@ -3,18 +3,27 @@ import { computed, onMounted } from "vue"
 import { useRouter } from "vue-router"
 
 import { useMinHelseStore } from "@/stores/minHelseStore"
+import { testHealth } from "@/services/testApi"
 
 import HealthScoreCard from "@/components/Hjem/HealthScoreCard.vue"
 import BoostMomentCard from "@/components/Hjem/BoostMomentCard.vue"
 import KomIGangMentaltCard from "@/components/Hjem/KomIGangMentaltCard.vue"
 import DagensInnsiktCard from "@/components/Hjem/DagensInnsiktCard.vue"
+import TilbakemeldingCard from "@/components/Hjem/TilbakemeldingCard.vue"
 
 const router = useRouter()
 const minHelse = useMinHelseStore()
 
-onMounted(() => {
-  // Viktig: ellers er entriesByDate tom når Hjem laster første gang
+onMounted(async () => {
   minHelse.hydrateFromLocalStorage()
+
+  // 🔥 Test backend-tilkobling
+  try {
+    const res = await testHealth()
+    console.log("HEALTH:", res)
+  } catch (err) {
+    console.error("HEALTH ERROR:", err)
+  }
 })
 
 const PATHS = {
@@ -28,7 +37,6 @@ function go(path: string) {
   router.push(path)
 }
 
-// "YYYY-MM" for inneværende måned (samme som monthStatus-getteren bruker)
 const month = computed(() => {
   const now = new Date()
   const y = now.getFullYear()
@@ -36,24 +44,18 @@ const month = computed(() => {
   return `${y}-${m}`
 })
 
-/**
- * trackedMap: "YYYY-MM-DD" -> true/false
- * Vi bruker monthStatus-getteren din (tracked = !!entriesByDate[date])
- */
 const trackedMap = computed<Record<string, boolean>>(() => {
   const out: Record<string, boolean> = {}
-  for (const d of minHelse.monthStatus) {
-    out[d.date] = d.tracked
-  }
+  for (const d of minHelse.monthStatus) out[d.date] = d.tracked
   return out
 })
 
-/**
- * Score i midten:
- * - V1: bruk latestScore (siste lagrede dag)
- * - Alternativ: minHelse.todayEntry?.totalScore ?? minHelse.latestScore
- */
 const score = computed(() => minHelse.latestScore)
+
+// V1: bare logg i console ved submit (V2: send til API)
+function onFeedbackSubmit(payload: { month: string; selected: string[]; orgId?: string }) {
+  console.log("feedback submit", payload)
+}
 </script>
 
 <template>
@@ -70,7 +72,6 @@ const score = computed(() => minHelse.latestScore)
       </button>
     </header>
 
-    <!-- Spirometer: måned + trackedMap kommer fra MinHelse store -->
     <HealthScoreCard
       :score="score"
       :month="month"
@@ -84,6 +85,12 @@ const score = computed(() => minHelse.latestScore)
     </section>
 
     <DagensInnsiktCard @open="go(PATHS.knowZone)" />
+
+    <!-- NY: Lavterskel tilbakemelding til firma -->
+    <TilbakemeldingCard
+      orgId="demo-company"
+      @submit="onFeedbackSubmit"
+    />
   </div>
 </template>
 

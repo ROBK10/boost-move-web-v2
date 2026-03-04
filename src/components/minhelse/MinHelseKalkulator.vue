@@ -1,137 +1,272 @@
 <script setup lang="ts">
-import { computed, ref, watchEffect } from 'vue'
-import BaseCard from "@/components/ui/BaseCard.vue";
-import { useMinHelseStore } from '@/stores/minHelseStore'
+import { computed } from "vue"
+import { useMinHelseStore } from "@/stores/minHelseStore"
+import MinHelseInputRow from "@/components/minhelse/MinHelseInputRow.vue"
 
-const minHelseStore = useMinHelseStore()
-const showTip = ref(false)
+const store = useMinHelseStore()
 
-const props = defineProps<{
-  sleep?: string | number
-  food?: string | number
-  workout?: string | number
-  weight?: string | number
-  movement?: string | number
-}>()
-
-function toNumber(v: unknown): number | null {
-  const n = Number(String(v ?? '').replace(',', '.'))
-  return Number.isFinite(n) ? n : null
+function fmt1(v: number | null) {
+  if (v == null) return "–"
+  return Number.isFinite(v) ? String(v) : "–"
 }
 
-// Hold store.draft oppdatert fra props
-watchEffect(() => {
-  minHelseStore.draft.sleepHours = toNumber(props.sleep)
-  minHelseStore.draft.foodQuality = toNumber(props.food) // hvis du sender 1-10 her
-  minHelseStore.draft.trainingMinutes = toNumber(props.workout)
-  minHelseStore.draft.weightKg = toNumber(props.weight)
-  minHelseStore.draft.movementRaw = toNumber(props.movement)
+function fmtSleep(v: number | null) {
+  if (v == null) return "–"
+  return (Math.round(v * 2) / 2).toFixed(1)
+}
+
+const sleep = computed<number | null>({
+  get: () => store.draft.sleepHours,
+  set: (v) => (store.draft.sleepHours = v == null ? null : v),
 })
 
-// Score kommer fra store (samme logikk som ved lagring)
-const score = computed(() => minHelseStore.todayScore.totalScore)
-const level = computed(() => minHelseStore.todayScore.color)
-const breakdown = computed(() => minHelseStore.todayScore.breakdown)
+const food = computed<number | null>({
+  get: () => store.draft.foodQuality,
+  set: (v) => (store.draft.foodQuality = v == null ? null : Math.max(1, Math.min(10, v))),
+})
 
-const tips: Record<string, string[]> = {
-  søvn: [
-    'Prøv 30–60 min tidligere nedtrapping og sikt mot 7–9t.',
-    'Legg bort skjerm 30 min før du legger deg.',
-    'Kutt koffein etter kl 14 i dag.',
-  ],
-  bevegelse: [
-    'Ta 2 minutter bevegelse nå (reis deg, rull skuldre, gå litt).',
-    'Gå en veldig kort runde: 5 minutter er nok.',
-  ],
-  trening: [
-    'Start med 2 minutter – det teller.',
-    'Gjør 5 knebøy og 5 pushups – ferdig.',
-  ],
-  kost: [
-    'Legg til én frukt/grønnsak i dag.',
-    'Velg én ting: litt mer protein eller litt mindre snacks.',
-  ],
-}
+const training = computed<number | null>({
+  get: () => store.draft.trainingMinutes,
+  set: (v) => (store.draft.trainingMinutes = v == null ? null : Math.max(0, v)),
+})
 
-function pickTip(category: string) {
-  const list = tips[category] || []
-  if (list.length === 0) return ''
-  return list[Math.floor(Math.random() * list.length)]
-}
+const weight = computed<number | null>({
+  get: () => store.draft.weightKg,
+  set: (v) => (store.draft.weightKg = v == null ? null : Math.max(0, v)),
+})
 
-const nextTip = computed(() => {
-  const candidates = [
-    { key: 'søvn', pts: breakdown.value.sleep },
-    { key: 'bevegelse', pts: breakdown.value.movement },
-    { key: 'trening', pts: breakdown.value.training },
-    { key: 'kost', pts: breakdown.value.food },
+const movement = computed<number | null>({
+  get: () => store.draft.movementRaw,
+  set: (v) => (store.draft.movementRaw = v == null ? null : Math.max(0, v)),
+})
+
+// “5/5 fullført” logikk
+const filledCount = computed(() => {
+  const vals = [
+    sleep.value,
+    food.value,
+    training.value,
+    weight.value,
+    movement.value,
   ]
-  candidates.sort((a, b) => a.pts - b.pts)
-  return pickTip(candidates[0].key)
+  return vals.filter((v) => v != null && Number(v) > 0).length
 })
 
-function saveEntry() {
-  minHelseStore.saveToday()
-}
-
-defineExpose({ saveEntry })
+defineExpose({ filledCount })
 </script>
 
 <template>
-  <BaseCard>
-    <h3 style="margin: 0 0 10px 0;">Dagens score (V1)</h3>
-
-    <div style="display:flex; gap:12px; align-items:baseline;">
-      <div style="font-size: 34px; font-weight: 900;">{{ score }}</div>
-      <div style="font-weight: 800;">{{ level }}</div>
+  <div class="wrap">
+    <div class="head">
+      <div class="h">DAGENS REGISTRERING</div>
+      <div class="badge">{{ filledCount }}/5 fullført</div>
     </div>
 
-    <div style="margin-top: 10px; opacity: .85;">
-  Søvn: {{ breakdown.sleep }} / 25 ·
-  Bevegelse: {{ breakdown.movement }} / 25 ·
-  Trening: {{ breakdown.training }} / 20 ·
-  Kost: {{ breakdown.food }} / 15 ·
-  Vekt-logg: {{ breakdown.weight }} / 5
-</div>
+    <div class="grid">
+      <!-- Søvn (stepper) -->
+      <MinHelseInputRow
+        title="Søvn"
+        subtitle="TIMER"
+        rightMode="stepper"
+        :valueText="fmtSleep(sleep)"
+        iconBg="rgba(99,102,241,0.10)"
+        @minus="sleep = sleep == null ? 0 : Math.max(0, sleep - 0.5)"
+        @plus="sleep = sleep == null ? 0.5 : sleep + 0.5"
+      >
+        <template #icon>
+          <div class="moon" aria-hidden="true" />
+        </template>
+      </MinHelseInputRow>
 
-    <div style="margin-top: 14px;">
-      <button v-if="!showTip" @click="showTip = true" class="suggest-btn">
-        Ønsker du et enkelt forslag for å øke helsa ytterligere?
-      </button>
+      <!-- Kosthold -->
+      <MinHelseInputRow
+        title="Kosthold"
+        subtitle="KVALITET (1–10)"
+        rightMode="value"
+        :valueText="food == null ? '–' : String(food)"
+        iconBg="rgba(16,185,129,0.10)"
+        @click="food = food == null ? 5 : ((food % 10) + 1)"
+      >
+        <template #icon>
+          <div class="fork" aria-hidden="true" />
+        </template>
+      </MinHelseInputRow>
 
-      <div v-else>
-        <div style="font-weight: 700;">Forslag:</div>
-        <div style="margin-top: 6px;">
-          {{ nextTip }}
-        </div>
+      <!-- Trening -->
+      <MinHelseInputRow
+        title="Trening"
+        subtitle="MINUTTER"
+        rightMode="value"
+        :valueText="fmt1(training)"
+        iconBg="rgba(245,158,11,0.10)"
+        @click="training = training == null ? 30 : training + 10"
+      >
+        <template #icon>
+          <div class="bolt" aria-hidden="true" />
+        </template>
+      </MinHelseInputRow>
 
-        <button
-          @click="showTip = false"
-          class="suggest-btn small"
-          style="margin-top: 10px;"
-        >
-          Skjul forslag
-        </button>
-      </div>
+      <!-- Vekt -->
+      <MinHelseInputRow
+        title="Vekt"
+        subtitle="KG"
+        rightMode="value"
+        :valueText="weight == null ? '–' : weight.toFixed(1)"
+        iconBg="rgba(17,24,39,0.06)"
+        @click="weight = weight == null ? 80 : Math.round((weight + 0.1) * 10) / 10"
+      >
+        <template #icon>
+          <div class="scale" aria-hidden="true" />
+        </template>
+      </MinHelseInputRow>
+
+      <!-- Bevegelse -->
+      <MinHelseInputRow
+        title="Bevegelse"
+        subtitle="MIN / SKRITT"
+        rightMode="value"
+        :valueText="fmt1(movement)"
+        iconBg="rgba(59,130,246,0.10)"
+        @click="movement = movement == null ? 4000 : movement + 500"
+      >
+        <template #icon>
+          <div class="shoe" aria-hidden="true" />
+        </template>
+      </MinHelseInputRow>
     </div>
 
-    <div style="margin-top: 12px; font-size: 12px; opacity: .7;">
-      *V1-estimat for motivasjon – ikke medisinsk råd.
+    <div class="hint">
+      (V2) Klikk på et kort for å øke verdien raskt. Vi kan bytte til ekte input/stepper per kort etterpå.
     </div>
-  </BaseCard>
+  </div>
 </template>
 
 <style scoped>
-.suggest-btn {
-  padding: 10px 14px;
-  border-radius: 12px;
-  border: 1px solid #e5e7eb;
-  background: white;
-  font-weight: 600;
-  cursor: pointer;
+.wrap {
+  display: grid;
+  gap: 14px;
 }
-.suggest-btn.small {
-  font-size: 13px;
-  opacity: 0.8;
+
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 6px;
+}
+
+.h {
+  font-size: 14px;
+  font-weight: 950;
+  letter-spacing: 0.12em;
+  color: rgba(17, 24, 39, 0.35);
+}
+
+.badge {
+  padding: 10px 14px;
+  border-radius: 999px;
+  background: rgba(16, 185, 129, 0.10);
+  color: rgba(16, 185, 129, 0.95);
+  font-weight: 950;
+}
+
+.grid {
+  display: grid;
+  gap: 14px;
+}
+
+.hint {
+  font-size: 12px;
+  font-weight: 800;
+  color: rgba(17, 24, 39, 0.38);
+  margin-top: 2px;
+}
+
+/* simple icons (pure CSS) */
+.moon {
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  box-shadow: inset 10px 0 0 0 rgba(99,102,241,0.95);
+  position: relative;
+}
+.moon::after {
+  content: "";
+  position: absolute;
+  right: -2px;
+  top: 6px;
+  width: 16px;
+  height: 16px;
+  border-radius: 999px;
+  background: white;
+}
+
+.fork {
+  width: 26px;
+  height: 26px;
+  position: relative;
+}
+.fork::before {
+  content: "";
+  position: absolute;
+  left: 6px;
+  top: 2px;
+  width: 4px;
+  height: 22px;
+  background: rgba(16,185,129,0.95);
+  border-radius: 99px;
+}
+.fork::after {
+  content: "";
+  position: absolute;
+  left: 14px;
+  top: 2px;
+  width: 4px;
+  height: 22px;
+  background: rgba(16,185,129,0.95);
+  border-radius: 99px;
+}
+
+.bolt {
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 22px solid rgba(245,158,11,0.95);
+  transform: skewX(-12deg);
+}
+
+.scale {
+  width: 28px;
+  height: 22px;
+  border-radius: 8px;
+  background: rgba(17,24,39,0.28);
+  position: relative;
+}
+.scale::after {
+  content: "";
+  position: absolute;
+  left: 6px;
+  right: 6px;
+  top: 6px;
+  height: 2px;
+  background: rgba(255,255,255,0.7);
+}
+
+.shoe {
+  width: 28px;
+  height: 18px;
+  border-radius: 10px;
+  background: rgba(59,130,246,0.95);
+  position: relative;
+}
+.shoe::after {
+  content: "";
+  position: absolute;
+  left: 4px;
+  bottom: -4px;
+  width: 20px;
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(59,130,246,0.35);
 }
 </style>

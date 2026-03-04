@@ -5,9 +5,8 @@ import { useRoute, useRouter } from "vue-router"
 const route = useRoute()
 const router = useRouter()
 
-// ✅ Antatte ruter (justeres kun her hvis de hos deg heter noe annet)
 const R = {
-  hjem: "/",
+  hjem: "/hjem",          // ✅ endret fra "/"
   movin: "/movin",
   minHelse: "/min-helse",
   chat: "/chat",
@@ -17,7 +16,6 @@ const R = {
 const current = computed(() => route.path)
 
 function isActive(path: string) {
-  if (path === "/") return current.value === "/"
   return current.value === path || current.value.startsWith(path + "/")
 }
 
@@ -29,7 +27,6 @@ function go(path: string) {
 <template>
   <nav class="bottom-nav" aria-label="Bunnmeny">
     <div class="inner">
-      <!-- Hjem -->
       <button
         class="item"
         :class="{ active: isActive(R.hjem) }"
@@ -41,7 +38,6 @@ function go(path: string) {
         <span class="text">Hjem</span>
       </button>
 
-      <!-- Movin -->
       <button
         class="item"
         :class="{ active: isActive(R.movin) }"
@@ -53,7 +49,6 @@ function go(path: string) {
         <span class="text">Movin</span>
       </button>
 
-      <!-- Min Helse (senter) -->
       <button
         class="center"
         :class="{ active: isActive(R.minHelse) }"
@@ -65,7 +60,6 @@ function go(path: string) {
         <span class="center-text">Min Helse</span>
       </button>
 
-      <!-- Chat -->
       <button
         class="item"
         :class="{ active: isActive(R.chat) }"
@@ -77,7 +71,6 @@ function go(path: string) {
         <span class="text">Chat</span>
       </button>
 
-      <!-- Profil -->
       <button
         class="item"
         :class="{ active: isActive(R.profil) }"
@@ -93,6 +86,7 @@ function go(path: string) {
 </template>
 
 <style scoped>
+/* (samme CSS som du har nå) */
 .bottom-nav {
   position: fixed;
   left: 0;
@@ -116,7 +110,6 @@ function go(path: string) {
   gap: 10px;
 }
 
-/* Standard items */
 .item {
   appearance: none;
   border: none;
@@ -135,7 +128,6 @@ function go(path: string) {
   font-size: 11px;
 }
 
-/* Enkle, “proffe” ikoner uten emoji (CSS-shapes) */
 .icon {
   width: 18px;
   height: 18px;
@@ -143,7 +135,6 @@ function go(path: string) {
   background: rgba(17, 24, 39, 0.10);
 }
 
-/* små variasjoner så de ikke ser identiske ut */
 .icon.home { border-radius: 6px; }
 .icon.movin { border-radius: 999px; }
 .icon.chat { border-radius: 6px 6px 999px 6px; }
@@ -157,7 +148,6 @@ function go(path: string) {
   background: rgba(17, 24, 39, 0.92);
 }
 
-/* Senterknapp */
 .center {
   appearance: none;
   border: none;

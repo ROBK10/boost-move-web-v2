@@ -1,0 +1,16 @@
+services:
+  db:
+    image: postgres:16
+    container_name: boostmove_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: boostmove
+      POSTGRES_PASSWORD: boostmove
+      POSTGRES_DB: boostmove
+    ports:
+      - "5432:5432"
+    volumes:
+      - boostmove_pg:/var/lib/postgresql/data
+
+volumes:
+  boostmove_pg:

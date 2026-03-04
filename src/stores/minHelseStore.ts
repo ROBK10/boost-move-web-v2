@@ -1,14 +1,14 @@
 import { defineStore } from "pinia"
 import { storageService } from "@/services/storageService"
 
-type MovementInput = {
+export type MovementInput = {
   raw: number
   interpretedAs: "minutes" | "steps"
   minutes?: number
   steps?: number
 }
 
-type Draft = {
+export type Draft = {
   sleepHours: number | null
   foodQuality: number | null // 1-10
   trainingMinutes: number | null
@@ -16,7 +16,7 @@ type Draft = {
   movementRaw: number | null // <300=min, >=300=steps
 }
 
-type DailyEntry = {
+export type DailyEntry = {
   date: string // YYYY-MM-DD
   sleepHours?: number
   foodQuality?: number
@@ -37,8 +37,20 @@ type DailyEntry = {
 
 const LS_KEY = "boostmove:minHelse:v1"
 
+function pad2(n: number) {
+  return String(n).padStart(2, "0")
+}
+
+function dateISOFromParts(year: number, month0: number, day: number) {
+  return `${year}-${pad2(month0 + 1)}-${pad2(day)}`
+}
+
 export function todayISO(d = new Date()) {
   return dateISOFromParts(d.getFullYear(), d.getMonth(), d.getDate())
+}
+
+function daysInMonth(d = new Date()) {
+  return new Date(d.getFullYear(), d.getMonth() + 1, 0).getDate()
 }
 
 function safeParse<T>(s: string | null): T | null {
@@ -124,26 +136,16 @@ function computeScore(input: {
     food: foodPoints(input.foodQuality),
     weight: weightPoints(input.weightKg),
   }
+
   const totalRaw =
     breakdown.sleep +
     breakdown.movement +
     breakdown.training +
     breakdown.food +
     breakdown.weight // max 90
+
   const totalScore = Math.round((totalRaw / 90) * 100)
   return { totalScore, breakdown, color: scoreColor(totalScore) }
-}
-
-function daysInMonth(d = new Date()) {
-  return new Date(d.getFullYear(), d.getMonth() + 1, 0).getDate()
-}
-
-function pad2(n: number) {
-  return String(n).padStart(2, "0")
-}
-
-function dateISOFromParts(year: number, month0: number, day: number) {
-  return `${year}-${pad2(month0 + 1)}-${pad2(day)}`
 }
 
 type PersistedMinHelseV1 = {
