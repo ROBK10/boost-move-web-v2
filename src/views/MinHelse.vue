@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from "vue"
 import { useRouter } from "vue-router"
-import { getTodayCheckIn, saveCheckIn, type DailyCheckInInput } from "@/services/minhelseApi"
+import { getTodayCheckIn, saveCheckIn, type DailyCheckIn, type DailyCheckInInput } from "@/services/minhelseApi"
 import HealthScoreCard from "@/components/Hjem/HealthScoreCard.vue"
 
 type Step = 1 | 2 | 3 | 4
@@ -12,7 +12,7 @@ const router = useRouter()
 const isLoading = ref(false)
 const error = ref<string | null>(null)
 
-const todayCheckin = ref<any | null>(null)
+const todayCheckin = ref<DailyCheckIn | null>(null)
 
 const step = ref<Step>(1)
 const form = ref<DailyCheckInInput>({
