@@ -14,7 +14,15 @@ function onKeydown(e: KeyboardEvent) {
   }
 }
 
-const quote = '“Skap din egen fremtid i dag.”'
+const insights = [
+  "Små bevegelsespauser gjennom dagen gir bedre fokus og lavere stressnivå.",
+  "3 dype pust senker pulsen og hjelper kroppen å skifte til ro-modus.",
+  "Regelmessig bevegelse er den enkeltfaktoren som påvirker energinivået mest.",
+  "Det å stå opp i 2 minutter per time reduserer belastningen på ryggen markant.",
+  "Mental kapasitet henger direkte sammen med søvn, bevegelse og pauser.",
+]
+
+const insight = insights[Math.floor(Math.random() * insights.length)]
 </script>
 
 <template>
@@ -30,7 +38,7 @@ const quote = '“Skap din egen fremtid i dag.”'
 
     <div class="text">
       <div class="label">DAGENS INNSIKT</div>
-      <div class="quote">{{ quote }}</div>
+      <div class="quote">{{ insight }}</div>
     </div>
 
     <div class="chev" aria-hidden="true"></div>
