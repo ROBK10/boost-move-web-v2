@@ -14,9 +14,10 @@ function onKeydown(e: KeyboardEvent) {
   }
 }
 
-// Placeholder-data (kan kobles på senere)
-const monthLabel = "MAI 2024"
-const total = 12
+const props = defineProps<{
+  monthLabel: string
+  total: number
+}>()
 </script>
 
 <template>
@@ -31,7 +32,7 @@ const total = 12
     <div class="top">
       <div class="title">
         <span class="bolt" aria-hidden="true"></span>
-        <span>Boost</span>
+        <span>Boosts</span>
       </div>
     </div>
 
@@ -39,7 +40,7 @@ const total = 12
       <div class="month">{{ monthLabel }}</div>
       <div class="row">
         <div class="num">{{ total }}</div>
-        <div class="txt">totalt</div>
+        <div class="txt">innsjekk denne måneden</div>
       </div>
     </div>
 

@@ -2,17 +2,20 @@
 import { computed, onMounted, ref } from "vue"
 import { useRouter } from "vue-router"
 import { getTodayCheckIn, saveCheckIn, type DailyCheckIn, type DailyCheckInInput } from "@/services/minhelseApi"
+import { useMinHelseStore } from "@/stores/minHelseStore"
 import HealthScoreCard from "@/components/Hjem/HealthScoreCard.vue"
 
 type Step = 1 | 2 | 3 | 4
 type CapacityBand = "low" | "mid" | "high"
 
 const router = useRouter()
+const minHelseStore = useMinHelseStore()
 
 const isLoading = ref(false)
 const error = ref<string | null>(null)
 
 const todayCheckin = ref<DailyCheckIn | null>(null)
+const isEditing = ref(false)
 
 const step = ref<Step>(1)
 const form = ref<DailyCheckInInput>({
@@ -22,7 +25,7 @@ const form = ref<DailyCheckInInput>({
   movement: "litt",
 })
 
-const hasCheckedInToday = computed(() => !!todayCheckin.value)
+const hasCheckedInToday = computed(() => !!todayCheckin.value && !isEditing.value)
 const showSuggestion = ref(true)
 
 const month = computed(() => {
@@ -66,7 +69,7 @@ const suggestion = computed(() => {
         text: "Hvis du vil: hent litt vann + ta 3 rolige pust. Senk skuldrene og slipp kjeven.",
       },
       {
-        title: "Rask “kropp på”",
+        title: 'Rask "kropp på"',
         text: "Hvis du vil: rull skuldrene rolig i 20 sek. Pust ut litt lengre enn du puster inn.",
       },
     ],
@@ -77,7 +80,7 @@ const suggestion = computed(() => {
       },
       {
         title: "Stabilt nivå – hold det enkelt",
-        text: "Hvis du vil: 30 sek “shake out” (rist løs armer/ben) + en rolig utpust.",
+        text: 'Hvis du vil: 30 sek "shake out" (rist løs armer/ben) + en rolig utpust.',
       },
     ],
     high: [
@@ -129,7 +132,11 @@ async function loadToday() {
   try {
     const res = await getTodayCheckIn()
     todayCheckin.value = res.checkin
+    isEditing.value = false
     showSuggestion.value = true
+    if (res.checkin) {
+      minHelseStore.latestScore = res.checkin.capacityScore
+    }
   } catch (e: any) {
     error.value = e?.message || "Kunne ikke hente dagens innsjekk"
   } finally {
@@ -169,7 +176,10 @@ async function submit() {
   try {
     const res = await saveCheckIn(form.value)
     todayCheckin.value = res.checkin
+    isEditing.value = false
     showSuggestion.value = true
+    minHelseStore.latestScore = res.checkin.capacityScore
+    minHelseStore.fetchMonthCheckins(minHelseStore.monthKey).catch(() => {})
   } catch (e: any) {
     error.value = e?.message || "Kunne ikke lagre innsjekk"
   } finally {
@@ -186,6 +196,7 @@ function editToday() {
       movement: todayCheckin.value.movement,
     }
   }
+  isEditing.value = true
   startCheckIn()
 }
 
@@ -267,7 +278,7 @@ function goBoost() {
       </button>
     </template>
 
-    <!-- ✅ Wizard hvis ingen innsjekk i dag -->
+    <!-- ✅ Wizard hvis ingen innsjekk i dag, eller ved redigering -->
     <template v-else>
       <section class="card">
         <div class="wizardTop">

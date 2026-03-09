@@ -34,6 +34,13 @@ const score = computed(() => minHelse.latestScore)
 const userName = computed(() => auth.user?.name || "der")
 const month = computed(() => minHelse.monthKey)
 
+const boostMonthLabel = computed(() => {
+  const [yyyy, mm] = minHelse.monthKey.split("-")
+  const d = new Date(Number(yyyy), Number(mm) - 1, 1)
+  return d.toLocaleString("nb-NO", { month: "long", year: "numeric" }).toUpperCase()
+})
+const boostTotal = computed(() => minHelse.monthCheckins.length)
+
 // Mock team data (V1 visuell prototype)
 const teamScore = 72
 const teamTrend = "stable" as const
@@ -103,7 +110,7 @@ function onFeedbackSubmit(payload: { month: string; selected: string[]; orgId?: 
     />
 
     <section class="grid-two" aria-label="Snarveier">
-      <BoostMomentCard @open="go(PATHS.boostMoment)" />
+      <BoostMomentCard :monthLabel="boostMonthLabel" :total="boostTotal" @open="go(PATHS.boostMoment)" />
       <KomIGangMentaltCard @open="go(PATHS.komIGangMentalt)" />
     </section>
 
