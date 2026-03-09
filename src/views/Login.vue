@@ -42,9 +42,7 @@
         {{ auth.isLoading ? "Oppretter..." : "Lag demo-bruker (test)" }}
       </button>
 
-      <p class="hint">
-        Tips: Demo-bruker lages i databasen og du blir logget inn automatisk.
-      </p>
+      <p class="hint">Tips: Demo-bruker lages i databasen og du blir logget inn automatisk.</p>
     </div>
   </div>
 </template>
@@ -52,7 +50,7 @@
 <script setup lang="ts">
 import { ref } from "vue"
 import { useRouter } from "vue-router"
-import { useAuthStore } from "@/stores/authStore"
+import { useAuthStore } from "../stores/authStore"
 
 const router = useRouter()
 const auth = useAuthStore()
@@ -69,10 +67,14 @@ async function onCreateDemo() {
   // Lager en unik demo-epost hver gang
   const rand = Math.random().toString(16).slice(2, 8)
   const demoEmail = `demo-${rand}@boostmove.no`
-  const demoPass = "Test12345!"
-  const demoName = "Demo Bruker"
 
-  await auth.register(demoName, demoEmail, demoPass, "Demo Company")
+  await auth.register({
+    name: "Demo Bruker",
+    email: demoEmail,
+    password: "Test12345!",
+    companyName: "Demo Company",
+  })
+
   router.push("/")
 }
 </script>

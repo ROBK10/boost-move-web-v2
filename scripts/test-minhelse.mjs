@@ -17,6 +17,12 @@ try {
     platform: 'node',
     sourcemap: false,
     target: 'node20',
+    alias: {
+      '@/services/api': path.resolve(process.cwd(), 'src/services/api.ts'),
+    },
+    define: {
+      'import.meta.env.VITE_API_BASE': '"http://localhost:3001"',
+    },
   })
 
   const mod = await import(pathToFileURL(outfile).href)

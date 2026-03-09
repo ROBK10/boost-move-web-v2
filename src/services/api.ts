@@ -10,7 +10,19 @@ export async function apiFetch(path: string, options: RequestInit = {}) {
     },
   })
 
-  const data = await res.json().catch(() => ({}))
-  if (!res.ok) throw new Error(data?.error || "Request failed")
+  // les alltid text først
+  const text = await res.text()
+
+  let data: any = {}
+  try {
+    data = text ? JSON.parse(text) : {}
+  } catch {
+    data = {}
+  }
+
+  if (!res.ok) {
+    throw new Error(data?.error || data?.message || `HTTP ${res.status}`)
+  }
+
   return data
 }

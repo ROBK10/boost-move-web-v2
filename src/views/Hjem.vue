@@ -3,6 +3,8 @@ import { computed, onMounted } from "vue"
 import { useRouter } from "vue-router"
 
 import { useMinHelseStore } from "@/stores/minHelseStore"
+import { useAuthStore } from "@/stores/authStore"
+
 import { testHealth } from "@/services/testApi"
 
 import HealthScoreCard from "@/components/Hjem/HealthScoreCard.vue"
@@ -13,18 +15,7 @@ import TilbakemeldingCard from "@/components/Hjem/TilbakemeldingCard.vue"
 
 const router = useRouter()
 const minHelse = useMinHelseStore()
-
-onMounted(async () => {
-  minHelse.hydrateFromLocalStorage()
-
-  // 🔥 Test backend-tilkobling
-  try {
-    const res = await testHealth()
-    console.log("HEALTH:", res)
-  } catch (err) {
-    console.error("HEALTH ERROR:", err)
-  }
-})
+const auth = useAuthStore()
 
 const PATHS = {
   minHelse: "/min-helse",
@@ -37,22 +28,43 @@ function go(path: string) {
   router.push(path)
 }
 
-const month = computed(() => {
-  const now = new Date()
-  const y = now.getFullYear()
-  const m = String(now.getMonth() + 1).padStart(2, "0")
-  return `${y}-${m}`
-})
-
-const trackedMap = computed<Record<string, boolean>>(() => {
-  const out: Record<string, boolean> = {}
-  for (const d of minHelse.monthStatus) out[d.date] = d.tracked
-  return out
-})
-
 const score = computed(() => minHelse.latestScore)
+const userName = computed(() => auth.user?.name || "der")
+const month = computed(() => minHelse.monthKey)
 
-// V1: bare logg i console ved submit (V2: send til API)
+// Map av hvilke dager som er registrert (for ring/ticks)
+const trackedMap = computed(() => {
+  const map: Record<string, boolean> = {}
+
+  for (const c of minHelse.monthCheckins) {
+    const d = new Date(c.date).toISOString().slice(0, 10)
+    map[d] = true
+  }
+
+  return map
+})
+
+onMounted(async () => {
+  // hydrate lokal state
+  minHelse.hydrateFromLocalStorage?.()
+
+  // (valgfritt) test backend
+  try {
+    const res = await testHealth()
+    console.log("HEALTH:", res)
+  } catch (err) {
+    console.error("HEALTH ERROR:", err)
+  }
+
+  // hent månedens checkins via store
+  try {
+    await minHelse.fetchMonthCheckins(minHelse.monthKey)
+  } catch (err) {
+    console.error("MONTH CHECKINS ERROR:", err)
+  }
+})
+
+// V1: bare logg i console
 function onFeedbackSubmit(payload: { month: string; selected: string[]; orgId?: string }) {
   console.log("feedback submit", payload)
 }
@@ -62,7 +74,7 @@ function onFeedbackSubmit(payload: { month: string; selected: string[]; orgId?: 
   <div class="hjem">
     <header class="top">
       <div>
-        <h1 class="hello">Hei, Ola Nordmann</h1>
+        <h1 class="hello">Hei, {{ userName }}</h1>
         <p class="sub">Klar for en ny dag?</p>
       </div>
 
@@ -86,11 +98,7 @@ function onFeedbackSubmit(payload: { month: string; selected: string[]; orgId?: 
 
     <DagensInnsiktCard @open="go(PATHS.knowZone)" />
 
-    <!-- NY: Lavterskel tilbakemelding til firma -->
-    <TilbakemeldingCard
-      orgId="demo-company"
-      @submit="onFeedbackSubmit"
-    />
+    <TilbakemeldingCard orgId="demo-company" @submit="onFeedbackSubmit" />
   </div>
 </template>
 

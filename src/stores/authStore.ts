@@ -1,5 +1,5 @@
 import { defineStore } from "pinia"
-import { apiFetch } from "@/services/api"
+import { apiFetch } from "../services/api"
 
 export type AuthUser = {
   id: string
@@ -7,6 +7,13 @@ export type AuthUser = {
   name: string
   role: string
   companyId: string
+}
+
+type RegisterInput = {
+  name: string
+  email: string
+  password: string
+  companyName?: string
 }
 
 export const useAuthStore = defineStore("auth", {
@@ -27,7 +34,7 @@ export const useAuthStore = defineStore("auth", {
       try {
         const data = await apiFetch("/auth/me")
         this.user = data.user
-      } catch (e: any) {
+      } catch {
         this.user = null
       } finally {
         this.isLoading = false
@@ -51,13 +58,13 @@ export const useAuthStore = defineStore("auth", {
       }
     },
 
-    async register(name: string, email: string, password: string, companyName?: string) {
+    async register(input: RegisterInput) {
       this.isLoading = true
       this.error = null
       try {
         const data = await apiFetch("/auth/register", {
           method: "POST",
-          body: JSON.stringify({ name, email, password, companyName }),
+          body: JSON.stringify(input),
         })
         this.user = data.user
       } catch (e: any) {

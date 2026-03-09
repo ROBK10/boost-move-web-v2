@@ -1,9 +1,18 @@
 <script setup lang="ts">
-import { computed } from "vue"
+import { computed, watch } from "vue"
 import { useMinHelseStore } from "@/stores/minHelseStore"
 import MinHelseInputRow from "@/components/minhelse/MinHelseInputRow.vue"
 
 const store = useMinHelseStore()
+
+// ✅ Auto: hver endring i draft => oppdater latestScore + lagre i localStorage
+watch(
+  () => store.draft,
+  () => {
+    store.recalcScore()
+  },
+  { deep: true }
+)
 
 function fmt1(v: number | null) {
   if (v == null) return "–"
@@ -40,15 +49,9 @@ const movement = computed<number | null>({
   set: (v) => (store.draft.movementRaw = v == null ? null : Math.max(0, v)),
 })
 
-// “5/5 fullført” logikk
+// “5/5 fullført”
 const filledCount = computed(() => {
-  const vals = [
-    sleep.value,
-    food.value,
-    training.value,
-    weight.value,
-    movement.value,
-  ]
+  const vals = [sleep.value, food.value, training.value, weight.value, movement.value]
   return vals.filter((v) => v != null && Number(v) > 0).length
 })
 
@@ -63,7 +66,7 @@ defineExpose({ filledCount })
     </div>
 
     <div class="grid">
-      <!-- Søvn (stepper) -->
+      <!-- Søvn -->
       <MinHelseInputRow
         title="Søvn"
         subtitle="TIMER"
@@ -181,7 +184,6 @@ defineExpose({ filledCount })
   margin-top: 2px;
 }
 
-/* simple icons (pure CSS) */
 .moon {
   width: 28px;
   height: 28px;

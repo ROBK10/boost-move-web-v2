@@ -192,7 +192,7 @@ const ticks = computed<Tick[]>(() => {
   text-align: center;
 
   /* Optisk senter: litt opp */
-  transform: translateY(-12px);
+  transform: translateY(22px);
 }
 
 .score {
@@ -204,7 +204,7 @@ const ticks = computed<Tick[]>(() => {
 }
 
 .label {
-  margin-top: 8px;
+  margin-top: -130px;
   font-size: 12px;
   font-weight: 800;
   letter-spacing: 0.22em;

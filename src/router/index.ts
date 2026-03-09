@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router"
+import type { RouteRecordRaw } from "vue-router"
 import { useAuthStore } from "@/stores/authStore"
 
 import Hjem from "@/views/Hjem.vue"
@@ -26,7 +27,7 @@ import MalerDetail from "@/views/movin/MalerDetail.vue"
 import Fordeler from "@/views/movin/Fordeler.vue"
 import FordelerDetail from "@/views/movin/FordelerDetail.vue"
 
-const routes = [
+const routes: RouteRecordRaw[] = [
   { path: "/", redirect: "/hjem" },
   { path: "/login", component: Login },
 
