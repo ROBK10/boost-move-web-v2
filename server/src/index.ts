@@ -5,6 +5,7 @@ import cookieParser from "cookie-parser"
 
 import authRouter from "./routes/auth"
 import minHelseRoutes from "./routes/minhelse"
+import boostsRoutes from "./routes/boosts"
 import { attachUser } from "./middleware/attachUser"
 
 const app = express()
@@ -30,6 +31,7 @@ app.get("/health", (_req, res) => {
 // routes
 app.use("/auth", authRouter)
 app.use("/minhelse", minHelseRoutes)
+app.use("/boosts", boostsRoutes)
 
 const port = Number(process.env.PORT || 3001)
 

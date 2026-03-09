@@ -4,6 +4,7 @@ import { useRouter } from "vue-router"
 
 import { useMinHelseStore } from "@/stores/minHelseStore"
 import { useAuthStore } from "@/stores/authStore"
+import { useBoostStore } from "@/stores/boostStore"
 
 import { testHealth } from "@/services/testApi"
 
@@ -17,6 +18,7 @@ import TilbakemeldingCard from "@/components/Hjem/TilbakemeldingCard.vue"
 const router = useRouter()
 const minHelse = useMinHelseStore()
 const auth = useAuthStore()
+const boost = useBoostStore()
 
 const PATHS = {
   minHelse: "/min-helse",
@@ -35,11 +37,11 @@ const userName = computed(() => auth.user?.name || "der")
 const month = computed(() => minHelse.monthKey)
 
 const boostMonthLabel = computed(() => {
-  const [yyyy, mm] = minHelse.monthKey.split("-")
+  const [yyyy, mm] = boost.monthKey.split("-")
   const d = new Date(Number(yyyy), Number(mm) - 1, 1)
   return d.toLocaleString("nb-NO", { month: "long", year: "numeric" }).toUpperCase()
 })
-const boostTotal = computed(() => minHelse.monthCheckins.length)
+const boostTotal = computed(() => boost.monthTotal)
 
 // Mock team data (V1 visuell prototype)
 const teamScore = 72
@@ -71,6 +73,12 @@ onMounted(async () => {
     await minHelse.fetchMonthCheckins(minHelse.monthKey)
   } catch (err) {
     console.error("MONTH CHECKINS ERROR:", err)
+  }
+
+  try {
+    await boost.fetchMonthBoosts(boost.monthKey)
+  } catch (err) {
+    console.error("BOOST MONTH ERROR:", err)
   }
 })
 

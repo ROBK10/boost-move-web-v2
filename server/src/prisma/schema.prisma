@@ -30,6 +30,7 @@ model User {
 
   checkIns        DailyCheckIn[]
   minHelseCheckins MinHelseCheckin[]
+  boostEntries    BoostEntry[]
 }
 
 model DailyCheckIn {
@@ -57,6 +58,20 @@ model DailyCheckIn {
 
   @@unique([userId, date])
   @@index([userId, date])
+}
+
+model BoostEntry {
+  id              String   @id @default(cuid())
+
+  userId          String
+  user            User     @relation(fields: [userId], references: [id])
+
+  type            String
+  durationSeconds Int
+
+  completedAt     DateTime @default(now())
+
+  @@index([userId, completedAt])
 }
 
 model MinHelseCheckin {
