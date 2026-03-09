@@ -3,6 +3,24 @@ const emit = defineEmits<{
   (e: "open"): void
 }>()
 
+const props = withDefaults(
+  defineProps<{
+    score: number
+    trend?: "up" | "down" | "stable"
+    sleepTrend?: "up" | "down" | "stable"
+    movementTrend?: "up" | "down" | "stable"
+    energyTrend?: "up" | "down" | "stable"
+    title?: string
+  }>(),
+  {
+    trend: "stable",
+    sleepTrend: "down",
+    movementTrend: "stable",
+    energyTrend: "up",
+    title: "Lagets kapasitet",
+  }
+)
+
 function open() {
   emit("open")
 }
@@ -13,17 +31,6 @@ function onKeydown(e: KeyboardEvent) {
     open()
   }
 }
-
-// Placeholder-data (kobles til backend senere)
-const title = "Lagets kapasitet"
-const todayLabel = "I DAG"
-const capacity = 72
-const trend: "up" | "down" | "stable" = "stable"
-
-// drivere (placeholder)
-const sleepTrend: "up" | "down" | "stable" = "down"
-const movementTrend: "up" | "down" | "stable" = "stable"
-const energyTrend: "up" | "down" | "stable" = "up"
 
 function arrow(v: "up" | "down" | "stable") {
   if (v === "up") return "↑"
@@ -40,8 +47,8 @@ function trendText(v: "up" | "down" | "stable") {
 function moodText(score: number) {
   if (score >= 75) return "Laget virker i flyt i dag."
   if (score >= 60) return "En jevn og stabil dag for laget."
-  if (score >= 45) return "Laget virker litt slitent – små pauser hjelper."
-  return "Tung dag – hold det enkelt og rolig."
+  if (score >= 45) return "Laget virker litt slitent i dag."
+  return "En tung dag for laget."
 }
 </script>
 
@@ -52,224 +59,191 @@ function moodText(score: number) {
     tabindex="0"
     @click="open"
     @keydown="onKeydown"
-    aria-label="Åpne Team Status"
+    aria-label="Åpne Lagets kapasitet"
   >
-    <div class="top">
-      <div class="title">
-        <span class="group" aria-hidden="true"></span>
-        <span>{{ title }}</span>
-      </div>
+    <div class="head">
+      <div class="eyebrow">{{ title }}</div>
+      <div class="chev" aria-hidden="true"></div>
     </div>
 
-    <div class="stat">
-      <div class="month">{{ todayLabel }}</div>
+    <div class="main">
+      <div class="score">{{ score }}</div>
 
-      <div class="row">
-        <div class="num">{{ capacity }}</div>
-        <div class="meta">
-          <div class="trend">
-            <span class="arr">{{ arrow(trend) }}</span>
-            <span>{{ trendText(trend) }}</span>
-          </div>
-          <div class="mini">{{ moodText(capacity) }}</div>
+      <div class="meta">
+        <div class="trendLine">
+          <span class="trendIcon">{{ arrow(trend) }}</span>
+          <span class="trendText">{{ trendText(trend) }}</span>
         </div>
-      </div>
 
-      <div class="drivers">
-        <div class="pill">
-          <span class="k">Søvn</span>
-          <span class="v">{{ arrow(sleepTrend) }}</span>
-        </div>
-        <div class="pill">
-          <span class="k">Bevegelse</span>
-          <span class="v">{{ arrow(movementTrend) }}</span>
-        </div>
-        <div class="pill">
-          <span class="k">Energi</span>
-          <span class="v">{{ arrow(energyTrend) }}</span>
+        <div class="mood">
+          {{ moodText(score) }}
         </div>
       </div>
     </div>
 
-    <div class="cta">
-      <span>Se status</span>
-      <span class="arrow" aria-hidden="true"></span>
+    <div class="drivers">
+      <div class="driver">
+        <span class="driverLabel">Søvn</span>
+        <span class="driverValue">{{ arrow(sleepTrend) }}</span>
+      </div>
+
+      <div class="driver">
+        <span class="driverLabel">Bevegelse</span>
+        <span class="driverValue">{{ arrow(movementTrend) }}</span>
+      </div>
+
+      <div class="driver">
+        <span class="driverLabel">Energi</span>
+        <span class="driverValue">{{ arrow(energyTrend) }}</span>
+      </div>
     </div>
   </section>
 </template>
 
 <style scoped>
-/* V2: samme “premium card”-følelse som Boost */
 .card {
-  background: #ffffff;
-  color: #111827;
-  border-radius: 26px;
-  padding: 18px;
-  box-shadow: 0 16px 40px rgba(17, 24, 39, 0.10);
-  min-height: 175px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  background: white;
+  border-radius: 28px;
+  padding: 20px 18px 18px;
+  box-shadow: 0 12px 36px rgba(20, 20, 20, 0.06);
+  border: 1px solid rgba(17, 24, 39, 0.06);
   cursor: pointer;
   user-select: none;
   transition: transform 120ms ease, box-shadow 120ms ease;
-  border: 1px solid rgba(17, 24, 39, 0.08);
 }
 
 .card:hover {
   transform: translateY(-1px);
-  box-shadow: 0 20px 50px rgba(17, 24, 39, 0.14);
+  box-shadow: 0 16px 42px rgba(20, 20, 20, 0.08);
 }
 
 .card:focus-visible {
-  outline: 3px solid rgba(99, 102, 241, 0.25);
+  outline: 3px solid rgba(99, 102, 241, 0.22);
   outline-offset: 4px;
 }
 
-.title {
-  display: inline-flex;
+.head {
+  display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 10px;
-  font-weight: 900;
-  font-size: 18px;
 }
 
-/* ikon-boble */
-.group {
-  width: 34px;
-  height: 34px;
-  border-radius: 999px;
-  background: rgba(17, 24, 39, 0.06);
-  position: relative;
-}
-.group::before,
-.group::after {
-  content: "";
-  position: absolute;
-  top: 10px;
-  width: 8px;
-  height: 8px;
-  border-radius: 999px;
-  background: rgba(17, 24, 39, 0.38);
-}
-.group::before {
-  left: 10px;
-}
-.group::after {
-  right: 10px;
-}
-.group {
-  box-shadow: inset 0 0 0 1px rgba(17, 24, 39, 0.06);
-}
-
-.stat {
-  margin-top: 6px;
-  background: rgba(17, 24, 39, 0.03);
-  border-radius: 16px;
-  padding: 14px;
-}
-
-.month {
+.eyebrow {
   font-size: 12px;
   font-weight: 900;
-  letter-spacing: 0.12em;
-  color: rgba(17, 24, 39, 0.45);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(17, 24, 39, 0.42);
 }
 
-.row {
-  margin-top: 6px;
+.chev {
+  width: 10px;
+  height: 10px;
+  border-right: 2px solid rgba(17, 24, 39, 0.24);
+  border-top: 2px solid rgba(17, 24, 39, 0.24);
+  transform: rotate(45deg);
+  flex-shrink: 0;
+}
+
+.main {
+  margin-top: 14px;
   display: flex;
-  align-items: flex-start;
-  gap: 12px;
+  align-items: flex-end;
+  gap: 14px;
 }
 
-.num {
-  font-size: 40px;
+.score {
+  font-size: 54px;
+  line-height: 0.95;
   font-weight: 900;
-  line-height: 1;
-  letter-spacing: -0.02em;
-  min-width: 58px;
+  letter-spacing: -0.04em;
+  color: #111827;
 }
 
 .meta {
-  display: grid;
-  gap: 6px;
-  padding-top: 2px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-bottom: 4px;
 }
 
-.trend {
+.trendLine {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  font-weight: 900;
-  font-size: 14px;
-  color: rgba(17, 24, 39, 0.85);
 }
 
-.arr {
-  width: 26px;
-  height: 26px;
+.trendIcon {
+  width: 24px;
+  height: 24px;
   border-radius: 999px;
-  background: rgba(17, 24, 39, 0.06);
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  background: rgba(17, 24, 39, 0.06);
+  font-size: 13px;
   font-weight: 900;
+  color: rgba(17, 24, 39, 0.8);
 }
 
-.mini {
-  font-size: 13px;
+.trendText {
+  font-size: 14px;
+  font-weight: 900;
+  color: rgba(17, 24, 39, 0.82);
+}
+
+.mood {
+  font-size: 14px;
   font-weight: 700;
-  color: rgba(17, 24, 39, 0.55);
   line-height: 1.25;
+  color: rgba(17, 24, 39, 0.56);
+  max-width: 240px;
 }
 
 .drivers {
-  margin-top: 12px;
-  display: flex;
+  margin-top: 16px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   gap: 10px;
-  flex-wrap: wrap;
 }
 
-.pill {
-  border-radius: 999px;
-  padding: 10px 12px;
-  background: rgba(17, 24, 39, 0.06);
-  display: inline-flex;
+.driver {
+  background: rgba(17, 24, 39, 0.04);
+  border-radius: 16px;
+  padding: 12px 12px;
+  display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 8px;
-  font-weight: 900;
-  font-size: 12px;
-  color: rgba(17, 24, 39, 0.85);
 }
 
-.k {
-  letter-spacing: 0.06em;
+.driverLabel {
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 0.04em;
   color: rgba(17, 24, 39, 0.55);
 }
 
-.v {
-  font-size: 14px;
-}
-
-.cta {
-  margin-top: 12px;
-  border-radius: 999px;
-  padding: 14px 16px;
-  background: #0b0f17;
-  color: #ffffff;
+.driverValue {
+  font-size: 15px;
   font-weight: 900;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
+  color: rgba(17, 24, 39, 0.82);
 }
 
-.arrow {
-  width: 14px;
-  height: 14px;
-  border-right: 2px solid rgba(255, 255, 255, 0.85);
-  border-top: 2px solid rgba(255, 255, 255, 0.85);
-  transform: rotate(45deg);
+@media (max-width: 420px) {
+  .main {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .meta {
+    padding-bottom: 0;
+  }
+
+  .mood {
+    max-width: none;
+  }
 }
 </style>

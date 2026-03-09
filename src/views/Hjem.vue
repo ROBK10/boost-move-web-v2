@@ -8,6 +8,7 @@ import { useAuthStore } from "@/stores/authStore"
 import { testHealth } from "@/services/testApi"
 
 import HealthScoreCard from "@/components/Hjem/HealthScoreCard.vue"
+import TeamStatusCard from "@/components/Hjem/TeamStatusCard.vue"
 import BoostMomentCard from "@/components/Hjem/BoostMomentCard.vue"
 import KomIGangMentaltCard from "@/components/Hjem/KomIGangMentaltCard.vue"
 import DagensInnsiktCard from "@/components/Hjem/DagensInnsiktCard.vue"
@@ -22,6 +23,7 @@ const PATHS = {
   boostMoment: "/movin/boost-moment",
   komIGangMentalt: "/movin/kom-i-gang",
   knowZone: "/movin/knowzone",
+  teamStatus: "/min-helse",
 }
 
 function go(path: string) {
@@ -32,7 +34,13 @@ const score = computed(() => minHelse.latestScore)
 const userName = computed(() => auth.user?.name || "der")
 const month = computed(() => minHelse.monthKey)
 
-// Map av hvilke dager som er registrert (for ring/ticks)
+// Mock team data (V1 visuell prototype)
+const teamScore = 72
+const teamTrend = "stable" as const
+const teamSleepTrend = "down" as const
+const teamMovementTrend = "stable" as const
+const teamEnergyTrend = "up" as const
+
 const trackedMap = computed(() => {
   const map: Record<string, boolean> = {}
 
@@ -45,10 +53,6 @@ const trackedMap = computed(() => {
 })
 
 onMounted(async () => {
-  // hydrate lokal state
-  minHelse.hydrateFromLocalStorage?.()
-
-  // (valgfritt) test backend
   try {
     const res = await testHealth()
     console.log("HEALTH:", res)
@@ -56,7 +60,6 @@ onMounted(async () => {
     console.error("HEALTH ERROR:", err)
   }
 
-  // hent månedens checkins via store
   try {
     await minHelse.fetchMonthCheckins(minHelse.monthKey)
   } catch (err) {
@@ -64,7 +67,6 @@ onMounted(async () => {
   }
 })
 
-// V1: bare logg i console
 function onFeedbackSubmit(payload: { month: string; selected: string[]; orgId?: string }) {
   console.log("feedback submit", payload)
 }
@@ -89,6 +91,15 @@ function onFeedbackSubmit(payload: { month: string; selected: string[]; orgId?: 
       :month="month"
       :trackedMap="trackedMap"
       @open="go(PATHS.minHelse)"
+    />
+
+    <TeamStatusCard
+      :score="teamScore"
+      :trend="teamTrend"
+      :sleepTrend="teamSleepTrend"
+      :movementTrend="teamMovementTrend"
+      :energyTrend="teamEnergyTrend"
+      @open="go(PATHS.teamStatus)"
     />
 
     <section class="grid-two" aria-label="Snarveier">
