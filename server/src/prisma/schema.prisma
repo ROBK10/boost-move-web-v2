@@ -31,6 +31,34 @@ model User {
   checkIns        DailyCheckIn[]
   minHelseCheckins MinHelseCheckin[]
   boostEntries    BoostEntry[]
+  messages        Message[]
+  sentDMs         DirectMessage[] @relation("SentMessages")
+  receivedDMs     DirectMessage[] @relation("ReceivedMessages")
+}
+
+model Message {
+  id        String   @id @default(cuid())
+  userId    String
+  companyId String
+  text      String
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@index([companyId, createdAt])
+}
+
+model DirectMessage {
+  id         String   @id @default(cuid())
+  senderId   String
+  receiverId String
+  text       String
+  createdAt  DateTime @default(now())
+
+  sender     User     @relation("SentMessages", fields: [senderId], references: [id])
+  receiver   User     @relation("ReceivedMessages", fields: [receiverId], references: [id])
+
+  @@index([senderId, receiverId])
 }
 
 model DailyCheckIn {

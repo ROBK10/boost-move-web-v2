@@ -7,6 +7,7 @@ import authRouter from "./routes/auth"
 import minHelseRoutes from "./routes/minhelse"
 import boostsRoutes from "./routes/boosts"
 import teamRoutes from "./routes/team"
+import chatRoutes from "./routes/chat"
 import { attachUser } from "./middleware/attachUser"
 
 const app = express()
@@ -34,6 +35,7 @@ app.use("/auth", authRouter)
 app.use("/minhelse", minHelseRoutes)
 app.use("/boosts", boostsRoutes)
 app.use("/team", teamRoutes)
+app.use("/", chatRoutes)
 
 const port = Number(process.env.PORT || 3001)
 
