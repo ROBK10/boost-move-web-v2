@@ -2,13 +2,20 @@
 import { ref, computed, onMounted } from "vue"
 import { useRouter } from "vue-router"
 import { useBoostMomentStore } from "@/stores/BoostMomentStore"
+import { useBoostStore } from "@/stores/boostStore"
 import { microActions } from "@/data/microActions"
 
 const router = useRouter()
 const boostMomentStore = useBoostMomentStore()
+const boostStore = useBoostStore()
 
-onMounted(() => {
+onMounted(async () => {
   boostMomentStore.hydrate()
+  try {
+    await boostStore.fetchMonthBoosts(boostStore.monthKey)
+  } catch {
+    // non-critical
+  }
 })
 
 type Step = "energy" | "action" | "done"
@@ -17,7 +24,7 @@ const step = ref<Step>("energy")
 const energy = ref<number>(5)
 const action = ref<string>(microActions[0] ?? "Ta 3 dype pust")
 
-const streak = computed(() => boostMomentStore.boostStreak)
+const monthTotal = computed(() => boostStore.monthTotal)
 const levels = Array.from({ length: 10 }, (_, i) => i + 1)
 
 function goBack() {
@@ -35,6 +42,7 @@ function next() {
 function handleComplete() {
   step.value = "done"
   boostMomentStore.completeBoostToday()
+  boostStore.completeBoost("breath", 60).catch(() => {})
 }
 
 function refreshAction() {
@@ -63,12 +71,12 @@ function barHeight(level: number) {
         </div>
       </header>
 
-      <!-- Streak card -->
-      <section class="streakCard" aria-label="Streak">
+      <!-- Boost count card -->
+      <section class="streakCard" aria-label="Boosts denne måneden">
         <div>
-          <div class="kicker">Daglige boost</div>
+          <div class="kicker">Boosts denne måneden</div>
           <div class="streakRow">
-            <div class="streakNum">{{ streak }}</div>
+            <div class="streakNum">{{ monthTotal }}</div>
             <div class="zap" aria-hidden="true"></div>
           </div>
         </div>
@@ -145,11 +153,11 @@ function barHeight(level: number) {
         <div v-else class="panelInner done">
           <div class="check" aria-hidden="true">✓</div>
           <h2 class="doneTitle">Bra jobbet!</h2>
-          <p class="doneText">Du har fullført dagens boost og investert i helsa di.</p>
+          <p class="doneText">Du har fullført en Boost og investert i helsa di.</p>
 
           <div class="pill">
             <span class="pillDot" aria-hidden="true"></span>
-            <span>{{ streak }} dager streak</span>
+            <span>{{ monthTotal }} Boosts denne måneden</span>
           </div>
 
           <button class="secondary" type="button" @click="goBack">
