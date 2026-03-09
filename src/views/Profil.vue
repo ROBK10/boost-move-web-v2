@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from "vue"
+import { computed, onMounted, ref } from "vue"
 import { useRouter } from "vue-router"
 import { useAuthStore } from "@/stores/authStore"
 import { useBoostStore } from "@/stores/boostStore"
@@ -20,6 +20,26 @@ const teamScore = computed(() =>
 )
 
 const notificationsOn = ref(true)
+
+onMounted(async () => {
+  try {
+    await boostStore.fetchMonthBoosts(boostStore.monthKey)
+  } catch (err) {
+    console.error("PROFIL: boost fetch error", err)
+  }
+
+  try {
+    await minHelse.fetchMonthCheckins(minHelse.monthKey)
+  } catch (err) {
+    console.error("PROFIL: minHelse fetch error", err)
+  }
+
+  try {
+    await teamStore.fetchTeamStatus()
+  } catch (err) {
+    console.error("PROFIL: team fetch error", err)
+  }
+})
 
 async function onLogout() {
   await auth.logout()
