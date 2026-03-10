@@ -43,23 +43,11 @@ function scrollToSettings() {
 }
 
 onMounted(async () => {
-  try {
-    await boost.fetchMonthBoosts(boost.monthKey)
-  } catch (err) {
-    console.error("PROFIL: boost fetch error", err)
-  }
-
-  try {
-    await minHelse.fetchMonthCheckins(minHelse.monthKey)
-  } catch (err) {
-    console.error("PROFIL: minHelse fetch error", err)
-  }
-
-  try {
-    await teamStore.fetchTeamStatus()
-  } catch (err) {
-    console.error("PROFIL: team fetch error", err)
-  }
+  await Promise.allSettled([
+    boost.fetchMonthBoosts(boost.monthKey),
+    minHelse.fetchMonthCheckins(minHelse.monthKey),
+    teamStore.fetchTeamStatus(),
+  ])
 })
 
 async function onLogout() {

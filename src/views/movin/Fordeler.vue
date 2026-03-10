@@ -11,9 +11,7 @@ function goBack() {
 }
 
 function openLink() {
-  // V1 placeholder: her kan du senere åpne ekstern side / partner-side / modal
-  // f.eks: window.open("https://boostmove.no", "_blank")
-  console.log("open link (placeholder)")
+  // V2: open partner / external page
 }
 
 const categories = computed(() => getFordelerCategories())

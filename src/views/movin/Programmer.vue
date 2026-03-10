@@ -10,7 +10,7 @@ function goBack() {
 }
 
 function openLink() {
-  console.log("open link (placeholder)")
+  // V2: open external resource link
 }
 
 const categories = computed(() => getProgrammerCategories())

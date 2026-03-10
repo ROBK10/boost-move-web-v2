@@ -10,8 +10,7 @@ function goBack() {
 }
 
 function openLink() {
-  // placeholder (samme ikon som i video)
-  console.log("open link (placeholder)")
+  // V2: open external resource link
 }
 
 const categories = computed(() => getMalerCategories())

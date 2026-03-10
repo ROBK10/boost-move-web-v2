@@ -127,16 +127,10 @@ const boostBreakdown = computed(() =>
 // ─── Mount ────────────────────────────────────────────────────────────────────
 
 onMounted(async () => {
-  try {
-    await minHelse.fetchMonthCheckins(minHelse.monthKey)
-  } catch (err) {
-    console.error("Progresjon: minHelse fetch error", err)
-  }
-  try {
-    await boost.fetchMonthBoosts(boost.monthKey)
-  } catch (err) {
-    console.error("Progresjon: boost fetch error", err)
-  }
+  await Promise.allSettled([
+    minHelse.fetchMonthCheckins(minHelse.monthKey),
+    boost.fetchMonthBoosts(boost.monthKey),
+  ])
 })
 </script>
 

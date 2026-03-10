@@ -7,8 +7,6 @@ import { useAuthStore } from "@/stores/authStore"
 import { useBoostStore } from "@/stores/boostStore"
 import { useTeamStore } from "@/stores/teamStore"
 
-import { testHealth } from "@/services/testApi"
-
 import NotificationBell from "@/components/ui/NotificationBell.vue"
 import HealthScoreCard from "@/components/Hjem/HealthScoreCard.vue"
 import TeamStatusCard from "@/components/Hjem/TeamStatusCard.vue"
@@ -35,7 +33,15 @@ function go(path: string) {
   router.push(path)
 }
 
-const score = computed(() => minHelse.latestScore)
+const score = computed<number | null>(() => {
+  if (minHelse.monthCheckins.length > 0) {
+    const last = [...minHelse.monthCheckins].sort(
+      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+    )[0]
+    return last.capacityScore
+  }
+  return minHelse.latestScore > 0 ? minHelse.latestScore : null
+})
 const userName = computed(() => auth.user?.name || "der")
 const month = computed(() => minHelse.monthKey)
 
@@ -58,34 +64,15 @@ const trackedMap = computed(() => {
 })
 
 onMounted(async () => {
-  try {
-    const res = await testHealth()
-    console.log("HEALTH:", res)
-  } catch (err) {
-    console.error("HEALTH ERROR:", err)
-  }
-
-  try {
-    await minHelse.fetchMonthCheckins(minHelse.monthKey)
-  } catch (err) {
-    console.error("MONTH CHECKINS ERROR:", err)
-  }
-
-  try {
-    await boost.fetchMonthBoosts(boost.monthKey)
-  } catch (err) {
-    console.error("BOOST MONTH ERROR:", err)
-  }
-
-  try {
-    await teamStore.fetchTeamStatus()
-  } catch (err) {
-    console.error("TEAM STATUS ERROR:", err)
-  }
+  await Promise.allSettled([
+    minHelse.fetchMonthCheckins(minHelse.monthKey),
+    boost.fetchMonthBoosts(boost.monthKey),
+    teamStore.fetchTeamStatus(),
+  ])
 })
 
-function onFeedbackSubmit(payload: { month: string; selected: string[]; orgId?: string }) {
-  console.log("feedback submit", payload)
+function onFeedbackSubmit(_payload: { month: string; selected: string[]; orgId?: string }) {
+  // V1: feedback collected client-side; backend submission in V2
 }
 </script>
 
@@ -121,7 +108,7 @@ function onFeedbackSubmit(payload: { month: string; selected: string[]; orgId?: 
 
     <DagensInnsiktCard @open="go(PATHS.knowZone)" />
 
-    <TilbakemeldingCard orgId="demo-company" @submit="onFeedbackSubmit" />
+    <TilbakemeldingCard :orgId="auth.user?.companyId" @submit="onFeedbackSubmit" />
   </div>
 </template>
 

@@ -5,11 +5,12 @@ type TrackedMap = Record<string, boolean>
 
 const props = withDefaults(
   defineProps<{
-    score: number
+    score?: number | null
     month?: string // "YYYY-MM"
     trackedMap?: TrackedMap
   }>(),
   {
+    score: null,
     month: undefined,
     trackedMap: () => ({}),
   }
@@ -53,7 +54,9 @@ const scoreClamped = computed(() => {
   if (!Number.isFinite(n)) return 0
   return Math.min(100, Math.max(0, n))
 })
-const scoreText = computed(() => Math.round(scoreClamped.value))
+const scoreText = computed(() =>
+  props.score == null ? "—" : Math.round(scoreClamped.value)
+)
 
 // ---------- Geometry (balanced for size=300) ----------
 const size = 300
