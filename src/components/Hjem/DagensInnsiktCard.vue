@@ -88,9 +88,10 @@ const insight = insights[Math.floor(Math.random() * insights.length)]
 
 .quote {
   margin-top: 4px;
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 800;
-  color: rgba(17, 24, 39, 0.75);
+  color: rgba(17, 24, 39, 0.78);
+  line-height: 1.4;
 }
 
 .chev {

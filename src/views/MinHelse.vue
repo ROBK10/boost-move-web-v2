@@ -26,7 +26,7 @@ const form = ref<DailyCheckInInput>({
 })
 
 const hasCheckedInToday = computed(() => !!todayCheckin.value && !isEditing.value)
-const showSuggestion = ref(true)
+const showTipModal = ref(false)
 
 const month = computed(() => {
   const now = new Date()
@@ -35,8 +35,15 @@ const month = computed(() => {
   return `${y}-${m}`
 })
 
-// V1: vi har ikke månedskalender fra DB ennå, så vi sender tomt kart
-const trackedMap = computed<Record<string, boolean>>(() => ({}))
+// Build trackedMap from the shared store — same logic as Hjem.vue
+const trackedMap = computed<Record<string, boolean>>(() => {
+  const map: Record<string, boolean> = {}
+  for (const c of minHelseStore.monthCheckins) {
+    const d = new Date(c.date).toISOString().slice(0, 10)
+    map[d] = true
+  }
+  return map
+})
 
 const capacityBand = computed<CapacityBand>(() => {
   const score = todayCheckin.value?.capacityScore
@@ -130,10 +137,11 @@ async function loadToday() {
   isLoading.value = true
   error.value = null
   try {
+    // Populate monthCheckins so trackedMap (and Home's HealthScoreCard) stays in sync
+    await minHelseStore.fetchMonthCheckins(minHelseStore.monthKey).catch(() => {})
     const res = await getTodayCheckIn()
     todayCheckin.value = res.checkin
     isEditing.value = false
-    showSuggestion.value = true
     if (res.checkin) {
       minHelseStore.latestScore = res.checkin.capacityScore
     }
@@ -147,7 +155,7 @@ async function loadToday() {
 function startCheckIn() {
   error.value = null
   step.value = 1
-  showSuggestion.value = true
+  showTipModal.value = false
 }
 
 function setContext(v: DailyCheckInInput["context"]) {
@@ -177,9 +185,9 @@ async function submit() {
     const res = await saveCheckIn(form.value)
     todayCheckin.value = res.checkin
     isEditing.value = false
-    showSuggestion.value = true
     minHelseStore.latestScore = res.checkin.capacityScore
     minHelseStore.fetchMonthCheckins(minHelseStore.monthKey).catch(() => {})
+    showTipModal.value = true
   } catch (e: any) {
     error.value = e?.message || "Kunne ikke lagre innsjekk"
   } finally {
@@ -200,8 +208,13 @@ function editToday() {
   startCheckIn()
 }
 
-function goBoost() {
-  router.push(suggestion.value.ctaPath)
+function acceptTip() {
+  showTipModal.value = false
+  router.push("/movin/boost-moment")
+}
+
+function declineTip() {
+  showTipModal.value = false
 }
 </script>
 
@@ -213,6 +226,25 @@ function goBoost() {
         <p class="sub">En liten innsjekk – lav terskel.</p>
       </div>
     </header>
+
+    <!-- Tip prompt modal — fixed overlay, outside the v-if chain -->
+    <Transition name="modal">
+      <div v-if="showTipModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="tip-title">
+        <div class="modal-card">
+          <div class="modal-icon" aria-hidden="true">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+            </svg>
+          </div>
+          <h2 id="tip-title" class="modal-title">Ønsker du et tips?</h2>
+          <p class="modal-body">Vi har et forslag til en liten Boost tilpasset dagens innsjekk.</p>
+          <div class="modal-actions">
+            <button class="btn modal-ja" type="button" @click="acceptTip">Ja</button>
+            <button class="btn secondary modal-nei" type="button" @click="declineTip">Nei</button>
+          </div>
+        </div>
+      </div>
+    </Transition>
 
     <div v-if="isLoading" class="card">
       <p class="muted">Laster…</p>
@@ -231,24 +263,6 @@ function goBoost() {
         :trackedMap="trackedMap"
         @open="editToday"
       />
-
-      <!-- ✅ Soft forslag -->
-      <section v-if="showSuggestion" class="card">
-        <div>
-          <div class="suggestTitle">{{ suggestion.title }}</div>
-          <div class="suggestText">{{ suggestion.text }}</div>
-          <div class="suggestHint">{{ suggestion.hint }}</div>
-        </div>
-
-        <div class="suggestActions">
-          <button class="btn" type="button" @click="goBoost">
-            {{ suggestion.ctaLabel }}
-          </button>
-          <button class="link" type="button" @click="showSuggestion = false">
-            Ikke nå
-          </button>
-        </div>
-      </section>
 
       <section class="card">
         <div class="row">
@@ -476,33 +490,86 @@ function goBoost() {
   color: rgba(17, 24, 39, 0.6);
 }
 
-/* Suggestion */
-.suggestTitle {
-  font-size: 16px;
+/* TIP MODAL */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 150;
+  background: rgba(17, 24, 39, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.modal-card {
+  background: white;
+  border-radius: 24px;
+  padding: 28px 24px 24px;
+  width: 100%;
+  max-width: 360px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  box-shadow: 0 24px 64px rgba(17, 24, 39, 0.22);
+}
+
+.modal-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  background: #111827;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 18px;
+  box-shadow: 0 8px 24px rgba(17, 24, 39, 0.2);
+}
+
+.modal-title {
+  margin: 0 0 10px;
+  font-size: 22px;
   font-weight: 900;
-  color: rgba(17, 24, 39, 0.95);
+  letter-spacing: -0.02em;
+  color: #111827;
 }
 
-.suggestText {
-  margin-top: 8px;
+.modal-body {
+  margin: 0 0 24px;
   font-size: 14px;
-  font-weight: 700;
-  color: rgba(17, 24, 39, 0.7);
-  line-height: 1.35;
+  font-weight: 600;
+  color: rgba(17, 24, 39, 0.55);
+  line-height: 1.5;
 }
 
-.suggestHint {
-  margin-top: 8px;
-  font-size: 12px;
-  font-weight: 800;
-  color: rgba(17, 24, 39, 0.5);
-}
-
-.suggestActions {
-  margin-top: 12px;
+.modal-actions {
   display: flex;
   gap: 10px;
-  align-items: center;
+  width: 100%;
+}
+
+.modal-ja {
+  flex: 1;
+}
+
+.modal-nei {
+  flex: 1;
+}
+
+/* MODAL TRANSITION */
+.modal-enter-active {
+  transition: opacity 180ms ease, transform 220ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.modal-leave-active {
+  transition: opacity 140ms ease, transform 140ms ease;
+}
+
+.modal-enter-from,
+.modal-leave-to {
+  opacity: 0;
+  transform: scale(0.95);
 }
 
 .row {

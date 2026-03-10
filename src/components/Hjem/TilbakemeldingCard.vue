@@ -7,7 +7,7 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-  (e: "submit", payload: { month: string; selected: string[]; orgId?: string }): void
+  (e: "submit", payload: { month: string; selected: string[]; orgId?: string; annetText?: string }): void
 }>()
 
 const nowMonth = computed(() => {
@@ -19,17 +19,16 @@ const nowMonth = computed(() => {
 
 const month = computed(() => props.month ?? nowMonth.value)
 
-// V2: flervalg (lav terskel)
 const options = [
-  { id: "group-workout", label: "Fellestrening / gruppetime" },
-  { id: "health-check", label: "Kroppsanalyse / helsesjekk" },
-  { id: "nutrition-talk", label: "Kosthold / foredrag" },
-  { id: "mobility", label: "Mobilitet / rygg-nakke" },
-  { id: "stress", label: "Stress / søvn / mental boost" },
-  { id: "competition", label: "Konkurranse / challenge" },
+  { id: "team-building", label: "Team Building" },
+  { id: "fellestrening", label: "Fellestrening" },
+  { id: "sauna", label: "Sauna" },
+  { id: "kroppsanalyse", label: "Kroppsanalyse" },
 ]
 
 const selected = ref<string[]>([])
+const annetSelected = ref(false)
+const annetText = ref("")
 const expanded = ref(false)
 
 function toggle(id: string) {
@@ -38,22 +37,36 @@ function toggle(id: string) {
   else selected.value.push(id)
 }
 
-const canSubmit = computed(() => selected.value.length > 0)
+function toggleAnnet() {
+  annetSelected.value = !annetSelected.value
+  if (!annetSelected.value) annetText.value = ""
+}
+
+const canSubmit = computed(() => {
+  if (selected.value.length > 0) return true
+  if (annetSelected.value && annetText.value.trim().length > 0) return true
+  return false
+})
 
 function submit() {
   if (!canSubmit.value) return
-  emit("submit", { month: month.value, selected: [...selected.value], orgId: props.orgId })
-  // V1: reset (senere: lock 1 gang pr måned i store/backend)
+  emit("submit", {
+    month: month.value,
+    selected: [...selected.value, ...(annetSelected.value ? ["annet"] : [])],
+    orgId: props.orgId,
+    annetText: annetSelected.value ? annetText.value.trim() : undefined,
+  })
   selected.value = []
+  annetSelected.value = false
+  annetText.value = ""
   expanded.value = false
 }
 </script>
 
 <template>
   <section class="card" aria-label="Tilbakemelding til arbeidsgiver">
-    <header class="top" @click="expanded = !expanded" role="button" tabindex="0">
+    <header class="top" @click="expanded = !expanded" role="button" tabindex="0" :aria-expanded="expanded">
       <div class="left">
-        <div class="badge">NY</div>
         <div class="title">Hva ønsker dere på jobb?</div>
         <div class="sub">Lavterskel flervalg · tar 10 sek</div>
       </div>
@@ -77,6 +90,29 @@ function submit() {
           <span class="dot" aria-hidden="true"></span>
           <span class="txt">{{ opt.label }}</span>
         </button>
+
+        <!-- Annet option -->
+        <button
+          type="button"
+          class="chip"
+          :class="{ on: annetSelected }"
+          @click="toggleAnnet"
+        >
+          <span class="dot" aria-hidden="true"></span>
+          <span class="txt">Annet</span>
+        </button>
+      </div>
+
+      <!-- Text input shown when Annet is selected -->
+      <div v-if="annetSelected" class="annet-wrap">
+        <textarea
+          v-model="annetText"
+          class="annet-input"
+          placeholder="Skriv inn ditt forslag…"
+          rows="3"
+          maxlength="300"
+          aria-label="Ditt forslag"
+        ></textarea>
       </div>
 
       <button class="cta" type="button" :disabled="!canSubmit" @click="submit">
@@ -84,7 +120,7 @@ function submit() {
         <span class="meta">({{ month }})</span>
       </button>
 
-      <div class="note">Anonymt for kollegaer. (V1: logges lokalt / console hos deg.)</div>
+      <div class="note">Anonymt for kollegaer.</div>
     </div>
   </section>
 </template>
@@ -92,7 +128,7 @@ function submit() {
 <style scoped>
 .card {
   border-radius: 22px;
-  background: #0b0f17; /* “boost”-mørk */
+  background: #0b0f17;
   color: rgba(255, 255, 255, 0.92);
   padding: 14px;
   box-shadow: 0 18px 44px rgba(11, 15, 23, 0.22);
@@ -105,20 +141,10 @@ function submit() {
   gap: 12px;
   cursor: pointer;
   user-select: none;
+  min-height: 44px;
 }
 
 .left { display: grid; gap: 6px; }
-
-.badge {
-  width: fit-content;
-  font-size: 11px;
-  font-weight: 900;
-  letter-spacing: 0.14em;
-  padding: 6px 10px;
-  border-radius: 999px;
-  background: rgba(185, 255, 0, 0.95);
-  color: #0b0f17;
-}
 
 .title {
   font-size: 18px;
@@ -139,6 +165,7 @@ function submit() {
   border-bottom: 2px solid rgba(255, 255, 255, 0.55);
   transform: rotate(45deg);
   transition: transform 140ms ease;
+  flex-shrink: 0;
 }
 .chev.open { transform: rotate(-135deg); }
 
@@ -159,16 +186,18 @@ function submit() {
 
 .chip {
   width: 100%;
+  min-height: 52px;
   border: none;
   border-radius: 16px;
-  padding: 12px 12px;
+  padding: 14px 14px;
   background: rgba(255, 255, 255, 0.08);
   color: rgba(255, 255, 255, 0.92);
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   cursor: pointer;
   text-align: left;
+  transition: background 120ms ease;
 }
 
 .chip.on {
@@ -176,15 +205,54 @@ function submit() {
   box-shadow: inset 0 0 0 1px rgba(185, 255, 0, 0.35);
 }
 
+.chip:active {
+  opacity: 0.85;
+}
+
 .dot {
-  width: 10px;
-  height: 10px;
+  width: 12px;
+  height: 12px;
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.35);
+  flex-shrink: 0;
 }
 .chip.on .dot { background: rgba(185, 255, 0, 0.95); }
 
-.txt { font-weight: 850; font-size: 14px; }
+.txt {
+  font-weight: 850;
+  font-size: 15px;
+}
+
+/* ANNET INPUT */
+.annet-wrap {
+  margin-top: -2px;
+}
+
+.annet-input {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(185, 255, 0, 0.35);
+  border-radius: 14px;
+  padding: 12px 14px;
+  color: white;
+  font-size: 14px;
+  font-weight: 700;
+  font-family: inherit;
+  line-height: 1.4;
+  resize: none;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.annet-input::placeholder {
+  color: rgba(255, 255, 255, 0.38);
+  font-weight: 600;
+}
+
+.annet-input:focus {
+  border-color: rgba(185, 255, 0, 0.65);
+  background: rgba(255, 255, 255, 0.10);
+}
 
 .cta {
   height: 54px;
@@ -193,7 +261,9 @@ function submit() {
   background: rgba(185, 255, 0, 0.95);
   color: #0b0f17;
   font-weight: 950;
+  font-size: 15px;
   cursor: pointer;
+  width: 100%;
 }
 
 .cta:disabled {

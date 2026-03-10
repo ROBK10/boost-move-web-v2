@@ -26,7 +26,11 @@ const minutes = 2
     @keydown="onKeydown"
     aria-label="Åpne Kom i gang mentalt"
   >
-    <div class="play" aria-hidden="true"></div>
+    <div class="play" aria-hidden="true">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+        <polygon points="5 3 19 12 5 21 5 3"/>
+      </svg>
+    </div>
 
     <div class="content">
       <div class="title">Mental start</div>
@@ -70,6 +74,11 @@ const minutes = 2
   border-radius: 999px;
   background: rgba(17, 24, 39, 0.06);
   box-shadow: inset 0 0 0 1px rgba(17, 24, 39, 0.04);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(17, 24, 39, 0.7);
+  padding-left: 2px; /* optical center for play triangle */
 }
 
 .title {

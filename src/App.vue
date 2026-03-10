@@ -1,6 +1,7 @@
 <script setup>
 import BottomNav from "@/components/ui/BottomNav.vue"
 import OnboardingModal from "@/components/ui/OnboardingModal.vue"
+import InstallBanner from "@/components/ui/InstallBanner.vue"
 </script>
 
 <template>
@@ -10,6 +11,7 @@ import OnboardingModal from "@/components/ui/OnboardingModal.vue"
     </main>
 
     <BottomNav />
+    <InstallBanner />
     <OnboardingModal />
   </div>
 </template>

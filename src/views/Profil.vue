@@ -23,7 +23,7 @@ const notificationsOn = ref(true)
 
 onMounted(async () => {
   try {
-    await boostStore.fetchMonthBoosts(boostStore.monthKey)
+    await boost.fetchMonthBoosts(boost.monthKey)
   } catch (err) {
     console.error("PROFIL: boost fetch error", err)
   }
@@ -75,6 +75,20 @@ async function onLogout() {
       </div>
       <div class="user-name">{{ user?.name ?? "—" }}</div>
       <div class="user-email">{{ user?.email ?? "—" }}</div>
+
+      <div v-if="user?.role" class="user-role-badge">{{ user.role }}</div>
+
+      <div class="user-meta-row">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
+        <span>Arbeidsplass</span>
+      </div>
+
+      <button class="dm-btn" type="button" @click="router.push('/chat')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+        </svg>
+        Send direktemelding
+      </button>
     </section>
 
     <!-- STATISTICS ROW -->
@@ -117,6 +131,17 @@ async function onLogout() {
         </span>
         <div class="stat-value">{{ teamScore !== null ? teamScore : "—" }}</div>
         <div class="stat-label">LAGSCORE</div>
+      </div>
+    </div>
+
+    <!-- MINE GRUPPER -->
+    <div class="section-card">
+      <div class="section-head">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        <span class="section-title">Mine grupper</span>
+      </div>
+      <div class="group-empty">
+        Ingen grupper ennå
       </div>
     </div>
 
@@ -284,6 +309,83 @@ async function onLogout() {
   font-size: 14px;
   font-weight: 600;
   color: rgba(17, 24, 39, 0.5);
+}
+
+.user-role-badge {
+  margin-top: 6px;
+  display: inline-block;
+  background: rgba(17, 24, 39, 0.07);
+  border-radius: 999px;
+  padding: 4px 12px;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: capitalize;
+  color: rgba(17, 24, 39, 0.65);
+}
+
+.dm-btn {
+  margin-top: 14px;
+  height: 44px;
+  padding: 0 20px;
+  border: 1.5px solid rgba(17, 24, 39, 0.12);
+  border-radius: 999px;
+  background: white;
+  color: #111827;
+  font-size: 14px;
+  font-weight: 800;
+  font-family: inherit;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background 150ms ease, border-color 150ms ease;
+}
+
+.dm-btn:active {
+  background: rgba(17, 24, 39, 0.04);
+}
+
+.user-meta-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  color: rgba(17, 24, 39, 0.45);
+  margin-top: 2px;
+}
+
+/* MINE GRUPPER SECTION */
+.section-card {
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 8px 24px rgba(20, 20, 20, 0.06);
+  border: 1px solid rgba(17, 24, 39, 0.05);
+  overflow: hidden;
+  padding: 16px 18px;
+}
+
+.section-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  color: rgba(17, 24, 39, 0.65);
+}
+
+.section-title {
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: 0.02em;
+  color: rgba(17, 24, 39, 0.65);
+}
+
+.group-empty {
+  font-size: 14px;
+  font-weight: 600;
+  color: rgba(17, 24, 39, 0.35);
+  padding: 4px 0 2px;
 }
 
 /* STATS ROW */

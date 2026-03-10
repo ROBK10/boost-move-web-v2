@@ -8,6 +8,7 @@ import { useBoostStore } from "@/stores/boostStore"
 
 import { testHealth } from "@/services/testApi"
 
+import NotificationBell from "@/components/ui/NotificationBell.vue"
 import HealthScoreCard from "@/components/Hjem/HealthScoreCard.vue"
 import TeamStatusCard from "@/components/Hjem/TeamStatusCard.vue"
 import BoostMomentCard from "@/components/Hjem/BoostMomentCard.vue"
@@ -95,10 +96,7 @@ function onFeedbackSubmit(payload: { month: string; selected: string[]; orgId?: 
         <p class="sub">Klar for en ny dag?</p>
       </div>
 
-      <button class="bell" type="button" aria-label="Varsler">
-        <span class="bell-icon" aria-hidden="true"></span>
-        <span class="badge" aria-hidden="true"></span>
-      </button>
+      <NotificationBell />
     </header>
 
     <HealthScoreCard
@@ -132,13 +130,20 @@ function onFeedbackSubmit(payload: { month: string; selected: string[]; orgId?: 
 .hjem {
   max-width: 520px;
   margin: 0 auto;
-  padding: 18px 16px 0;
+  padding: 0 16px 0;
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 14px;
 }
 
 .top {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: #f9fafb;
+  /* Extend background under notch on iPhone */
+  margin: 0 -16px;
+  padding: 20px 16px 12px;
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
@@ -161,37 +166,6 @@ function onFeedbackSubmit(payload: { month: string; selected: string[]; orgId?: 
   color: rgba(17, 24, 39, 0.55);
 }
 
-.bell {
-  position: relative;
-  width: 44px;
-  height: 44px;
-  border: none;
-  background: white;
-  border-radius: 999px;
-  box-shadow: 0 10px 30px rgba(20, 20, 20, 0.08);
-  cursor: pointer;
-}
-
-.bell-icon {
-  display: block;
-  width: 18px;
-  height: 18px;
-  margin: 0 auto;
-  background: rgba(17, 24, 39, 0.85);
-  border-radius: 6px;
-  transform: rotate(10deg);
-  opacity: 0.9;
-}
-
-.badge {
-  position: absolute;
-  top: 8px;
-  right: 10px;
-  width: 7px;
-  height: 7px;
-  background: #ef4444;
-  border-radius: 999px;
-}
 
 .grid-two {
   display: grid;

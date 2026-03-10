@@ -150,6 +150,8 @@ const ticks = computed<Tick[]>(() => {
         <div class="label">HELSE SCORE</div>
       </div>
     </div>
+
+    <div class="tap-hint">Trykk for detaljer</div>
   </section>
 </template>
 
@@ -174,6 +176,15 @@ const ticks = computed<Tick[]>(() => {
 .card:focus-visible {
   outline: 3px solid rgba(99, 102, 241, 0.25);
   outline-offset: 4px;
+}
+
+.tap-hint {
+  margin-top: 4px;
+  font-size: 14px;
+  font-weight: 600;
+  color: rgba(17, 24, 39, 0.38);
+  text-align: center;
+  padding-bottom: 4px;
 }
 
 .ring {

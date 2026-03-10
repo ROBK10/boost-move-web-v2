@@ -31,7 +31,11 @@ const props = defineProps<{
   >
     <div class="top">
       <div class="title">
-        <span class="bolt" aria-hidden="true"></span>
+        <div class="bolt" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+          </svg>
+        </div>
         <span>Boosts</span>
       </div>
     </div>
@@ -86,10 +90,14 @@ const props = defineProps<{
 }
 
 .bolt {
-  width: 34px;
-  height: 34px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.12);
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.14);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
 }
 
 .stat {
@@ -132,10 +140,14 @@ const props = defineProps<{
   background: white;
   color: #111827;
   font-weight: 900;
-  display: inline-flex;
+  font-size: 15px;
+  font-family: inherit;
+  display: flex;
   align-items: center;
   justify-content: center;
   gap: 10px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .arrow {
