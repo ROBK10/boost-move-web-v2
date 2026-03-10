@@ -33,9 +33,13 @@ const workplace = computed(() => {
 })
 
 const notificationsOn = ref(true)
+const settingsFlashing = ref(false)
 
 function scrollToSettings() {
-  document.getElementById("settings-section")?.scrollIntoView({ behavior: "smooth", block: "start" })
+  const el = document.getElementById("settings-section")
+  el?.scrollIntoView({ behavior: "smooth", block: "nearest" })
+  settingsFlashing.value = true
+  setTimeout(() => { settingsFlashing.value = false }, 700)
 }
 
 onMounted(async () => {
@@ -163,7 +167,7 @@ async function onLogout() {
     </div>
 
     <!-- ACTION LIST -->
-    <div id="settings-section" class="action-list">
+    <div id="settings-section" class="action-list" :class="{ 'action-list--flash': settingsFlashing }">
       <div class="action-row action-row--static">
         <span class="action-icon" aria-hidden="true">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -445,6 +449,17 @@ async function onLogout() {
   letter-spacing: 0.1em;
   color: rgba(17, 24, 39, 0.42);
   text-transform: uppercase;
+}
+
+/* ACTION LIST FLASH */
+@keyframes settings-flash {
+  0%   { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.3); }
+  50%  { box-shadow: 0 0 0 6px rgba(99, 102, 241, 0.12); }
+  100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0); }
+}
+
+.action-list--flash {
+  animation: settings-flash 700ms ease forwards;
 }
 
 /* ACTION LIST */

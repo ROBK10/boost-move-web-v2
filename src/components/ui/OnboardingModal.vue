@@ -12,6 +12,7 @@ function storageKey(): string {
 }
 
 onMounted(() => {
+  if (!auth.isAuthed) return
   if (!localStorage.getItem(storageKey())) {
     visible.value = true
   }

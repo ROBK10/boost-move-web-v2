@@ -109,7 +109,7 @@ function onFeedbackSubmit(payload: { month: string; selected: string[]; orgId?: 
 
     <TeamStatusCard
       :available="teamStore.available"
-      :score="teamStore.avgScore ?? 0"
+      :score="teamStore.avgScore"
       :trend="teamStore.trend"
       @open="go(PATHS.teamStatus)"
     />

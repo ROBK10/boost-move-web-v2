@@ -79,9 +79,11 @@ function typeIcon(t: NotificationType): string {
         <div class="panel-head">
           <span class="panel-title">Varsler</span>
           <button
-            v-if="store.unreadCount > 0"
+            v-if="store.sorted.length > 0"
             class="mark-all"
+            :class="{ 'mark-all--done': store.unreadCount === 0 }"
             type="button"
+            :disabled="store.unreadCount === 0"
             @click="store.markAllRead()"
           >
             Merk alle som lest
@@ -207,6 +209,11 @@ function typeIcon(t: NotificationType): string {
 
 .mark-all:hover {
   color: rgba(17, 24, 39, 0.75);
+}
+
+.mark-all--done {
+  opacity: 0.35;
+  cursor: default;
 }
 
 .empty {

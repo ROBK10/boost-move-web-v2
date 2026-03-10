@@ -6,12 +6,13 @@ const emit = defineEmits<{
 const props = withDefaults(
   defineProps<{
     available?: boolean
-    score: number
+    score?: number | null
     trend?: "up" | "down" | "stable"
     title?: string
   }>(),
   {
     available: false,
+    score: null,
     trend: "stable",
     title: "Lagets kapasitet",
   }
@@ -51,6 +52,7 @@ function moodText(score: number) {
 <template>
   <section
     class="card"
+    :class="{ 'card--unavailable': !available }"
     role="button"
     tabindex="0"
     @click="open"
@@ -104,6 +106,26 @@ function moodText(score: number) {
 .card:focus-visible {
   outline: 3px solid rgba(99, 102, 241, 0.22);
   outline-offset: 4px;
+}
+
+.card--unavailable {
+  background: rgba(17, 24, 39, 0.03);
+  cursor: default;
+  border-color: rgba(17, 24, 39, 0.04);
+  box-shadow: none;
+}
+
+.card--unavailable:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+.card--unavailable .eyebrow {
+  color: rgba(17, 24, 39, 0.28);
+}
+
+.card--unavailable .chev {
+  border-color: rgba(17, 24, 39, 0.12);
 }
 
 .head {
