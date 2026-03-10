@@ -5,18 +5,14 @@ const emit = defineEmits<{
 
 const props = withDefaults(
   defineProps<{
+    available?: boolean
     score: number
     trend?: "up" | "down" | "stable"
-    sleepTrend?: "up" | "down" | "stable"
-    movementTrend?: "up" | "down" | "stable"
-    energyTrend?: "up" | "down" | "stable"
     title?: string
   }>(),
   {
+    available: false,
     trend: "stable",
-    sleepTrend: "down",
-    movementTrend: "stable",
-    energyTrend: "up",
     title: "Lagets kapasitet",
   }
 )
@@ -66,7 +62,7 @@ function moodText(score: number) {
       <div class="chev" aria-hidden="true"></div>
     </div>
 
-    <div class="main">
+    <div v-if="available" class="main">
       <div class="score">{{ score }}</div>
 
       <div class="meta">
@@ -81,21 +77,9 @@ function moodText(score: number) {
       </div>
     </div>
 
-    <div class="drivers">
-      <div class="driver">
-        <span class="driverLabel">Søvn</span>
-        <span class="driverValue">{{ arrow(sleepTrend) }}</span>
-      </div>
-
-      <div class="driver">
-        <span class="driverLabel">Bevegelse</span>
-        <span class="driverValue">{{ arrow(movementTrend) }}</span>
-      </div>
-
-      <div class="driver">
-        <span class="driverLabel">Energi</span>
-        <span class="driverValue">{{ arrow(energyTrend) }}</span>
-      </div>
+    <div v-else class="unavailable">
+      <div class="unavailableScore">—</div>
+      <div class="unavailableText">Lagstatus vises når flere har registrert innsjekk i dag.</div>
     </div>
   </section>
 </template>
@@ -201,34 +185,27 @@ function moodText(score: number) {
   max-width: 240px;
 }
 
-.drivers {
-  margin-top: 16px;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+.unavailable {
+  margin-top: 14px;
+  display: flex;
+  flex-direction: column;
   gap: 10px;
 }
 
-.driver {
-  background: rgba(17, 24, 39, 0.04);
-  border-radius: 16px;
-  padding: 12px 12px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
+.unavailableScore {
+  font-size: 54px;
+  line-height: 0.95;
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  color: rgba(17, 24, 39, 0.18);
 }
 
-.driverLabel {
-  font-size: 12px;
-  font-weight: 900;
-  letter-spacing: 0.04em;
-  color: rgba(17, 24, 39, 0.55);
-}
-
-.driverValue {
-  font-size: 15px;
-  font-weight: 900;
-  color: rgba(17, 24, 39, 0.82);
+.unavailableText {
+  font-size: 13px;
+  font-weight: 700;
+  color: rgba(17, 24, 39, 0.42);
+  line-height: 1.35;
+  max-width: 280px;
 }
 
 @media (max-width: 420px) {

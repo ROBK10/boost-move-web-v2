@@ -5,6 +5,7 @@ import { useRouter } from "vue-router"
 import { useMinHelseStore } from "@/stores/minHelseStore"
 import { useAuthStore } from "@/stores/authStore"
 import { useBoostStore } from "@/stores/boostStore"
+import { useTeamStore } from "@/stores/teamStore"
 
 import { testHealth } from "@/services/testApi"
 
@@ -20,6 +21,7 @@ const router = useRouter()
 const minHelse = useMinHelseStore()
 const auth = useAuthStore()
 const boost = useBoostStore()
+const teamStore = useTeamStore()
 
 const PATHS = {
   minHelse: "/min-helse",
@@ -43,13 +45,6 @@ const boostMonthLabel = computed(() => {
   return d.toLocaleString("nb-NO", { month: "long", year: "numeric" }).toUpperCase()
 })
 const boostTotal = computed(() => boost.monthTotal)
-
-// Mock team data (V1 visuell prototype)
-const teamScore = 72
-const teamTrend = "stable" as const
-const teamSleepTrend = "down" as const
-const teamMovementTrend = "stable" as const
-const teamEnergyTrend = "up" as const
 
 const trackedMap = computed(() => {
   const map: Record<string, boolean> = {}
@@ -81,6 +76,12 @@ onMounted(async () => {
   } catch (err) {
     console.error("BOOST MONTH ERROR:", err)
   }
+
+  try {
+    await teamStore.fetchTeamStatus()
+  } catch (err) {
+    console.error("TEAM STATUS ERROR:", err)
+  }
 })
 
 function onFeedbackSubmit(payload: { month: string; selected: string[]; orgId?: string }) {
@@ -107,11 +108,9 @@ function onFeedbackSubmit(payload: { month: string; selected: string[]; orgId?: 
     />
 
     <TeamStatusCard
-      :score="teamScore"
-      :trend="teamTrend"
-      :sleepTrend="teamSleepTrend"
-      :movementTrend="teamMovementTrend"
-      :energyTrend="teamEnergyTrend"
+      :available="teamStore.available"
+      :score="teamStore.avgScore ?? 0"
+      :trend="teamStore.trend"
       @open="go(PATHS.teamStatus)"
     />
 
