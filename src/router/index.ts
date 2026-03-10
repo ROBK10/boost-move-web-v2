@@ -8,6 +8,7 @@ import MovinHome from "@/views/Movin.vue"
 import MinHelse from "@/views/MinHelse.vue"
 import Chat from "@/views/Chat.vue"
 import Profil from "@/views/Profil.vue"
+import Progresjon from "@/views/Progresjon.vue"
 import Login from "@/views/Login.vue"
 
 import BoostMoment from "@/views/movin/BoostMoment.vue"
@@ -35,6 +36,7 @@ const routes: RouteRecordRaw[] = [
   { path: "/min-helse", component: MinHelse },
   { path: "/chat", component: Chat },
   { path: "/profil", component: Profil },
+  { path: "/progresjon", component: Progresjon },
 
   {
     path: "/movin",

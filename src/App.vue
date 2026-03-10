@@ -1,5 +1,6 @@
 <script setup>
 import BottomNav from "@/components/ui/BottomNav.vue"
+import OnboardingModal from "@/components/ui/OnboardingModal.vue"
 </script>
 
 <template>
@@ -9,6 +10,7 @@ import BottomNav from "@/components/ui/BottomNav.vue"
     </main>
 
     <BottomNav />
+    <OnboardingModal />
   </div>
 </template>
 
