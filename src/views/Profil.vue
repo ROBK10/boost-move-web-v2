@@ -19,7 +19,24 @@ const teamScore = computed(() =>
   teamStore.available && teamStore.avgScore !== null ? teamStore.avgScore : null
 )
 
+const initials = computed(() => {
+  const name = user.value?.name ?? ""
+  const parts = name.trim().split(/\s+/)
+  if (parts.length >= 2) return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase()
+  return (parts[0]?.[0] ?? "?").toUpperCase()
+})
+
+const workplace = computed(() => {
+  const email = user.value?.email ?? ""
+  const domain = email.split("@")[1]
+  return domain ? domain.split(".")[0] : null
+})
+
 const notificationsOn = ref(true)
+
+function scrollToSettings() {
+  document.getElementById("settings-section")?.scrollIntoView({ behavior: "smooth", block: "start" })
+}
 
 onMounted(async () => {
   try {
@@ -52,7 +69,7 @@ async function onLogout() {
     <!-- HEADER -->
     <header class="top">
       <h1 class="title">Profil</h1>
-      <button class="gear-btn" type="button" aria-label="Innstillinger">
+      <button class="gear-btn" type="button" aria-label="Innstillinger" @click="scrollToSettings">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="12" cy="12" r="3"/>
           <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
@@ -64,7 +81,7 @@ async function onLogout() {
     <section class="profile-section">
       <div class="avatar-wrap">
         <div class="avatar">
-          <span class="avatar-initials">{{ user?.name?.charAt(0) ?? "?" }}</span>
+          <span class="avatar-initials">{{ initials }}</span>
         </div>
         <div class="edit-badge" aria-hidden="true">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -78,9 +95,9 @@ async function onLogout() {
 
       <div v-if="user?.role" class="user-role-badge">{{ user.role }}</div>
 
-      <div class="user-meta-row">
+      <div v-if="workplace" class="user-meta-row">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
-        <span>Arbeidsplass</span>
+        <span>{{ workplace }}</span>
       </div>
 
       <button class="dm-btn" type="button" @click="router.push('/chat')">
@@ -146,8 +163,8 @@ async function onLogout() {
     </div>
 
     <!-- ACTION LIST -->
-    <div class="action-list">
-      <div class="action-row">
+    <div id="settings-section" class="action-list">
+      <div class="action-row action-row--static">
         <span class="action-icon" aria-hidden="true">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
@@ -155,7 +172,7 @@ async function onLogout() {
           </svg>
         </span>
         <span class="action-label">Personlige detaljer</span>
-        <span class="chev" aria-hidden="true"></span>
+        <span class="soon-pill">Snart</span>
       </div>
 
       <div class="action-divider"></div>
@@ -182,14 +199,14 @@ async function onLogout() {
 
       <div class="action-divider"></div>
 
-      <div class="action-row">
+      <div class="action-row action-row--static">
         <span class="action-icon" aria-hidden="true">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
           </svg>
         </span>
         <span class="action-label">Personvern og sikkerhet</span>
-        <span class="chev" aria-hidden="true"></span>
+        <span class="soon-pill">Snart</span>
       </div>
 
       <div class="action-divider"></div>
@@ -449,6 +466,22 @@ async function onLogout() {
   border: none;
   cursor: default;
   text-align: left;
+}
+
+.action-row--static {
+  opacity: 0.65;
+}
+
+.soon-pill {
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(17, 24, 39, 0.5);
+  background: rgba(17, 24, 39, 0.07);
+  border-radius: 999px;
+  padding: 3px 8px;
+  flex-shrink: 0;
 }
 
 .action-divider {
