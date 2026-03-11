@@ -68,6 +68,54 @@ async function onLogout() {
         </div>
       </header>
 
+      <!-- GDPR: Personvernerklæring -->
+      <div class="section-label">Personvernerklæring</div>
+      <div class="card gdpr-card">
+        <p class="gdpr-text">
+          Boost Move behandler personopplysninger for å levere en personalisert helseopplevelse på jobb. Vi samler inn navn, e-post, helsescore og aktivitetsdata.
+        </p>
+        <p class="gdpr-text">
+          Dataene dine brukes utelukkende til å vise deg din egen fremgang og gi aggregerte statistikker til din arbeidsgiver. Vi selger aldri data til tredjeparter.
+        </p>
+        <p class="gdpr-text">
+          Du har rett til innsyn, retting og sletting av dine personopplysninger. Se «Faresone» nedenfor for å slette kontoen din.
+        </p>
+        <p class="gdpr-text">
+          Ansvarlig behandlingsansvarlig: Boost Move AS, Norge. Behandlingsgrunnlag: samtykke (GDPR art. 6 nr. 1 a).
+        </p>
+      </div>
+
+      <!-- GDPR: Databehandling -->
+      <div class="section-label">Databehandling</div>
+      <div class="card gdpr-card">
+        <p class="gdpr-text">
+          <strong>Hva vi lagrer:</strong> Navn, e-postadresse, helsescore, boost-aktivitet, refleksjonstekster og meldinger i gruppekanaler du deltar i.
+        </p>
+        <p class="gdpr-text">
+          <strong>Lagring:</strong> Data lagres på servere innenfor EU/EØS. Vi benytter kryptert overføring (HTTPS) og passord lagres som krypterte hash-verdier.
+        </p>
+        <p class="gdpr-text">
+          <strong>Oppbevaringstid:</strong> Data slettes 30 dager etter at kontoen din slettes. Du kan når som helst be om umiddelbar sletting.
+        </p>
+        <p class="gdpr-text">
+          <strong>Dine rettigheter:</strong> Innsyn · Retting · Sletting · Begrensning · Dataportabilitet · Klage til Datatilsynet (datatilsynet.no).
+        </p>
+      </div>
+
+      <!-- Kontakt -->
+      <div class="section-label">Kontakt</div>
+      <div class="card gdpr-card">
+        <p class="gdpr-text">
+          Har du spørsmål om hvordan vi behandler dataene dine, eller ønsker du å utøve dine rettigheter?
+        </p>
+        <p class="gdpr-text">
+          <strong>E-post:</strong> personvern@boostmove.no
+        </p>
+        <p class="gdpr-text">
+          Vi svarer innen 5 virkedager.
+        </p>
+      </div>
+
       <!-- Endre passord -->
       <div class="section-label">Endre passord</div>
       <div class="card">
@@ -464,5 +512,23 @@ async function onLogout() {
 .confirm-delete-btn:disabled {
   opacity: 0.35;
   cursor: default;
+}
+
+/* GDPR static cards */
+.gdpr-card {
+  gap: 10px;
+}
+
+.gdpr-text {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 500;
+  color: rgba(17, 24, 39, 0.65);
+  line-height: 1.6;
+}
+
+.gdpr-text strong {
+  font-weight: 800;
+  color: rgba(17, 24, 39, 0.80);
 }
 </style>

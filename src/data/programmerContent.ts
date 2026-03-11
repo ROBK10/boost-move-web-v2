@@ -43,6 +43,46 @@ function make12WeeksItems(prefix: string): ProgramItem[] {
 
 export const programmerCategories: ProgramCategory[] = [
   {
+    id: "raske-okter",
+    title: "Raske økter",
+    items: [
+      {
+        id: "5min-rygg",
+        title: "5 min rygg",
+        subtitle: "Løs opp ryggen ved skrivebordet",
+        sections: [
+          {
+            h: "5 min rygg – Kom i gang",
+            p: "Disse øvelsene er laget for deg som sitter mye. Du trenger ingen utstyr og kan gjøre dem ved pulten.\n\nØvelse 1 – Katterygg (1 min)\nKom på alle fire (eller gjør det i stolen). Rund ryggen som en katt, hold 3 sekunder. Slipp ned og løft brystet lett, hold 3 sekunder. Gjenta i 1 minutt.\n\nØvelse 2 – Sittende rotasjon (1 min)\nSitt rett. Roter overkroppen sakte til høyre, hold 5 sekunder. Tilbake til midten. Roter til venstre, hold 5 sekunder. Gjenta i 1 minutt.\n\nØvelse 3 – Bryst åpning (1 min)\nFlett hendene bak hodet. Trekk albuene bakover og press brystet fremover. Hold 5 sekunder, slipp. Gjenta 6 ganger.\n\nØvelse 4 – Hofte hev i stående (1 min)\nStå bak stolen, hold i ryggen. Hev én kne til hoftehøyde, hold 2 sekunder. Bytt ben. Gjenta i 1 minutt.\n\nØvelse 5 – Pust og strekk (1 min)\nStå opp, strekk armene rett opp. Pust dypt inn. Pust ut og senk armene sakte. Gjenta 6 ganger rolig.\n\nBra jobbet! Ryggen din takker deg.",
+          },
+        ],
+      },
+      {
+        id: "5min-skuldre",
+        title: "5 min skuldre",
+        subtitle: "Slipp spenning i nakke og skuldre",
+        sections: [
+          {
+            h: "5 min skuldre – Slipp spenningen",
+            p: "Skuldre og nakke samler mye spenning gjennom dagen. Disse øvelsene hjelper deg å slippe det.\n\nØvelse 1 – Skulderruller (1 min)\nRull skuldrene sakte bakover 10 ganger. Deretter fremover 10 ganger. Hold rolig tempo og pust jevnt.\n\nØvelse 2 – Nakkestrekk (1 min)\nLen hodet sakte til høyre, la tyngden trekke. Hold 15 sekunder. Tilbake til midten. Gjenta til venstre. Gjenta én gang til på hver side.\n\nØvelse 3 – Arm-kryssing over bryst (1 min)\nTrekk én arm rett over brystet med den andre armen. Hold 15 sekunder. Bytt arm. Gjenta én gang til på hver side.\n\nØvelse 4 – Skulder åpning i dørkarm (1 min)\nStå i en åpning (eller press hendene mot veggen bak). Trykk skuldrene lett bakover og åpne brystet. Hold 10 sekunder, slipp. Gjenta 4–5 ganger.\n\nØvelse 5 – Trist-rolig avrunding (1 min)\nSett deg ned. Lukk øynene. Pust inn gjennom nesen i 4 sekunder. Hold 4 sekunder. Pust ut i 6 sekunder. Gjenta 4 ganger.\n\nSkuldrene dine er lettere nå.",
+          },
+        ],
+      },
+      {
+        id: "5min-energi",
+        title: "5 min energi",
+        subtitle: "Kickstart kroppen midt på dagen",
+        sections: [
+          {
+            h: "5 min energi – Vekk kroppen",
+            p: "Når energien synker midt på dagen, er bevegelse raskere og bedre enn en kopp kaffe. Disse øvelsene får blodet til å sirkulere.\n\nØvelse 1 – Hoppetau uten tau (1 min)\nHopp lett på stedet, alternér bena som om du hopper tauhopp. Lett intensitet, hold tempo du klarer i 1 minutt.\n\nØvelse 2 – Armhevinger mot vegg (1 min)\nStå 1 meter fra veggen, legg hendene på veggen. Bøy albuene og kom mot veggen, press tilbake. 12–15 repetisjoner.\n\nØvelse 3 – Knehev marsj (1 min)\nMarsjer på stedet med høye knær. Sving armene med. Hold jevnt tempo i 1 minutt.\n\nØvelse 4 – Sidestep (1 min)\nTa et skritt til siden, samle føttene. Ta et skritt til andre siden. Øk tempoet gradvis. Hold i 1 minutt.\n\nØvelse 5 – Dyp pust og strekk (1 min)\nHev armene rett opp over hodet på innpust. Pust ut og slipp armene ned. 6–8 rolige repetisjoner.\n\nDu er nå mer klar enn før!",
+          },
+        ],
+      },
+    ],
+  },
+
+  {
     id: "oppstart",
     title: "Oppstart",
     items: [

@@ -46,6 +46,7 @@ function toggleNotifications() {
 const fileInput = ref<HTMLInputElement | null>(null)
 const avatarPreview = ref<string | null>(null)
 const avatarUploading = ref(false)
+const avatarError = ref<string | null>(null)
 
 const fullAvatarUrl = computed(() => {
   if (avatarPreview.value) return avatarPreview.value
@@ -61,18 +62,18 @@ async function onAvatarChange(e: Event) {
   const file = (e.target as HTMLInputElement).files?.[0]
   if (!file) return
 
-  // Immediate local preview
+  avatarError.value = null
   avatarPreview.value = URL.createObjectURL(file)
   avatarUploading.value = true
   try {
     await auth.uploadAvatar(file)
-    // Replace object URL with server URL
     avatarPreview.value = null
-  } catch {
-    // Keep the local preview if upload failed; silently degrade
+  } catch (err: any) {
+    avatarPreview.value = null
+    avatarError.value = err?.message || "Kunne ikke laste opp bilde. Prøv igjen."
+    setTimeout(() => { avatarError.value = null }, 4000)
   } finally {
     avatarUploading.value = false
-    // Reset file input so the same file can be re-selected
     if (fileInput.value) fileInput.value.value = ""
   }
 }
@@ -120,6 +121,7 @@ async function onLogout() {
         </div>
       </button>
       <input ref="fileInput" type="file" accept="image/*" class="hidden-input" @change="onAvatarChange" />
+      <p v-if="avatarError" class="avatar-error" role="alert">{{ avatarError }}</p>
       <div class="user-name">{{ user?.name ?? "—" }}</div>
       <div class="user-email">{{ user?.email ?? "—" }}</div>
 
@@ -354,6 +356,15 @@ async function onLogout() {
 
 .hidden-input {
   display: none;
+}
+
+.avatar-error {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 700;
+  color: #dc2626;
+  text-align: center;
+  max-width: 260px;
 }
 
 .edit-badge {
