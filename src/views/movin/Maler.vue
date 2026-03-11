@@ -55,7 +55,7 @@ function openItem(id: string) {
 
           <div>
             <h1 class="title">Maler</h1>
-            <p class="subtitle">Mine Maler</p>
+            <p class="subtitle">Praktiske verktøy og rutiner</p>
           </div>
         </div>
 
@@ -67,7 +67,7 @@ function openItem(id: string) {
       <section class="list">
         <div v-for="cat in categories" :key="cat.id" class="catBlock">
           <!-- Category pill -->
-          <button class="catRow" type="button" @click="toggleCategory(cat.id)">
+          <button class="catRow" :class="{ 'catRow--open': openCategoryId === cat.id }" type="button" @click="toggleCategory(cat.id)">
             <div class="catText">
               <div v-if="cat.label" class="catLabel">{{ cat.label }}</div>
               <div class="catTitle">{{ cat.title }}</div>
@@ -77,6 +77,7 @@ function openItem(id: string) {
           </button>
 
           <!-- Items -->
+          <Transition name="expand">
           <div v-if="openCategoryId === cat.id" class="items">
             <button
               v-for="it in cat.items"
@@ -127,6 +128,7 @@ function openItem(id: string) {
               Innhold kommer snart.
             </div>
           </div>
+          </Transition>
         </div>
       </section>
     </div>
@@ -216,64 +218,84 @@ function openItem(id: string) {
 }
 
 /* List */
-.list{ display:flex; flex-direction:column; gap:12px; }
+.list{ display:flex; flex-direction:column; gap:10px; }
 
 /* Category pill */
 .catRow{
   width:100%;
-  border:none;
-  background: rgba(17,24,39,0.04);
-  border-radius:18px;
-  padding: 18px 16px;
+  border: 1px solid rgba(17,24,39,0.06);
+  background: white;
+  border-radius:20px;
+  padding:16px 18px;
+  min-height: 64px;
   display:flex;
   align-items:center;
   justify-content:space-between;
+  gap:12px;
   cursor:pointer;
+  box-shadow: 0 4px 16px rgba(17,24,39,0.06);
+  transition: box-shadow 160ms ease, background 120ms ease, border-color 160ms ease;
 }
+.catRow--open {
+  box-shadow: 0 8px 28px rgba(17,24,39,0.10);
+  border-color: rgba(17,24,39,0.10);
+  background: #fafafa;
+}
+.catRow:active { background: rgba(17,24,39,0.03); }
 
-.catText{ display:flex; flex-direction:column; gap:6px; text-align:left; }
+.catText{ display:flex; flex-direction:column; gap:4px; text-align:left; min-width:0; }
 .catLabel{
-  font-size:14px;
+  font-size:13px;
   font-weight:800;
-  color: rgba(17,24,39,0.55);
+  color: rgba(17,24,39,0.45);
+  letter-spacing:0.01em;
+  text-transform: uppercase;
 }
 .catTitle{
-  font-size:22px;
+  font-size:17px;
   font-weight:900;
   color: rgba(17,24,39,0.92);
-  letter-spacing: -0.02em;
+  letter-spacing: -0.01em;
 }
 
 .catChev{
   width:10px;height:10px;
-  border-right:2px solid rgba(17,24,39,0.45);
-  border-bottom:2px solid rgba(17,24,39,0.45);
+  border-right:2px solid rgba(17,24,39,0.35);
+  border-bottom:2px solid rgba(17,24,39,0.35);
   transform: rotate(45deg);
-  transition: transform 120ms ease;
+  transition: transform 200ms cubic-bezier(0.22,1,0.36,1);
+  flex-shrink:0;
 }
 .catChev.open{ transform: rotate(-135deg); }
 
 /* Items list */
 .items{
-  margin-top: 10px;
+  margin-top: 8px;
   display:flex;
   flex-direction:column;
-  gap: 12px;
+  gap: 8px;
 }
 
 /* Item row */
 .itemRow{
   width:100%;
-  border:none;
-  background: rgba(17,24,39,0.04);
-  border-radius:18px;
-  padding:14px 12px;
+  border: 1px solid rgba(17,24,39,0.05);
+  background: white;
+  border-radius:16px;
+  padding:14px 14px;
   display:flex;
   align-items:center;
   justify-content:space-between;
   gap:10px;
   cursor:pointer;
+  box-shadow: 0 2px 8px rgba(17,24,39,0.05);
+  transition: background 120ms ease, box-shadow 120ms ease;
 }
+.itemRow:hover {
+  background: rgba(17,24,39,0.02);
+  box-shadow: 0 4px 14px rgba(17,24,39,0.08);
+}
+.itemRow:active { background: rgba(17,24,39,0.04); }
 
 .left{ display:flex; align-items:center; gap:12px; min-width:0; }
 
@@ -407,4 +429,13 @@ function openItem(id: string) {
   color: rgba(17,24,39,0.45);
   padding: 10px 4px 0;
 }
+
+.expand-enter-active {
+  transition: opacity 220ms ease, transform 220ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.expand-leave-active {
+  transition: opacity 140ms ease, transform 140ms ease;
+}
+.expand-enter-from { opacity: 0; transform: translateY(-8px); }
+.expand-leave-to   { opacity: 0; transform: translateY(-4px); }
 </style>

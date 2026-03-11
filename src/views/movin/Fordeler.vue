@@ -48,7 +48,7 @@ function openItem(id: string) {
 
           <div>
             <h1 class="title">Mine fordeler</h1>
-            <p class="subtitle">Samarbeidspartnere og fordeler</p>
+            <p class="subtitle">Ressurser og samarbeidspartnere</p>
           </div>
         </div>
 
