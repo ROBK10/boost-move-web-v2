@@ -7,6 +7,7 @@ const router = Router()
 
 const JWT_SECRET = process.env.JWT_SECRET || "dev_secret_change_me"
 const COOKIE_NAME = process.env.COOKIE_NAME || "bm_token"
+const IS_PROD = process.env.NODE_ENV === "production"
 
 function makeCompanyCode(companyName: string) {
   const slug = companyName
@@ -28,7 +29,7 @@ function setAuthCookie(res: any, token: string) {
   res.cookie(COOKIE_NAME, token, {
     httpOnly: true,
     sameSite: "lax",
-    secure: false,
+    secure: IS_PROD,
     path: "/",
     maxAge: 1000 * 60 * 60 * 24 * 30,
   })
@@ -38,7 +39,7 @@ function clearAuthCookie(res: any) {
   res.clearCookie(COOKIE_NAME, {
     httpOnly: true,
     sameSite: "lax",
-    secure: false,
+    secure: IS_PROD,
     path: "/",
   })
 }

@@ -117,10 +117,10 @@ const dagensBoost = computed(() => {
       <KomIGangMentaltCard @open="go(PATHS.komIGangMentalt)" />
     </section>
 
-    <!-- Dagens Boost -->
-    <div class="boost-card" role="region" aria-label="Dagens Boost">
+    <!-- Dagens økt -->
+    <div class="boost-card" role="region" aria-label="Dagens økt">
       <div class="boost-left">
-        <span class="boost-eyebrow">Dagens Boost</span>
+        <span class="boost-eyebrow">Dagens økt</span>
         <span class="boost-title">{{ dagensBoost.label }}</span>
       </div>
       <button
