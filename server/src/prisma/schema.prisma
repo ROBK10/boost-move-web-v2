@@ -26,6 +26,9 @@ model User {
   companyId    String
   company      Company  @relation(fields: [companyId], references: [id])
 
+  bio          String?
+  avatarUrl    String?
+
   createdAt    DateTime @default(now())
 
   checkIns        DailyCheckIn[]

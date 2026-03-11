@@ -6,6 +6,8 @@ import { useBoostStore } from "@/stores/boostStore"
 import { useMinHelseStore } from "@/stores/minHelseStore"
 import { useTeamStore } from "@/stores/teamStore"
 
+const API_BASE = import.meta.env.VITE_API_BASE || "http://localhost:3001"
+
 const router = useRouter()
 const auth = useAuthStore()
 const boost = useBoostStore()
@@ -32,14 +34,47 @@ const workplace = computed(() => {
   return domain ? domain.split(".")[0] : null
 })
 
-const notificationsOn = ref(true)
+const notificationsOn = ref(localStorage.getItem("bm-notifications") !== "false")
 const settingsFlashing = ref(false)
 
-function scrollToSettings() {
-  const el = document.getElementById("settings-section")
-  el?.scrollIntoView({ behavior: "smooth", block: "nearest" })
-  settingsFlashing.value = true
-  setTimeout(() => { settingsFlashing.value = false }, 700)
+function toggleNotifications() {
+  notificationsOn.value = !notificationsOn.value
+  localStorage.setItem("bm-notifications", String(notificationsOn.value))
+}
+
+// Avatar upload
+const fileInput = ref<HTMLInputElement | null>(null)
+const avatarPreview = ref<string | null>(null)
+const avatarUploading = ref(false)
+
+const fullAvatarUrl = computed(() => {
+  if (avatarPreview.value) return avatarPreview.value
+  if (auth.user?.avatarUrl) return `${API_BASE}${auth.user.avatarUrl}`
+  return null
+})
+
+function triggerAvatarPick() {
+  fileInput.value?.click()
+}
+
+async function onAvatarChange(e: Event) {
+  const file = (e.target as HTMLInputElement).files?.[0]
+  if (!file) return
+
+  // Immediate local preview
+  avatarPreview.value = URL.createObjectURL(file)
+  avatarUploading.value = true
+  try {
+    await auth.uploadAvatar(file)
+    // Replace object URL with server URL
+    avatarPreview.value = null
+  } catch {
+    // Keep the local preview if upload failed; silently degrade
+  } finally {
+    avatarUploading.value = false
+    // Reset file input so the same file can be re-selected
+    if (fileInput.value) fileInput.value.value = ""
+  }
 }
 
 onMounted(async () => {
@@ -61,7 +96,7 @@ async function onLogout() {
     <!-- HEADER -->
     <header class="top">
       <h1 class="title">Profil</h1>
-      <button class="gear-btn" type="button" aria-label="Innstillinger" @click="scrollToSettings">
+      <button class="gear-btn" type="button" aria-label="Innstillinger" @click="router.push('/profil/innstillinger')">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="12" cy="12" r="3"/>
           <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
@@ -71,17 +106,20 @@ async function onLogout() {
 
     <!-- PROFILE SECTION -->
     <section class="profile-section">
-      <div class="avatar-wrap">
-        <div class="avatar">
-          <span class="avatar-initials">{{ initials }}</span>
+      <button class="avatar-wrap" type="button" @click="triggerAvatarPick" aria-label="Endre profilbilde" :disabled="avatarUploading">
+        <div class="avatar" :class="{ 'avatar--uploading': avatarUploading }">
+          <img v-if="fullAvatarUrl" :src="fullAvatarUrl" class="avatar-img" alt="Profilbilde" />
+          <span v-else class="avatar-initials">{{ initials }}</span>
         </div>
         <div class="edit-badge" aria-hidden="true">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <svg v-if="!avatarUploading" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
             <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
             <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
           </svg>
+          <span v-else class="badge-spinner" aria-hidden="true"></span>
         </div>
-      </div>
+      </button>
+      <input ref="fileInput" type="file" accept="image/*" class="hidden-input" @change="onAvatarChange" />
       <div class="user-name">{{ user?.name ?? "—" }}</div>
       <div class="user-email">{{ user?.email ?? "—" }}</div>
 
@@ -156,7 +194,7 @@ async function onLogout() {
 
     <!-- ACTION LIST -->
     <div id="settings-section" class="action-list" :class="{ 'action-list--flash': settingsFlashing }">
-      <div class="action-row action-row--static">
+      <button class="action-row action-row--nav" type="button" @click="router.push('/profil/personlige-detaljer')">
         <span class="action-icon" aria-hidden="true">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
@@ -164,8 +202,8 @@ async function onLogout() {
           </svg>
         </span>
         <span class="action-label">Personlige detaljer</span>
-        <span class="soon-pill">Snart</span>
-      </div>
+        <span class="chev" aria-hidden="true"></span>
+      </button>
 
       <div class="action-divider"></div>
 
@@ -183,7 +221,7 @@ async function onLogout() {
           type="button"
           role="switch"
           :aria-checked="notificationsOn"
-          @click="notificationsOn = !notificationsOn"
+          @click="toggleNotifications"
         >
           <span class="toggle-thumb"></span>
         </button>
@@ -191,15 +229,15 @@ async function onLogout() {
 
       <div class="action-divider"></div>
 
-      <div class="action-row action-row--static">
+      <button class="action-row action-row--nav" type="button" @click="router.push('/profil/personvern')">
         <span class="action-icon" aria-hidden="true">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
           </svg>
         </span>
         <span class="action-label">Personvern og sikkerhet</span>
-        <span class="soon-pill">Snart</span>
-      </div>
+        <span class="chev" aria-hidden="true"></span>
+      </button>
 
       <div class="action-divider"></div>
 
@@ -271,6 +309,14 @@ async function onLogout() {
   width: 96px;
   height: 96px;
   margin-bottom: 4px;
+  border: none;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.avatar-wrap:disabled {
+  cursor: default;
 }
 
 .avatar {
@@ -283,6 +329,19 @@ async function onLogout() {
   justify-content: center;
   border: 3px solid white;
   box-shadow: 0 8px 24px rgba(99, 102, 241, 0.28);
+  overflow: hidden;
+  transition: opacity 150ms ease;
+}
+
+.avatar--uploading {
+  opacity: 0.7;
+}
+
+.avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 999px;
 }
 
 .avatar-initials {
@@ -291,6 +350,10 @@ async function onLogout() {
   color: white;
   text-transform: uppercase;
   line-height: 1;
+}
+
+.hidden-input {
+  display: none;
 }
 
 .edit-badge {
@@ -305,6 +368,19 @@ async function onLogout() {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.badge-spinner {
+  width: 12px;
+  height: 12px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 999px;
+  animation: spin 600ms linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }
 
 .user-name {
@@ -471,8 +547,12 @@ async function onLogout() {
   text-align: left;
 }
 
-.action-row--static {
-  opacity: 0.65;
+.action-row--nav {
+  cursor: pointer;
+}
+
+.action-row--nav:active {
+  background: rgba(17, 24, 39, 0.03);
 }
 
 .soon-pill {

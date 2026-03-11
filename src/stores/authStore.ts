@@ -1,5 +1,6 @@
 import { defineStore } from "pinia"
 import { apiFetch } from "../services/api"
+import { updateProfile as apiUpdateProfile, uploadAvatar as apiUploadAvatar } from "../services/userService"
 
 export type AuthUser = {
   id: string
@@ -7,6 +8,8 @@ export type AuthUser = {
   name: string
   role: string
   companyId: string
+  bio?: string
+  avatarUrl?: string
 }
 
 type RegisterInput = {
@@ -78,6 +81,22 @@ export const useAuthStore = defineStore("auth", {
     async logout() {
       await apiFetch("/auth/logout", { method: "POST" })
       this.user = null
+    },
+
+    async updateProfile(data: { name?: string; bio?: string }) {
+      const res = await apiUpdateProfile(data)
+      if (this.user) {
+        if (res.user.name) this.user.name = res.user.name
+        if (res.user.bio !== undefined) this.user.bio = res.user.bio
+      }
+    },
+
+    async uploadAvatar(file: File) {
+      const res = await apiUploadAvatar(file)
+      if (this.user) {
+        this.user.avatarUrl = res.avatarUrl
+      }
+      return res.avatarUrl
     },
   },
 })

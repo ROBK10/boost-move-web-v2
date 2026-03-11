@@ -8,6 +8,9 @@ import MovinHome from "@/views/Movin.vue"
 import MinHelse from "@/views/MinHelse.vue"
 import Chat from "@/views/Chat.vue"
 import Profil from "@/views/Profil.vue"
+import ProfileSettings from "@/views/profile/ProfileSettings.vue"
+import ProfilePersonal from "@/views/profile/ProfilePersonal.vue"
+import ProfilePrivacy from "@/views/profile/ProfilePrivacy.vue"
 import Progresjon from "@/views/Progresjon.vue"
 import Login from "@/views/Login.vue"
 
@@ -36,6 +39,9 @@ const routes: RouteRecordRaw[] = [
   { path: "/min-helse", component: MinHelse },
   { path: "/chat", component: Chat },
   { path: "/profil", component: Profil },
+  { path: "/profil/innstillinger", component: ProfileSettings },
+  { path: "/profil/personlige-detaljer", component: ProfilePersonal },
+  { path: "/profil/personvern", component: ProfilePrivacy },
   { path: "/progresjon", component: Progresjon },
 
   {
