@@ -20,7 +20,9 @@ watch(
 )
 
 const total = computed(() => item.value?.sections.length ?? 0)
-const isEmpty = computed(() => total.value === 0)
+const hasSections = computed(() => total.value > 0)
+const isPdfOnly = computed(() => !!item.value?.pdfOnly)
+const isEmpty = computed(() => !hasSections.value && !isPdfOnly.value)
 const isFirst = computed(() => index.value <= 0)
 const isLast = computed(() => total.value > 0 && index.value >= total.value - 1)
 
@@ -94,6 +96,12 @@ function complete() {
     router.push("/movin/programmer")
   }, 1600)
 }
+
+function openPdf() {
+  if (item.value?.pdfUrl) {
+    window.open(item.value.pdfUrl, "_blank")
+  }
+}
 </script>
 
 <template>
@@ -112,12 +120,8 @@ function complete() {
       <h1 class="title">{{ item.title }}</h1>
       <p v-if="item.subtitle" class="subtitle">{{ item.subtitle }}</p>
 
-      <main class="content">
-        <div v-if="isEmpty" class="empty">
-          Innhold kommer snart.
-        </div>
-
-        <template v-else-if="section">
+      <main class="content" v-if="hasSections">
+        <template v-if="section">
           <!-- Program content -->
           <section class="section">
             <h2 class="h2">{{ section.h }}</h2>
@@ -172,12 +176,31 @@ function complete() {
         </template>
       </main>
 
+      <!-- Empty state -->
+      <div class="content" v-if="isEmpty">
+        <div class="empty">Innhold kommer snart.</div>
+      </div>
+
+      <!-- PDF-only CTA -->
+      <div v-if="isPdfOnly" class="pdfCard">
+        <div class="pdfCardIcon" aria-hidden="true"></div>
+        <p class="pdfCardText">Dette programmet er tilgjengelig som PDF-dokument.</p>
+        <button class="pdfBtn" type="button" @click="openPdf">
+          <span class="dlIcon" aria-hidden="true"></span>
+          Åpne program (PDF)
+        </button>
+      </div>
+
       <!-- Partner credit -->
-      <footer class="credit">
+      <footer class="credit" v-if="hasSections">
         Program utviklet i samarbeid med Skap Flyt
       </footer>
 
-      <div class="bottom" v-if="!isEmpty">
+      <div class="bottom" v-if="isPdfOnly">
+        <button class="completeBtn" type="button" @click="goBack">Tilbake</button>
+      </div>
+
+      <div class="bottom" v-if="hasSections">
         <button class="navBtn" type="button" @click="prev" :disabled="isFirst">
           Forrige
         </button>
@@ -391,6 +414,106 @@ function complete() {
   background: rgba(17, 24, 39, 0.08);
   border-color: rgba(17, 24, 39, 0.28);
   color: rgba(17, 24, 39, 0.90);
+}
+
+/* PDF-only card */
+.pdfCard {
+  margin-top: 24px;
+  background: white;
+  border-radius: 24px;
+  padding: 24px 20px;
+  box-shadow: 0 8px 28px rgba(17, 24, 39, 0.07);
+  border: 1px solid rgba(17, 24, 39, 0.06);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  text-align: center;
+}
+
+.pdfCardIcon {
+  width: 52px;
+  height: 60px;
+  border: 2px solid rgba(17, 24, 39, 0.12);
+  border-radius: 8px;
+  position: relative;
+  background: rgba(17, 24, 39, 0.03);
+}
+
+.pdfCardIcon::before {
+  content: "PDF";
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.05em;
+  color: rgba(17, 24, 39, 0.40);
+}
+
+.pdfCardText {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+  color: rgba(17, 24, 39, 0.55);
+  line-height: 1.5;
+}
+
+.pdfBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  height: 52px;
+  padding: 0 24px;
+  border: none;
+  border-radius: 16px;
+  background: #111827;
+  color: white;
+  font-size: 15px;
+  font-weight: 900;
+  cursor: pointer;
+  transition: opacity 120ms ease;
+}
+
+.pdfBtn:active { opacity: 0.8; }
+
+.dlIcon {
+  width: 16px;
+  height: 16px;
+  position: relative;
+  display: inline-block;
+}
+
+.dlIcon::before {
+  content: "";
+  position: absolute;
+  left: 7px; top: 1px;
+  width: 2px; height: 9px;
+  background: white;
+}
+
+.dlIcon::after {
+  content: "";
+  position: absolute;
+  left: 4px; top: 7px;
+  width: 8px; height: 8px;
+  border-right: 2px solid white;
+  border-bottom: 2px solid white;
+  transform: rotate(45deg);
+}
+
+.completeBtn {
+  flex: 1;
+  height: 58px;
+  border: none;
+  border-radius: 18px;
+  background: rgba(185, 255, 0, 0.95);
+  color: #111827;
+  font-weight: 900;
+  font-size: 15px;
+  cursor: pointer;
 }
 
 /* Partner credit */

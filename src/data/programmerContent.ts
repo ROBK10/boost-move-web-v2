@@ -10,12 +10,16 @@ export type ProgramItem = {
   title: string
   subtitle: string
   sections: ProgramSection[]
+  image?: string    // cover/hero image path (served from /programmer/images/)
+  pdfUrl?: string   // downloadable PDF path (served from /programmer/pdfs/)
+  pdfOnly?: boolean // true = no sections, show PDF download CTA as primary action
 }
 
 export type ProgramCategory = {
   id: string
   title: string
   items: ProgramItem[]
+  pdfUrl?: string   // category-level PDF shown as download badge in list view
 }
 
 function make12WeeksItems(prefix: string): ProgramItem[] {
@@ -90,6 +94,8 @@ export const programmerCategories: ProgramCategory[] = [
         id: "oppstart-din-vei",
         title: "Din vei",
         subtitle: "Veiledning til trening!",
+        pdfUrl: "/programmer/pdfs/kartlegge-verdier.pdf",
+        pdfOnly: true,
         sections: [],
       },
     ],
@@ -111,11 +117,14 @@ export const programmerCategories: ProgramCategory[] = [
   {
     id: "kontortrening",
     title: "Kontortrening",
+    pdfUrl: "/programmer/pdfs/kontortrening.pdf",
     items: [
       {
         id: "kontortrening-01",
         title: "Kontortrening",
         subtitle: "Myk opp og få i gang blodsirkulasjonen",
+        pdfUrl: "/programmer/pdfs/kontortrening.pdf",
+        pdfOnly: true,
         sections: [],
       },
     ],
@@ -124,11 +133,14 @@ export const programmerCategories: ProgramCategory[] = [
   {
     id: "kjerne-og-bevegelighet",
     title: "Kjerne og bevegelighet",
+    pdfUrl: "/programmer/pdfs/kjerne-bevegelighet.pdf",
     items: [
       {
         id: "kjerne-01",
         title: "Kjerne og bevegelighet",
         subtitle: "Bevegelighetsprogram",
+        pdfUrl: "/programmer/pdfs/kjerne-bevegelighet.pdf",
+        pdfOnly: true,
         sections: [],
       },
     ],
@@ -137,11 +149,14 @@ export const programmerCategories: ProgramCategory[] = [
   {
     id: "styrkeprogram-for-lopere",
     title: "Styrkeprogram for løpere",
+    pdfUrl: "/programmer/pdfs/styrkeprogram-lopere.pdf",
     items: [
       {
         id: "styrke-loper-01",
         title: "Styrkeprogram",
         subtitle: "Forebygger skader og gjør deg sterkere",
+        pdfUrl: "/programmer/pdfs/styrkeprogram-lopere.pdf",
+        pdfOnly: true,
         sections: [],
       },
     ],
@@ -150,11 +165,14 @@ export const programmerCategories: ProgramCategory[] = [
   {
     id: "mobilitetsprogram-for-lopere",
     title: "Mobilitetsprogram for løpere",
+    pdfUrl: "/programmer/pdfs/mobilitetsprogram-lopere.pdf",
     items: [
       {
         id: "mobilitet-loper-01",
         title: "Mobilitetsprogram",
         subtitle: "Bli bedre i løp – bedre flyt og mindre stivhet",
+        pdfUrl: "/programmer/pdfs/mobilitetsprogram-lopere.pdf",
+        pdfOnly: true,
         sections: [],
       },
     ],
@@ -162,24 +180,29 @@ export const programmerCategories: ProgramCategory[] = [
 
   {
     id: "12uker-niva1",
-    title: "12-ukers løpeprogram (nivå1)",
+    title: "12-ukers løpeprogram (nivå 1)",
+    pdfUrl: "/programmer/pdfs/norklinikken-12uker.pdf",
     items: make12WeeksItems("niva1"),
   },
 
   {
     id: "12uker-niva2",
-    title: "12-ukers løpeprogram (nivå2)",
+    title: "12-ukers løpeprogram (nivå 2)",
+    pdfUrl: "/programmer/pdfs/norklinikken-12uker-niva2.pdf",
     items: make12WeeksItems("niva2"),
   },
 
   {
     id: "fra-null-til-gull",
-    title: "Fra Null til Gull.",
+    title: "Fra Null til Gull",
+    pdfUrl: "/programmer/pdfs/12uker-hybrid.pdf",
     items: [
       {
         id: "nulltilgull-01",
         title: "Fra Null til Gull",
         subtitle: "Kom i gang – bygg deg opp steg for steg",
+        pdfUrl: "/programmer/pdfs/12uker-hybrid.pdf",
+        pdfOnly: true,
         sections: [],
       },
     ],

@@ -19,7 +19,6 @@ function toggleCategory(id: string) {
 
 const starred = reactive<Record<string, boolean>>({})
 const downloaded = reactive<Record<string, boolean>>({})
-const checked = reactive<Record<string, boolean>>({})
 
 function toggleStar(id: string) { starred[id] = !starred[id] }
 function toggleDownload(id: string) { downloaded[id] = !downloaded[id] }
@@ -62,8 +61,8 @@ function openItem(id: string) { router.push(`/movin/knowzone/${id}`) }
                   <path d="M21 13v2a4 4 0 0 1-4 4H3"/>
                 </svg>
 
-                <!-- kunnskap-trening: activity pulse -->
-                <svg v-else-if="cat.id === 'kunnskap-trening'" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <!-- trening: activity pulse -->
+                <svg v-else-if="cat.id === 'trening'" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
                 </svg>
 
@@ -122,9 +121,9 @@ function openItem(id: string) { router.push(`/movin/knowzone/${id}`) }
               >
                 <div class="left">
                   <div class="thumb">
-                    <div v-if="checked[it.id]" class="check" aria-hidden="true"></div>
-                    <div v-else class="ghostMark" aria-hidden="true"></div>
-                    <div class="docPreview" aria-hidden="true"></div>
+                    <img v-if="it.image" :src="it.image" :alt="it.title" class="thumbImg" aria-hidden="true" />
+                    <div v-else-if="it.pdfOnly" class="pdfMark" aria-hidden="true">PDF</div>
+                    <div v-else class="docPreview" aria-hidden="true"></div>
                   </div>
                   <div class="text">
                     <div class="rowTitle">{{ it.title }}</div>
@@ -335,9 +334,9 @@ function openItem(id: string) { router.push(`/movin/knowzone/${id}`) }
 .left { display: flex; align-items: center; gap: 12px; min-width: 0; }
 
 .thumb {
-  width: 56px;
-  height: 56px;
-  border-radius: 14px;
+  width: 64px;
+  height: 64px;
+  border-radius: 16px;
   background: rgba(17, 24, 39, 0.07);
   position: relative;
   display: grid;
@@ -346,32 +345,29 @@ function openItem(id: string) { router.push(`/movin/knowzone/${id}`) }
   overflow: hidden;
 }
 
-.check {
-  position: absolute;
-  left: 7px;
-  top: 7px;
-  width: 14px;
-  height: 14px;
-  border-radius: 5px;
-  background: rgba(16, 185, 129, 0.95);
-}
-
-.ghostMark {
-  position: absolute;
-  left: 7px;
-  top: 7px;
-  width: 14px;
-  height: 14px;
-  border-radius: 5px;
-  background: rgba(17, 24, 39, 0.10);
-}
-
 .docPreview {
   width: 44px;
   height: 44px;
   border-radius: 10px;
   background: rgba(255, 255, 255, 0.75);
   box-shadow: inset 0 0 0 1px rgba(17, 24, 39, 0.08);
+}
+
+.thumbImg {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  border-radius: 16px;
+}
+
+.pdfMark {
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  color: rgba(17, 24, 39, 0.45);
+  border: 1.5px solid rgba(17, 24, 39, 0.20);
+  border-radius: 5px;
+  padding: 3px 5px;
 }
 
 .text { min-width: 0; text-align: left; }
@@ -390,7 +386,7 @@ function openItem(id: string) { router.push(`/movin/knowzone/${id}`) }
   margin-top: 3px;
   font-size: 12px;
   font-weight: 700;
-  color: rgba(17, 24, 39, 0.5);
+  color: rgba(17, 24, 39, 0.50);
   line-height: 1.3;
   white-space: nowrap;
   overflow: hidden;

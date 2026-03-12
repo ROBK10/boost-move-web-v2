@@ -29,7 +29,6 @@ function toggleCategory(id: string) {
 // V1 UI state
 const starred = reactive<Record<string, boolean>>({})
 const downloaded = reactive<Record<string, boolean>>({})
-const checked = reactive<Record<string, boolean>>({})
 
 function toggleStar(id: string) {
   starred[id] = !starred[id]
@@ -68,7 +67,17 @@ function openItem(id: string) {
         <div v-for="cat in categories" :key="cat.id" class="catBlock">
           <button class="catRow" :class="{ 'catRow--open': openCategoryId === cat.id }" type="button" @click="toggleCategory(cat.id)">
             <div class="catTitle">{{ cat.title }}</div>
-            <span class="catChev" :class="{ open: openCategoryId === cat.id }" aria-hidden="true"></span>
+            <div class="catRight">
+              <a
+                v-if="cat.pdfUrl"
+                :href="cat.pdfUrl"
+                target="_blank"
+                class="catPdfBadge"
+                @click.stop
+                aria-label="Last ned program som PDF"
+              >PDF</a>
+              <span class="catChev" :class="{ open: openCategoryId === cat.id }" aria-hidden="true"></span>
+            </div>
           </button>
 
           <Transition name="expand">
@@ -82,9 +91,8 @@ function openItem(id: string) {
             >
               <div class="left">
                 <div class="thumb">
-                  <div v-if="checked[it.id]" class="check"></div>
-                  <div v-else class="ghostMark"></div>
-                  <div class="docPreview"></div>
+                  <div v-if="it.pdfOnly" class="pdfMark" aria-hidden="true">PDF</div>
+                  <div v-else class="docPreview" aria-hidden="true"></div>
                 </div>
 
                 <div class="text">
@@ -229,6 +237,30 @@ function openItem(id: string) {
 .catRow:active { background: rgba(17,24,39,0.03); }
 .catTitle{ font-size:17px;font-weight:900;color:rgba(17,24,39,0.92);letter-spacing:-0.01em; }
 
+.catRight {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.catPdfBadge {
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  color: rgba(17, 24, 39, 0.55);
+  border: 1.5px solid rgba(17, 24, 39, 0.18);
+  border-radius: 6px;
+  padding: 3px 7px;
+  text-decoration: none;
+  transition: background 120ms ease, color 120ms ease;
+}
+
+.catPdfBadge:hover {
+  background: rgba(17, 24, 39, 0.06);
+  color: rgba(17, 24, 39, 0.85);
+}
+
 .catChev{
   width:10px;height:10px;
   border-right:2px solid rgba(17,24,39,0.35);
@@ -264,23 +296,22 @@ function openItem(id: string) {
   width:64px;height:64px;border-radius:16px;
   background: rgba(17,24,39,0.10);
   position:relative;display:grid;place-items:center;
-}
-
-.check{
-  position:absolute;left:8px;top:8px;
-  width:16px;height:16px;border-radius:6px;
-  background: rgba(16,185,129,0.95);
-}
-.ghostMark{
-  position:absolute;left:8px;top:8px;
-  width:16px;height:16px;border-radius:6px;
-  background: rgba(17,24,39,0.10);
+  flex-shrink:0;overflow:hidden;
 }
 
 .docPreview{
   width:52px;height:52px;border-radius:12px;
   background: rgba(255,255,255,0.7);
   box-shadow: inset 0 0 0 1px rgba(17,24,39,0.08);
+}
+
+.pdfMark{
+  font-size:9px;font-weight:900;
+  letter-spacing:0.06em;
+  color:rgba(17,24,39,0.45);
+  border:1.5px solid rgba(17,24,39,0.20);
+  border-radius:5px;
+  padding:3px 5px;
 }
 
 .rowTitle{ font-size:18px;font-weight:900;color:rgba(17,24,39,0.92); }

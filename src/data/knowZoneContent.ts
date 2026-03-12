@@ -9,6 +9,9 @@ export type KnowZoneItem = {
   title: string
   subtitle: string
   sections: KnowZoneSection[]
+  image?: string    // hero/infographic image path (served from /knowzone/images/)
+  pdfUrl?: string   // downloadable PDF path (served from /knowzone/pdfs/)
+  pdfOnly?: boolean // true = no sections, show PDF download CTA as primary action
 }
 
 export type KnowZoneCategory = {
@@ -27,57 +30,65 @@ export const knowZoneCategories: KnowZoneCategory[] = [
         id: "vane-01",
         title: "Vil du endelig klare å bli mer fysisk aktiv?",
         subtitle: "lær mer om vanenes rolle når vi prøver å endre atferd",
+        pdfUrl: "/knowzone/pdfs/vil-du-bli-aktiv.pdf",
         sections: [{ h: "Intro", p: "Placeholder..." }],
       },
     ],
   },
 
-  // 2) Kunnskap til bedre trening
+  // 2) Trening
   {
-    id: "kunnskap-trening",
-    title: "Kunnskap til bedre trening",
+    id: "trening",
+    title: "Trening",
     items: [
       {
         id: "kt-01",
         title: "Tilstandsstyring",
         subtitle: "Hvordan styrke/endre tilstanden vår",
+        pdfUrl: "/knowzone/pdfs/tilstandsstyring.pdf",
         sections: [{ h: "Intro", p: "Placeholder..." }],
       },
       {
         id: "kt-02",
         title: "Pulstrening",
         subtitle: "Hva sier pulsen?",
-        sections: [{ h: "Intro", p: "Placeholder..." }],
+        image: "/knowzone/images/pulstrening.jpg",
+        sections: [],
       },
       {
         id: "kt-03",
         title: "Løp/gå metoden",
         subtitle: "Bruk løp/gå metoden for å komme i form!",
-        sections: [{ h: "Intro", p: "Placeholder..." }],
+        image: "/knowzone/images/ga-metoden.jpg",
+        sections: [],
       },
       {
         id: "kt-04",
         title: "Belastning og økning",
         subtitle: "Hva er belastning og hvordan øke",
+        pdfUrl: "/knowzone/pdfs/belastning-og-okning.pdf",
         sections: [{ h: "Intro", p: "Placeholder..." }],
       },
       {
         id: "kt-05",
         title: "Søvn og restitusjon",
         subtitle: "Hvordan enkelt mestre søvn og restitusjon",
-        sections: [{ h: "Intro", p: "Placeholder..." }],
+        image: "/knowzone/images/sovn-og-restitusjon.jpg",
+        sections: [],
       },
       {
         id: "kt-06",
         title: "Trening og sykdom",
         subtitle: "Hva må jeg tenke på når jeg er syk?",
-        sections: [{ h: "Intro", p: "Placeholder..." }],
+        image: "/knowzone/images/trening-og-sykdom.jpg",
+        sections: [],
       },
       {
         id: "kt-07",
         title: "80-20 regelen",
         subtitle: "Hva er 80-20 regelen og hvorfor bruke denne?",
-        sections: [{ h: "Intro", p: "Placeholder..." }],
+        image: "/knowzone/images/80-20-regelen.jpg",
+        sections: [],
       },
     ],
   },
@@ -91,24 +102,28 @@ export const knowZoneCategories: KnowZoneCategory[] = [
         id: "ern-01",
         title: "Slik når du dine kostholdsrelaterte mål",
         subtitle: "Hvorfor er dietter så vanskelig, og hvordan kan du lykkes?",
-        sections: [{ h: "Intro", p: "Placeholder..." }],
+        image: "/knowzone/images/slik-nar-du-mal.png",
+        sections: [],
       },
       {
         id: "ern-02",
         title: "Tips til mettende måltider",
         subtitle: "4 enkle tips til å ta smarte valg i hverdagen",
+        pdfUrl: "/knowzone/pdfs/tips-mettende-maltider.pdf",
         sections: [{ h: "Intro", p: "Placeholder..." }],
       },
       {
         id: "ern-03",
         title: "Kosthold og trening",
         subtitle: "Hva er anbefalt og hvordan kan jeg gjøre smarte valg?",
-        sections: [{ h: "Intro", p: "Placeholder..." }],
+        image: "/knowzone/images/kosthold-og-trening.jpg",
+        sections: [],
       },
       {
         id: "ern-04",
         title: "Grunnprinsipper for et godt kosthold",
         subtitle: "Enkel oversikt over hva kroppen trenger for å fungere best.",
+        pdfUrl: "/knowzone/pdfs/grunnprinsipper-kosthold.pdf",
         sections: [{ h: "Intro", p: "Placeholder..." }],
       },
     ],
@@ -123,7 +138,9 @@ export const knowZoneCategories: KnowZoneCategory[] = [
         id: "hor-01",
         title: "Hormonbalanse",
         subtitle: "Hormonbalanse hos kvinner og menn",
-        sections: [{ h: "Intro", p: "Placeholder..." }],
+        pdfUrl: "/knowzone/pdfs/hormonbalanse.pdf",
+        pdfOnly: true,
+        sections: [],
       },
     ],
   },
@@ -137,19 +154,24 @@ export const knowZoneCategories: KnowZoneCategory[] = [
         id: "mus-01",
         title: "Hva er muskelbalanse?",
         subtitle: "Hva er muskelbalanse og hvorfor spiller dette en rolle?",
+        pdfUrl: "/knowzone/pdfs/muskelbalanse.pdf",
         sections: [{ h: "Intro", p: "Placeholder..." }],
       },
       {
         id: "mus-02",
         title: "Muskelbalanse: Gå - løper",
-        subtitle: "Muskelbalanse for deg som liker å gå Eller løpe",
-        sections: [{ h: "Intro", p: "Placeholder..." }],
+        subtitle: "Muskelbalanse for deg som liker å gå eller løpe",
+        pdfUrl: "/knowzone/pdfs/muskelbalanse-ga-loper.pdf",
+        pdfOnly: true,
+        sections: [],
       },
       {
         id: "mus-03",
         title: "Muskelbalanse: Nakke-Skulder-Rygg",
         subtitle: "Muskelbalanse for deg som har plager i nakke-skulder-rygg regionen",
-        sections: [{ h: "Intro", p: "Placeholder..." }],
+        pdfUrl: "/knowzone/pdfs/muskelbalanse-nakke-skulder-rygg.pdf",
+        pdfOnly: true,
+        sections: [],
       },
     ],
   },
@@ -168,7 +190,15 @@ export const knowZoneCategories: KnowZoneCategory[] = [
       {
         id: "ur-02",
         title: "Faste",
-        subtitle: "lær mer om faste og hvilke helseeffekter det kan gi",
+        subtitle: "Lær mer om faste og hvilke helseeffekter det kan gi",
+        pdfUrl: "/knowzone/pdfs/fasting.pdf",
+        sections: [{ h: "Intro", p: "Placeholder..." }],
+      },
+      {
+        id: "ur-03",
+        title: "Sollys",
+        subtitle: "Sollys og dets effekter på kropp og helse",
+        pdfUrl: "/knowzone/pdfs/sollys.pdf",
         sections: [{ h: "Intro", p: "Placeholder..." }],
       },
     ],

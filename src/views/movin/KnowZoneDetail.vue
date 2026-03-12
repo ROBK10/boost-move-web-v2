@@ -9,7 +9,6 @@ const router = useRouter()
 const id = computed(() => String(route.params.id || ""))
 const item = computed(() => findKnowZoneItemById(id.value))
 
-// paging inni samme artikkel
 const index = ref(0)
 
 watch(
@@ -20,7 +19,9 @@ watch(
 )
 
 const total = computed(() => item.value?.sections.length ?? 0)
-const isEmpty = computed(() => total.value === 0)
+const hasSections = computed(() => total.value > 0)
+const isPdfOnly = computed(() => !!item.value?.pdfOnly)
+const isEmpty = computed(() => !hasSections.value && !isPdfOnly.value && !item.value?.image)
 const isFirst = computed(() => index.value <= 0)
 const isLast = computed(() => total.value > 0 && index.value >= total.value - 1)
 
@@ -45,8 +46,13 @@ function next() {
 }
 
 function complete() {
-  // V1: bare tilbake til lista
   router.push("/movin/knowzone")
+}
+
+function openPdf() {
+  if (item.value?.pdfUrl) {
+    window.open(item.value.pdfUrl, "_blank")
+  }
 }
 </script>
 
@@ -58,7 +64,7 @@ function complete() {
           <span class="chev" aria-hidden="true"></span>
         </button>
 
-        <div class="progress" v-if="!isEmpty">
+        <div class="progress" v-if="hasSections">
           <span class="progressText">{{ index + 1 }}/{{ total }}</span>
         </div>
       </header>
@@ -66,18 +72,44 @@ function complete() {
       <h1 class="title">{{ item.title }}</h1>
       <p v-if="item.subtitle" class="subtitle">{{ item.subtitle }}</p>
 
-      <main class="content">
+      <!-- Hero image -->
+      <div v-if="item.image" class="heroWrap">
+        <img :src="item.image" :alt="item.title" class="heroImg" />
+      </div>
+
+      <main class="content" v-if="hasSections || isEmpty">
         <div v-if="isEmpty" class="empty">
           Innhold kommer snart.
         </div>
 
-        <section v-else class="section" v-if="section">
+        <section v-else-if="section" class="section">
           <h2 class="h2">{{ section.h }}</h2>
           <p class="p">{{ section.p }}</p>
         </section>
+
+        <!-- Inline PDF link for articles that have both sections and a PDF -->
+        <a
+          v-if="hasSections && item.pdfUrl"
+          :href="item.pdfUrl"
+          target="_blank"
+          class="pdfInline"
+        >
+          <span class="pdfIcon" aria-hidden="true"></span>
+          Last ned som PDF
+        </a>
       </main>
 
-      <div class="bottom" v-if="!isEmpty">
+      <!-- PDF-only CTA -->
+      <div v-if="isPdfOnly" class="pdfCard">
+        <div class="pdfCardIcon" aria-hidden="true"></div>
+        <p class="pdfCardText">Dette innholdet er tilgjengelig som PDF-dokument.</p>
+        <button class="pdfBtn" type="button" @click="openPdf">
+          <span class="dlIcon" aria-hidden="true"></span>
+          Åpne PDF
+        </button>
+      </div>
+
+      <div class="bottom" v-if="hasSections">
         <button class="navBtn" type="button" @click="prev" :disabled="isFirst">
           Forrige
         </button>
@@ -90,6 +122,11 @@ function complete() {
         <button v-else class="complete" type="button" @click="complete">
           COMPLETE
         </button>
+      </div>
+
+      <!-- Back button when no pagination -->
+      <div class="bottom" v-else-if="isPdfOnly || item.image">
+        <button class="complete" type="button" @click="goBack">Tilbake</button>
       </div>
     </div>
   </div>
@@ -154,6 +191,21 @@ function complete() {
   color: rgba(17, 24, 39, 0.45);
 }
 
+/* Hero image */
+.heroWrap {
+  margin-top: 18px;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 8px 28px rgba(17, 24, 39, 0.10);
+}
+
+.heroImg {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+/* Text content card */
 .content {
   margin-top: 18px;
   background: white;
@@ -161,7 +213,10 @@ function complete() {
   padding: 18px;
   box-shadow: 0 12px 36px rgba(20, 20, 20, 0.06);
   border: 1px solid rgba(17, 24, 39, 0.05);
-  min-height: 420px;
+  min-height: 120px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
 .section { display: flex; flex-direction: column; gap: 12px; }
@@ -180,6 +235,7 @@ function complete() {
   line-height: 1.6;
   font-weight: 650;
   color: rgba(17, 24, 39, 0.70);
+  white-space: pre-line;
 }
 
 .empty {
@@ -188,12 +244,137 @@ function complete() {
   color: rgba(17, 24, 39, 0.45);
 }
 
+/* Inline PDF link (for articles with both sections and PDF) */
+.pdfInline {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 13px;
+  font-weight: 800;
+  color: rgba(17, 24, 39, 0.55);
+  text-decoration: none;
+  padding: 8px 0 0;
+  border-top: 1px solid rgba(17, 24, 39, 0.06);
+}
+
+.pdfInline:hover { color: rgba(17, 24, 39, 0.85); }
+
+.pdfIcon {
+  width: 14px;
+  height: 16px;
+  border: 1.5px solid currentColor;
+  border-radius: 3px;
+  position: relative;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.pdfIcon::after {
+  content: "PDF";
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 4px;
+  font-weight: 900;
+  letter-spacing: 0.02em;
+}
+
+/* PDF-only card */
+.pdfCard {
+  margin-top: 24px;
+  background: white;
+  border-radius: 24px;
+  padding: 24px 20px;
+  box-shadow: 0 8px 28px rgba(17, 24, 39, 0.07);
+  border: 1px solid rgba(17, 24, 39, 0.06);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  text-align: center;
+}
+
+.pdfCardIcon {
+  width: 52px;
+  height: 60px;
+  border: 2px solid rgba(17, 24, 39, 0.12);
+  border-radius: 8px;
+  position: relative;
+  background: rgba(17, 24, 39, 0.03);
+}
+
+.pdfCardIcon::before {
+  content: "PDF";
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.05em;
+  color: rgba(17, 24, 39, 0.40);
+}
+
+.pdfCardText {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+  color: rgba(17, 24, 39, 0.55);
+  line-height: 1.5;
+}
+
+.pdfBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  height: 52px;
+  padding: 0 24px;
+  border: none;
+  border-radius: 16px;
+  background: #111827;
+  color: white;
+  font-size: 15px;
+  font-weight: 900;
+  cursor: pointer;
+  transition: opacity 120ms ease;
+}
+
+.pdfBtn:active { opacity: 0.8; }
+
+.dlIcon {
+  width: 16px;
+  height: 16px;
+  position: relative;
+  display: inline-block;
+}
+
+.dlIcon::before {
+  content: "";
+  position: absolute;
+  left: 7px; top: 1px;
+  width: 2px; height: 9px;
+  background: white;
+}
+
+.dlIcon::after {
+  content: "";
+  position: absolute;
+  left: 4px; top: 7px;
+  width: 8px; height: 8px;
+  border-right: 2px solid white;
+  border-bottom: 2px solid white;
+  transform: rotate(45deg);
+}
+
 /* Bottom nav */
 .bottom {
   position: fixed;
   left: 0;
   right: 0;
-  bottom: 86px; /* tar hensyn til bottomnav */
+  bottom: 86px;
   padding: 0 16px;
   display: flex;
   gap: 10px;

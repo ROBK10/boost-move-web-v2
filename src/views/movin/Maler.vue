@@ -29,7 +29,6 @@ function toggleCategory(id: string) {
 // V1 UI state (ikke lagring enda)
 const starred = reactive<Record<string, boolean>>({})
 const downloaded = reactive<Record<string, boolean>>({})
-const checked = reactive<Record<string, boolean>>({})
 
 function toggleStar(id: string) {
   starred[id] = !starred[id]
@@ -88,11 +87,15 @@ function openItem(id: string) {
             >
               <div class="left">
                 <div class="thumb">
-                  <div v-if="checked[it.id]" class="check" aria-hidden="true"></div>
-                  <div v-else class="ghostMark" aria-hidden="true"></div>
-
-                  <!-- V1 “pdf preview” placeholder -->
-                  <div class="docPreview" aria-hidden="true"></div>
+                  <img
+                    v-if="it.image"
+                    :src="it.image"
+                    :alt="it.title"
+                    class="thumbImg"
+                    aria-hidden="true"
+                  />
+                  <div v-else-if="it.pdfOnly" class="pdfMark" aria-hidden="true">PDF</div>
+                  <div v-else class="docPreview" aria-hidden="true"></div>
                 </div>
 
                 <div class="text">
@@ -311,31 +314,28 @@ function openItem(id: string) {
   overflow:hidden;
 }
 
-.check{
-  position:absolute;
-  left:8px;
-  top:8px;
-  width:16px;
-  height:16px;
-  border-radius:6px;
-  background: rgba(16,185,129,0.95);
-}
-.ghostMark{
-  position:absolute;
-  left:8px;
-  top:8px;
-  width:16px;
-  height:16px;
-  border-radius:6px;
-  background: rgba(17,24,39,0.10);
-}
-
 .docPreview{
   width: 52px;
   height: 52px;
   border-radius: 12px;
   background: rgba(255,255,255,0.7);
   box-shadow: inset 0 0 0 1px rgba(17,24,39,0.08);
+}
+
+.thumbImg {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  border-radius: 16px;
+}
+
+.pdfMark {
+  font-size: 9px; font-weight: 900;
+  letter-spacing: 0.06em;
+  color: rgba(17,24,39,0.45);
+  border: 1.5px solid rgba(17,24,39,0.20);
+  border-radius: 5px;
+  padding: 3px 5px;
 }
 
 .text{ min-width:0; text-align:left; }
