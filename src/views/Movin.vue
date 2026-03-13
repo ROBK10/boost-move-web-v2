@@ -59,6 +59,9 @@ function go(path: string) {
 <style scoped>
 .page {
   width: 100%;
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 18px 16px 110px;
 }
 
 .head {

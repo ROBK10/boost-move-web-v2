@@ -1,604 +1,414 @@
 <script setup lang="ts">
-import { computed, ref, watch } from "vue"
+import { computed, ref, watch, onMounted } from "vue"
 import { useRoute, useRouter } from "vue-router"
-import { findProgramById } from "@/data/programmerContent"
+import { useMovin, splitSteps } from "@/composables/useMovin"
+import { useMovinState } from "@/composables/useMovinState"
 
 const route = useRoute()
 const router = useRouter()
+const { getBySlug } = useMovin()
+const { isFave, toggleFave, getProgress, setProgress, clearProgress } = useMovinState()
 
-const id = computed(() => String(route.params.id || ""))
-const item = computed(() => findProgramById(id.value))
+const slug = computed(() => String(route.params.slug ?? ""))
+const article = computed(() => getBySlug(slug.value))
 
-const index = ref(0)
-
-watch(
-  () => id.value,
-  () => {
-    index.value = 0
-    loadAnswers()
-  }
+const steps = computed(() =>
+  article.value ? splitSteps(article.value.content) : []
 )
 
-const total = computed(() => item.value?.sections.length ?? 0)
-const hasSections = computed(() => total.value > 0)
-const isPdfOnly = computed(() => !!item.value?.pdfOnly)
-const isEmpty = computed(() => !hasSections.value && !isPdfOnly.value)
-const isFirst = computed(() => index.value <= 0)
-const isLast = computed(() => total.value > 0 && index.value >= total.value - 1)
-
-const section = computed(() => {
-  if (!item.value) return null
-  if (item.value.sections.length === 0) return null
-  return item.value.sections[index.value] ?? null
-})
-
-// ── Reflection answers ──────────────────────────────────────────
-const r1 = ref("")
-const r2 = ref("")
-const r3 = ref("")
-
-const storageKey = computed(() => `reflect-${id.value}-${index.value}`)
-
-function loadAnswers() {
-  try {
-    const saved = localStorage.getItem(storageKey.value)
-    if (saved) {
-      const parsed = JSON.parse(saved)
-      r1.value = parsed.r1 ?? ""
-      r2.value = parsed.r2 ?? ""
-      r3.value = parsed.r3 ?? ""
-      return
-    }
-  } catch {}
-  r1.value = ""
-  r2.value = ""
-  r3.value = ""
-}
-
-watch(index, () => loadAnswers(), { immediate: true })
-
-function saveAnswers() {
-  try {
-    localStorage.setItem(storageKey.value, JSON.stringify({ r1: r1.value, r2: r2.value, r3: r3.value }))
-  } catch {}
-}
-
-// ── Suggestions ─────────────────────────────────────────────────
-const suggestions = ["Treningsvaner", "Søvn", "Stress", "Kosthold", "Fokus"]
-
-function applySuggestion(s: string) {
-  r1.value = s
-}
-
-// ── Completion ──────────────────────────────────────────────────
+const currentStep = ref(0)
 const completed = ref(false)
+
+function restoreProgress() {
+  currentStep.value = getProgress(slug.value)
+  completed.value = false
+}
+
+onMounted(restoreProgress)
+watch(slug, restoreProgress)
+
+const total = computed(() => steps.value.length)
+const isLast = computed(() => currentStep.value >= total.value - 1)
+
+function next() {
+  if (isLast.value) {
+    clearProgress(slug.value)
+    completed.value = true
+  } else {
+    currentStep.value += 1
+    setProgress(slug.value, currentStep.value)
+  }
+}
 
 function goBack() {
   router.push("/movin/programmer")
 }
 
-function prev() {
-  if (isFirst.value) return
-  saveAnswers()
-  index.value -= 1
-}
-
-function next() {
-  if (isLast.value) return
-  saveAnswers()
-  index.value += 1
-}
-
-function complete() {
-  saveAnswers()
-  completed.value = true
-  setTimeout(() => {
-    router.push("/movin/programmer")
-  }, 1600)
-}
-
 function openPdf() {
-  if (item.value?.pdfUrl) {
-    window.open(item.value.pdfUrl, "_blank")
-  }
+  if (article.value?.pdf) window.open(article.value.pdf, "_blank")
 }
 </script>
 
 <template>
-  <div class="page" v-if="item">
+  <div class="page" v-if="article">
     <div class="container">
+
+      <!-- Header -->
       <header class="top">
         <button class="back" type="button" @click="goBack" aria-label="Tilbake">
           <span class="chev" aria-hidden="true"></span>
         </button>
 
-        <div class="progress" v-if="!isEmpty">
-          <span class="progressText">Dag {{ index + 1 }} av {{ total }}</span>
+        <div class="topRight">
+          <div v-if="!completed" class="badge">{{ currentStep + 1 }} / {{ total }}</div>
+          <button
+            class="starBtn"
+            type="button"
+            :class="{ active: isFave(slug) }"
+            @click="toggleFave(slug)"
+            :aria-label="isFave(slug) ? 'Fjern favoritt' : 'Legg til favoritt'"
+          >
+            <span class="starIcon" aria-hidden="true"></span>
+          </button>
         </div>
       </header>
 
-      <h1 class="title">{{ item.title }}</h1>
-      <p v-if="item.subtitle" class="subtitle">{{ item.subtitle }}</p>
+      <!-- Title -->
+      <h1 class="title">{{ article.title }}</h1>
 
-      <main class="content" v-if="hasSections">
-        <template v-if="section">
-          <!-- Program content -->
-          <section class="section">
-            <h2 class="h2">{{ section.h }}</h2>
-            <p class="p">{{ section.p }}</p>
-          </section>
-
-          <!-- Reflection inputs -->
-          <section class="reflectSection">
-            <p class="reflectTitle">Skriv her:</p>
-
-            <div class="reflectField">
-              <label class="reflectLabel">Hva vil du endre?</label>
-              <div class="suggestRow" aria-label="Forslag">
-                <span class="suggestHint">Forslag:</span>
-                <button
-                  v-for="s in suggestions"
-                  :key="s"
-                  class="chip"
-                  type="button"
-                  @click="applySuggestion(s)"
-                  :class="{ 'chip--active': r1 === s }"
-                >{{ s }}</button>
-              </div>
-              <textarea
-                v-model="r1"
-                class="textarea"
-                rows="3"
-                placeholder="Skriv dine tanker her…"
-              />
-            </div>
-
-            <div class="reflectField">
-              <label class="reflectLabel">Hvorfor vil du gjøre det?</label>
-              <textarea
-                v-model="r2"
-                class="textarea"
-                rows="3"
-                placeholder="Skriv dine tanker her…"
-              />
-            </div>
-
-            <div class="reflectField">
-              <label class="reflectLabel">Jeg velger å:</label>
-              <textarea
-                v-model="r3"
-                class="textarea"
-                rows="3"
-                placeholder="Skriv dine tanker her…"
-              />
-            </div>
-          </section>
-        </template>
-      </main>
-
-      <!-- Empty state -->
-      <div class="content" v-if="isEmpty">
-        <div class="empty">Innhold kommer snart.</div>
+      <!-- Progress bar -->
+      <div v-if="!completed" class="progressTrack">
+        <div
+          class="progressBar"
+          :style="{ width: ((currentStep + 1) / total * 100) + '%' }"
+        ></div>
       </div>
 
-      <!-- PDF-only CTA -->
-      <div v-if="isPdfOnly" class="pdfCard">
-        <div class="pdfCardIcon" aria-hidden="true"></div>
-        <p class="pdfCardText">Dette programmet er tilgjengelig som PDF-dokument.</p>
-        <button class="pdfBtn" type="button" @click="openPdf">
-          <span class="dlIcon" aria-hidden="true"></span>
-          Åpne program (PDF)
-        </button>
-      </div>
-
-      <!-- Partner credit -->
-      <footer class="credit" v-if="hasSections">
-        Program utviklet i samarbeid med Skap Flyt
-      </footer>
-
-      <div class="bottom" v-if="isPdfOnly">
-        <button class="completeBtn" type="button" @click="goBack">Tilbake</button>
-      </div>
-
-      <div class="bottom" v-if="hasSections">
-        <button class="navBtn" type="button" @click="prev" :disabled="isFirst">
-          Forrige
-        </button>
-
-        <button v-if="!isLast" class="primary" type="button" @click="next">
-          Neste
-          <span class="arrow" aria-hidden="true"></span>
-        </button>
-
-        <button v-else-if="!completed" class="complete" type="button" @click="complete">
-          COMPLETE
-        </button>
-
-        <div v-else class="confirmMsg" aria-live="polite">
-          Dag {{ index + 1 }} fullført
+      <!-- READING MODE -->
+      <template v-if="!completed">
+        <div class="stepCard">
+          <div class="stepContent" v-html="steps[currentStep]"></div>
         </div>
-      </div>
+
+        <div class="navRow">
+          <button class="nextBtn" type="button" @click="next">
+            <span>{{ isLast ? 'Fullfør' : 'Neste' }}</span>
+            <span class="nextChev" aria-hidden="true"></span>
+          </button>
+        </div>
+      </template>
+
+      <!-- COMPLETED MODE -->
+      <template v-else>
+        <div class="doneCard">
+          <div class="doneCheck" aria-hidden="true"></div>
+          <p class="doneTitle">Bra jobba!</p>
+          <p class="doneSub">Du har lest gjennom programmet.</p>
+        </div>
+
+        <div class="pdfSection" v-if="article.pdf">
+          <p class="pdfLabel">Last ned originaldokumentet</p>
+          <button class="pdfBtn" type="button" @click="openPdf">
+            <span class="dlIcon" aria-hidden="true"></span>
+            Last ned original PDF
+          </button>
+        </div>
+
+        <div class="credit">
+          <template v-if="article.partner_logo">
+            <img :src="article.partner_logo" :alt="article.partner" class="creditLogo" />
+          </template>
+          <span>Levert i samarbeid med {{ article.partner }}</span>
+        </div>
+
+        <p class="copyright">© Boost Move</p>
+
+        <div class="backRow">
+          <button class="backToList" type="button" @click="goBack">
+            <span class="backChev" aria-hidden="true"></span>
+            Tilbake til programmer
+          </button>
+        </div>
+      </template>
+
     </div>
   </div>
 
-  <div v-else class="container">
-    <p>Fant ikke innholdet.</p>
-    <button class="complete" type="button" @click="goBack">Tilbake</button>
+  <div v-else class="page">
+    <div class="container">
+      <button class="back" type="button" @click="goBack" aria-label="Tilbake">
+        <span class="chev" aria-hidden="true"></span>
+      </button>
+      <p style="margin-top:20px;color:rgba(17,24,39,0.5);font-weight:700">Fant ikke programmet.</p>
+    </div>
   </div>
 </template>
 
 <style scoped>
 .page { width: 100%; }
-.container { max-width: 520px; margin: 0 auto; padding: 18px 16px 140px; }
 
+.container {
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 18px 16px 140px;
+}
+
+/* Header */
 .top {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 16px;
+  margin-bottom: 14px;
 }
 
 .back {
-  width: 42px;
-  height: 42px;
-  border: none;
-  background: white;
-  border-radius: 999px;
-  box-shadow: 0 10px 30px rgba(20, 20, 20, 0.08);
-  cursor: pointer;
-  display: grid;
-  place-items: center;
+  width: 42px; height: 42px;
+  border: none; background: white; border-radius: 999px;
+  box-shadow: 0 10px 30px rgba(20,20,20,0.08);
+  cursor: pointer; display: grid; place-items: center; flex-shrink: 0;
 }
 
 .chev {
-  width: 12px;
-  height: 12px;
-  border-left: 2px solid rgba(17, 24, 39, 0.55);
-  border-bottom: 2px solid rgba(17, 24, 39, 0.55);
+  width: 12px; height: 12px;
+  border-left: 2px solid rgba(17,24,39,0.55);
+  border-bottom: 2px solid rgba(17,24,39,0.55);
   transform: rotate(45deg);
 }
 
-.progress {
-  background: rgba(17, 24, 39, 0.06);
-  padding: 8px 14px;
-  border-radius: 999px;
-}
-
-.progressText {
-  font-size: 13px;
-  font-weight: 800;
-  color: rgba(17, 24, 39, 0.55);
-  letter-spacing: -0.01em;
-}
-
-.title {
-  margin: 0;
-  font-size: 28px;
-  line-height: 1.1;
-  font-weight: 900;
-  letter-spacing: -0.03em;
-  color: #111827;
-}
-
-.subtitle {
-  margin: 10px 0 0;
-  font-size: 14px;
-  font-weight: 700;
-  color: rgba(17, 24, 39, 0.45);
-}
-
-.content {
-  margin-top: 18px;
-  background: white;
-  border-radius: 28px;
-  padding: 20px 18px;
-  box-shadow: 0 12px 36px rgba(20, 20, 20, 0.06);
-  border: 1px solid rgba(17, 24, 39, 0.05);
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-}
-
-.section { display: flex; flex-direction: column; gap: 12px; }
-
-.h2 {
-  margin: 0;
-  font-size: 20px;
-  font-weight: 900;
-  color: rgba(17, 24, 39, 0.92);
-  letter-spacing: -0.02em;
-}
-
-.p {
-  margin: 0;
-  font-size: 15px;
-  line-height: 1.6;
-  font-weight: 650;
-  color: rgba(17, 24, 39, 0.70);
-}
-
-.empty {
-  font-size: 14px;
-  font-weight: 800;
-  color: rgba(17, 24, 39, 0.45);
-}
-
-/* Reflection section */
-.reflectSection {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  padding-top: 4px;
-  border-top: 1px solid rgba(17, 24, 39, 0.07);
-}
-
-.reflectTitle {
-  margin: 0;
-  font-size: 13px;
-  font-weight: 800;
-  color: rgba(17, 24, 39, 0.45);
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
-}
-
-.reflectField {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.reflectLabel {
-  font-size: 14px;
-  font-weight: 800;
-  color: rgba(17, 24, 39, 0.80);
-}
-
-.textarea {
-  width: 100%;
-  box-sizing: border-box;
-  border: 1.5px solid rgba(17, 24, 39, 0.10);
-  border-radius: 14px;
-  padding: 12px 14px;
-  font-size: 15px;
-  font-weight: 600;
-  color: rgba(17, 24, 39, 0.88);
-  background: rgba(17, 24, 39, 0.025);
-  resize: none;
-  font-family: inherit;
-  line-height: 1.5;
-  transition: border-color 140ms ease, box-shadow 140ms ease;
-  -webkit-appearance: none;
-}
-
-.textarea::placeholder {
-  color: rgba(17, 24, 39, 0.28);
-  font-weight: 500;
-}
-
-.textarea:focus {
-  outline: none;
-  border-color: rgba(17, 24, 39, 0.28);
-  box-shadow: 0 0 0 3px rgba(17, 24, 39, 0.05);
-}
-
-/* Suggestion chips */
-.suggestRow {
+.topRight {
   display: flex;
   align-items: center;
-  gap: 6px;
-  flex-wrap: wrap;
+  gap: 10px;
 }
 
-.suggestHint {
-  font-size: 12px;
-  font-weight: 700;
-  color: rgba(17, 24, 39, 0.38);
-  flex-shrink: 0;
-}
-
-.chip {
-  border: 1.5px solid rgba(17, 24, 39, 0.12);
-  background: rgba(17, 24, 39, 0.03);
+.badge {
+  background: rgba(17,24,39,0.06);
+  padding: 7px 14px;
   border-radius: 999px;
-  padding: 5px 12px;
-  font-size: 13px;
-  font-weight: 700;
-  color: rgba(17, 24, 39, 0.65);
-  cursor: pointer;
-  transition: background 120ms ease, border-color 120ms ease, color 120ms ease;
-  white-space: nowrap;
+  font-size: 13px; font-weight: 800;
+  color: rgba(17,24,39,0.55);
 }
 
-.chip:active,
-.chip--active {
-  background: rgba(17, 24, 39, 0.08);
-  border-color: rgba(17, 24, 39, 0.28);
-  color: rgba(17, 24, 39, 0.90);
+.starBtn {
+  width: 40px; height: 40px;
+  background: rgba(17,24,39,0.05); border: none; border-radius: 999px;
+  display: grid; place-items: center; cursor: pointer;
+  transition: background 120ms ease;
+}
+.starBtn:active { background: rgba(17,24,39,0.10); }
+.starBtn.active { background: rgba(251,191,36,0.18); }
+
+.starIcon {
+  width: 18px; height: 18px; display: block;
+  background: rgba(17,24,39,0.38);
+  clip-path: polygon(50% 0%,62% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,38% 35%);
+  transition: background 120ms ease;
+}
+.starBtn.active .starIcon { background: rgba(251,191,36,0.95); }
+
+/* Title */
+.title {
+  margin: 0 0 14px;
+  font-size: 26px; line-height: 1.1;
+  font-weight: 900; letter-spacing: -0.03em; color: #111827;
 }
 
-/* PDF-only card */
-.pdfCard {
-  margin-top: 24px;
+/* Progress bar */
+.progressTrack {
+  height: 4px;
+  background: rgba(17,24,39,0.07);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-bottom: 18px;
+}
+
+.progressBar {
+  height: 100%;
+  background: #b9ff00;
+  border-radius: 2px;
+  transition: width 300ms cubic-bezier(0.22,1,0.36,1);
+}
+
+/* Step card */
+.stepCard {
   background: white;
   border-radius: 24px;
-  padding: 24px 20px;
-  box-shadow: 0 8px 28px rgba(17, 24, 39, 0.07);
-  border: 1px solid rgba(17, 24, 39, 0.06);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 14px;
-  text-align: center;
+  box-shadow: 0 8px 32px rgba(17,24,39,0.08);
+  border: 1px solid rgba(17,24,39,0.05);
+  overflow: hidden;
 }
 
-.pdfCardIcon {
-  width: 52px;
-  height: 60px;
-  border: 2px solid rgba(17, 24, 39, 0.12);
-  border-radius: 8px;
-  position: relative;
-  background: rgba(17, 24, 39, 0.03);
+.stepContent {
+  padding: 22px 20px 24px;
+  font-size: 15px; line-height: 1.70;
+  font-weight: 500; color: rgba(17,24,39,0.78);
 }
 
-.pdfCardIcon::before {
-  content: "PDF";
+.stepContent :deep(h1),
+.stepContent :deep(h2),
+.stepContent :deep(h3) {
+  font-size: 18px; font-weight: 900;
+  color: #111827; letter-spacing: -0.02em;
+  margin: 0 0 12px; line-height: 1.2;
+}
+
+.stepContent :deep(p) { margin: 0 0 12px; }
+.stepContent :deep(p:last-child) { margin-bottom: 0; }
+.stepContent :deep(ul), .stepContent :deep(ol) { padding-left: 20px; margin: 0 0 12px; }
+.stepContent :deep(li) { margin-bottom: 6px; }
+.stepContent :deep(hr) { border: none; border-top: 1px solid rgba(17,24,39,0.08); margin: 16px 0; }
+.stepContent :deep(em) { color: rgba(17,24,39,0.45); font-style: normal; }
+.stepContent :deep(a) { color: rgba(17,24,39,0.55); text-decoration: underline; }
+.stepContent :deep(strong) { font-weight: 800; color: rgba(17,24,39,0.88); }
+
+/* Navigation */
+.navRow { padding: 16px 0 0; }
+
+.nextBtn {
+  width: 100%; height: 56px;
+  border: none; border-radius: 18px;
+  background: #111827; color: white;
+  font-size: 15px; font-weight: 900;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  transition: opacity 120ms ease;
+}
+.nextBtn:active { opacity: 0.85; }
+
+.nextChev {
+  width: 9px; height: 9px;
+  border-right: 2.5px solid rgba(255,255,255,0.85);
+  border-top: 2.5px solid rgba(255,255,255,0.85);
+  transform: rotate(45deg);
+}
+
+/* Done card */
+.doneCard {
+  background: white;
+  border-radius: 24px;
+  box-shadow: 0 8px 32px rgba(17,24,39,0.08);
+  border: 1px solid rgba(17,24,39,0.05);
+  padding: 32px 24px;
+  display: flex; flex-direction: column; align-items: center; gap: 10px;
+  margin-bottom: 20px;
+}
+
+.doneCheck {
+  width: 56px; height: 56px;
+  border-radius: 999px;
+  background: rgba(185,255,0,0.20);
+  position: relative; flex-shrink: 0;
+}
+.doneCheck::after {
+  content: "";
   position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 11px;
-  font-weight: 900;
-  letter-spacing: 0.05em;
-  color: rgba(17, 24, 39, 0.40);
+  left: 15px; top: 18px;
+  width: 10px; height: 14px;
+  border-right: 3px solid #5a9000;
+  border-bottom: 3px solid #5a9000;
+  transform: rotate(35deg);
 }
 
-.pdfCardText {
+.doneTitle {
   margin: 0;
-  font-size: 14px;
-  font-weight: 700;
-  color: rgba(17, 24, 39, 0.55);
-  line-height: 1.5;
+  font-size: 20px; font-weight: 900;
+  color: #111827; letter-spacing: -0.02em;
+}
+
+.doneSub {
+  margin: 0;
+  font-size: 14px; font-weight: 600;
+  color: rgba(17,24,39,0.45);
+}
+
+/* PDF section */
+.pdfSection {
+  background: rgba(17,24,39,0.03);
+  border: 1px solid rgba(17,24,39,0.07);
+  border-radius: 18px;
+  padding: 18px;
+  margin-bottom: 16px;
+}
+
+.pdfLabel {
+  margin: 0 0 12px;
+  font-size: 13px; font-weight: 700;
+  color: rgba(17,24,39,0.45);
 }
 
 .pdfBtn {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  height: 52px;
-  padding: 0 24px;
-  border: none;
-  border-radius: 16px;
-  background: #111827;
-  color: white;
-  font-size: 15px;
-  font-weight: 900;
-  cursor: pointer;
-  transition: opacity 120ms ease;
+  display: flex; align-items: center; justify-content: center;
+  gap: 10px; width: 100%; height: 50px;
+  border: none; border-radius: 14px;
+  background: #111827; color: white;
+  font-size: 14px; font-weight: 900;
+  cursor: pointer; transition: opacity 120ms ease;
 }
-
-.pdfBtn:active { opacity: 0.8; }
+.pdfBtn:active { opacity: 0.85; }
 
 .dlIcon {
-  width: 16px;
-  height: 16px;
-  position: relative;
-  display: inline-block;
+  width: 14px; height: 14px;
+  position: relative; display: inline-block; flex-shrink: 0;
 }
-
 .dlIcon::before {
-  content: "";
-  position: absolute;
-  left: 7px; top: 1px;
-  width: 2px; height: 9px;
-  background: white;
+  content: ""; position: absolute;
+  left: 6px; top: 0; width: 2px; height: 9px; background: white;
 }
-
 .dlIcon::after {
-  content: "";
-  position: absolute;
-  left: 4px; top: 7px;
-  width: 8px; height: 8px;
-  border-right: 2px solid white;
-  border-bottom: 2px solid white;
+  content: ""; position: absolute;
+  left: 3px; top: 5px; width: 8px; height: 8px;
+  border-right: 2px solid white; border-bottom: 2px solid white;
   transform: rotate(45deg);
 }
 
-.completeBtn {
-  flex: 1;
-  height: 58px;
-  border: none;
-  border-radius: 18px;
-  background: rgba(185, 255, 0, 0.95);
-  color: #111827;
-  font-weight: 900;
-  font-size: 15px;
-  cursor: pointer;
-}
-
-/* Partner credit */
+/* Credit */
 .credit {
-  margin-top: 20px;
-  text-align: center;
-  font-size: 12px;
-  font-weight: 600;
-  color: rgba(17, 24, 39, 0.28);
-  letter-spacing: 0.01em;
-  padding: 0 16px;
+  display: flex; align-items: center; gap: 10px;
+  font-size: 12px; font-weight: 700;
+  color: rgba(17,24,39,0.38);
+  padding: 0 4px;
 }
 
-/* Bottom bar */
-.bottom {
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 86px;
-  padding: 0 16px;
-  display: flex;
-  gap: 10px;
-  justify-content: center;
+.creditLogo {
+  height: 24px; max-width: 60px;
+  object-fit: contain; flex-shrink: 0;
 }
 
-.navBtn {
-  flex: 1;
-  height: 58px;
-  border: none;
-  border-radius: 18px;
-  background: rgba(17, 24, 39, 0.06);
-  color: rgba(17, 24, 39, 0.85);
-  font-weight: 900;
+.copyright {
+  margin: 6px 0 0;
+  font-size: 11px; font-weight: 600;
+  color: rgba(17,24,39,0.25);
+  padding: 0 4px;
+}
+
+/* Back to list */
+.backRow {
+  padding: 20px 0 0;
+}
+
+.backToList {
+  width: 100%;
+  height: 50px;
+  border: 1.5px solid rgba(17,24,39,0.12);
+  border-radius: 14px;
+  background: transparent;
+  color: rgba(17,24,39,0.55);
+  font-size: 14px; font-weight: 800;
   cursor: pointer;
-}
-
-.navBtn:disabled { opacity: 0.45; cursor: default; }
-
-.primary {
-  flex: 1;
-  height: 58px;
-  border: none;
-  border-radius: 18px;
-  background: #0b0f17;
-  color: white;
-  font-weight: 900;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-}
-
-.complete {
-  flex: 1;
-  height: 58px;
-  border: none;
-  border-radius: 18px;
-  background: rgba(185, 255, 0, 0.95);
-  color: #111827;
-  font-weight: 900;
-  font-size: 15px;
-  letter-spacing: 0.04em;
-  cursor: pointer;
-}
-
-.confirmMsg {
-  flex: 1;
-  height: 58px;
-  border-radius: 18px;
-  background: rgba(185, 255, 0, 0.15);
-  color: rgba(17, 24, 39, 0.80);
-  font-weight: 900;
-  font-size: 15px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1.5px solid rgba(185, 255, 0, 0.40);
+  gap: 8px;
+  transition: background 120ms ease, border-color 120ms ease;
+  letter-spacing: -0.01em;
 }
+.backToList:active { background: rgba(17,24,39,0.04); border-color: rgba(17,24,39,0.20); }
 
-.arrow {
-  width: 10px;
-  height: 10px;
-  border-right: 2px solid rgba(255, 255, 255, 0.85);
-  border-top: 2px solid rgba(255, 255, 255, 0.85);
+.backChev {
+  width: 8px; height: 8px;
+  border-left: 2px solid rgba(17,24,39,0.55);
+  border-bottom: 2px solid rgba(17,24,39,0.55);
   transform: rotate(45deg);
+  margin-top: 1px;
 }
 </style>

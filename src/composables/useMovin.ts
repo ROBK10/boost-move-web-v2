@@ -1,7 +1,53 @@
 // src/composables/useMovin.ts
 import { marked } from "marked"
 
-export type MovinCategory = "knowzone" | "fordeler" | "maler" | "programmer"
+export type MovinCategory = "knowzone" | "fordeler" | "maler" | "programmer" | "komgang"
+
+// Split rendered HTML into readable steps (exported for reuse in list + detail views)
+// Groups 2 heading-sections per step and 3 paragraphs per step to avoid micro-boxes.
+export function splitSteps(html: string): string[] {
+  // Split into blocks starting at each h2/h3
+  const blocks = html.split(/(?=<h[23][^>]*>)/i).filter(s => s.trim())
+
+  if (blocks.length > 1) {
+    const MAX_BLOCKS = 2   // heading-sections per step
+    const MAX_CHARS = 1400 // soft char limit per step
+    const steps: string[] = []
+    let current = ""
+    let count = 0
+
+    for (const block of blocks) {
+      const wouldOverflow = current.length + block.length > MAX_CHARS
+      if (current && (count >= MAX_BLOCKS || wouldOverflow)) {
+        steps.push(current)
+        current = block
+        count = 1
+      } else {
+        current += block
+        count++
+      }
+    }
+    if (current) steps.push(current)
+    return steps
+  }
+
+  // Fallback: hr separators
+  const byHr = html.split(/<hr\s*\/?>/i).filter(s => s.trim())
+  if (byHr.length > 1) return byHr
+
+  // Fallback: group paragraphs — 3 per step
+  const paras = html.match(/<p[\s\S]*?<\/p>/gi) ?? []
+  if (paras.length > 4) {
+    const PER_STEP = 3
+    const steps: string[] = []
+    for (let i = 0; i < paras.length; i += PER_STEP) {
+      steps.push(paras.slice(i, i + PER_STEP).join(""))
+    }
+    return steps
+  }
+
+  return [html]
+}
 
 export type MovinArticle = {
   slug: string

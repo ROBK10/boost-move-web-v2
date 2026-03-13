@@ -2,9 +2,11 @@
 import { ref } from "vue"
 import { useRouter } from "vue-router"
 import { useMovin } from "@/composables/useMovin"
+import { useMovinState } from "@/composables/useMovinState"
 
 const router = useRouter()
 const { getByCategory } = useMovin()
+const { isFave, toggleFave } = useMovinState()
 
 const articles = getByCategory("fordeler")
 const openSlug = ref<string | null>(null)
@@ -55,7 +57,18 @@ function openPdf(url: string) {
                 <div class="rowPartner">{{ a.partner }}</div>
               </div>
             </div>
-            <span class="chevRight" :class="{ open: openSlug === a.slug }" aria-hidden="true"></span>
+            <div class="rowActions" @click.stop>
+              <button
+                class="starBtn"
+                type="button"
+                :class="{ active: isFave(a.slug) }"
+                @click="toggleFave(a.slug)"
+                :aria-label="isFave(a.slug) ? 'Fjern favoritt' : 'Legg til favoritt'"
+              >
+                <span class="starIcon" aria-hidden="true"></span>
+              </button>
+              <span class="chevRight" :class="{ open: openSlug === a.slug }" aria-hidden="true"></span>
+            </div>
           </button>
 
           <Transition name="expand">
@@ -204,6 +217,30 @@ function openPdf(url: string) {
   margin-top: 3px;
   font-size: 12px; font-weight: 700; color: rgba(17, 24, 39, 0.45);
 }
+
+.rowActions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.starBtn {
+  width: 34px; height: 34px;
+  background: rgba(17,24,39,0.05); border: none; border-radius: 999px;
+  display: grid; place-items: center; cursor: pointer;
+  transition: background 120ms ease;
+}
+.starBtn:active { background: rgba(17,24,39,0.10); }
+.starBtn.active { background: rgba(251,191,36,0.18); }
+
+.starIcon {
+  width: 16px; height: 16px; display: block;
+  background: rgba(17,24,39,0.35);
+  clip-path: polygon(50% 0%,62% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,38% 35%);
+  transition: background 120ms ease;
+}
+.starBtn.active .starIcon { background: rgba(251,191,36,0.95); }
 
 .chevRight {
   width: 10px; height: 10px; flex-shrink: 0;

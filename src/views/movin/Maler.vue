@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { useRouter } from "vue-router"
 import { useMovin } from "@/composables/useMovin"
+import { useMovinState } from "@/composables/useMovinState"
 
 const router = useRouter()
 const { getByCategory } = useMovin()
+const { isFave, toggleFave } = useMovinState()
 
 const articles = getByCategory("maler")
 
@@ -43,16 +45,27 @@ function openPdf(url: string | null) {
             <div class="cardTitle">{{ a.title }}</div>
           </div>
 
-          <button
-            v-if="a.pdf"
-            class="pdfBtn"
-            type="button"
-            @click="openPdf(a.pdf)"
-            aria-label="Last ned PDF"
-          >
-            <span class="dlIcon" aria-hidden="true"></span>
-            PDF
-          </button>
+          <div class="cardActions">
+            <button
+              class="starBtn"
+              type="button"
+              :class="{ active: isFave(a.slug) }"
+              @click="toggleFave(a.slug)"
+              :aria-label="isFave(a.slug) ? 'Fjern favoritt' : 'Legg til favoritt'"
+            >
+              <span class="starIcon" aria-hidden="true"></span>
+            </button>
+            <button
+              v-if="a.pdf"
+              class="pdfBtn"
+              type="button"
+              @click="openPdf(a.pdf)"
+              aria-label="Last ned PDF"
+            >
+              <span class="dlIcon" aria-hidden="true"></span>
+              PDF
+            </button>
+          </div>
         </div>
 
         <div v-if="articles.length === 0" class="empty">Innhold kommer snart.</div>
@@ -147,6 +160,30 @@ function openPdf(url: string | null) {
   color: rgba(17, 24, 39, 0.92); line-height: 1.2;
   display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
 }
+
+.cardActions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.starBtn {
+  width: 34px; height: 34px;
+  background: rgba(17,24,39,0.05); border: none; border-radius: 999px;
+  display: grid; place-items: center; cursor: pointer;
+  transition: background 120ms ease;
+}
+.starBtn:active { background: rgba(17,24,39,0.10); }
+.starBtn.active { background: rgba(251,191,36,0.18); }
+
+.starIcon {
+  width: 16px; height: 16px; display: block;
+  background: rgba(17,24,39,0.35);
+  clip-path: polygon(50% 0%,62% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,38% 35%);
+  transition: background 120ms ease;
+}
+.starBtn.active .starIcon { background: rgba(251,191,36,0.95); }
 
 .pdfBtn {
   display: inline-flex; align-items: center;
