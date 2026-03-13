@@ -1,28 +1,25 @@
 <script setup lang="ts">
-import { computed, reactive, ref } from "vue"
+import { ref } from "vue"
 import { useRouter } from "vue-router"
-import { getKnowZoneCategories } from "@/data/knowZoneContent"
+import { useMovin } from "@/composables/useMovin"
 
 const router = useRouter()
+const { getByCategory } = useMovin()
+
+const articles = getByCategory("knowzone")
+const openSlug = ref<string | null>(null)
+
+function toggle(slug: string) {
+  openSlug.value = openSlug.value === slug ? null : slug
+}
 
 function goBack() {
   router.push("/movin")
 }
 
-const categories = computed(() => getKnowZoneCategories())
-
-const openCategoryId = ref<string | null>(null)
-
-function toggleCategory(id: string) {
-  openCategoryId.value = openCategoryId.value === id ? null : id
+function openPdf(url: string) {
+  window.open(url, "_blank")
 }
-
-const starred = reactive<Record<string, boolean>>({})
-const downloaded = reactive<Record<string, boolean>>({})
-
-function toggleStar(id: string) { starred[id] = !starred[id] }
-function toggleDownload(id: string) { downloaded[id] = !downloaded[id] }
-function openItem(id: string) { router.push(`/movin/knowzone/${id}`) }
 </script>
 
 <template>
@@ -34,132 +31,57 @@ function openItem(id: string) { router.push(`/movin/knowzone/${id}`) }
         </button>
         <div>
           <h1 class="title">KnowZone</h1>
-          <p class="subtitle">Min kunnskapsbase</p>
+          <p class="subtitle">Kunnskapsbase</p>
         </div>
       </header>
 
       <section class="list">
-        <div v-for="cat in categories" :key="cat.id" class="catBlock">
-
-          <!-- Category header -->
+        <div v-for="a in articles" :key="a.slug" class="block">
+          <!-- Accordion header -->
           <button
-            class="catRow"
-            :class="{ 'catRow--open': openCategoryId === cat.id }"
+            class="row"
+            :class="{ 'row--open': openSlug === a.slug }"
             type="button"
-            @click="toggleCategory(cat.id)"
-            :aria-expanded="openCategoryId === cat.id"
+            @click="toggle(a.slug)"
+            :aria-expanded="openSlug === a.slug"
           >
-            <div class="catLeft">
-              <!-- Per-category icon -->
-              <div class="catIcon" aria-hidden="true">
-
-                <!-- vanedannelse: repeat/habit -->
-                <svg v-if="cat.id === 'vanedannelse'" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <polyline points="17 1 21 5 17 9"/>
-                  <path d="M3 11V9a4 4 0 0 1 4-4h14"/>
-                  <polyline points="7 23 3 19 7 15"/>
-                  <path d="M21 13v2a4 4 0 0 1-4 4H3"/>
-                </svg>
-
-                <!-- trening: activity pulse -->
-                <svg v-else-if="cat.id === 'trening'" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
-                </svg>
-
-                <!-- ernaering: leaf -->
-                <svg v-else-if="cat.id === 'ernaering'" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M17 8C8 10 5.9 16.17 3.82 20.82 8.88 18.46 15.07 15.39 17 8z"/>
-                  <path d="M3.82 20.82C2.2 16.17 2 8 9 7"/>
-                </svg>
-
-                <!-- hormoner: waves -->
-                <svg v-else-if="cat.id === 'hormoner'" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M2 12h2l2-7 4 14 3-9 2 4h7"/>
-                </svg>
-
-                <!-- muskelbalanse: symmetry arrows -->
-                <svg v-else-if="cat.id === 'muskelbalanse'" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <line x1="12" y1="2" x2="12" y2="22"/>
-                  <path d="M7 7L2 12l5 5"/>
-                  <path d="M17 7l5 5-5 5"/>
-                </svg>
-
-                <!-- urpraksis: sun -->
-                <svg v-else-if="cat.id === 'urpraksis'" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <circle cx="12" cy="12" r="5"/>
-                  <line x1="12" y1="1" x2="12" y2="3"/>
-                  <line x1="12" y1="21" x2="12" y2="23"/>
-                  <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
-                  <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
-                  <line x1="1" y1="12" x2="3" y2="12"/>
-                  <line x1="21" y1="12" x2="23" y2="12"/>
-                  <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
-                  <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
-                </svg>
-
-                <!-- fallback: book -->
-                <svg v-else width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
-                  <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
-                </svg>
+            <div class="rowLeft">
+              <div class="thumb">
+                <img v-if="a.image" :src="a.image" :alt="a.title" class="thumbImg" />
+                <div v-else class="thumbPlaceholder" aria-hidden="true"></div>
               </div>
-
-              <span class="catTitle">{{ cat.title }}</span>
+              <div class="rowText">
+                <div class="rowTitle">{{ a.title }}</div>
+                <div class="rowPartner">{{ a.partner }}</div>
+              </div>
             </div>
-            <span class="catChev" :class="{ open: openCategoryId === cat.id }" aria-hidden="true"></span>
+            <span class="chevRight" :class="{ open: openSlug === a.slug }" aria-hidden="true"></span>
           </button>
 
-          <!-- Items -->
+          <!-- Expanded content -->
           <Transition name="expand">
-            <div v-if="openCategoryId === cat.id" class="items">
-              <button
-                v-for="it in cat.items"
-                :key="it.id"
-                class="itemRow"
-                type="button"
-                @click="openItem(it.id)"
-              >
-                <div class="left">
-                  <div class="thumb">
-                    <img v-if="it.image" :src="it.image" :alt="it.title" class="thumbImg" aria-hidden="true" />
-                    <div v-else-if="it.pdfOnly" class="pdfMark" aria-hidden="true">PDF</div>
-                    <div v-else class="docPreview" aria-hidden="true"></div>
-                  </div>
-                  <div class="text">
-                    <div class="rowTitle">{{ it.title }}</div>
-                    <div class="rowSub">{{ it.subtitle }}</div>
-                  </div>
-                </div>
+            <div v-if="openSlug === a.slug" class="body">
+              <article class="content" v-html="a.content"></article>
 
-                <div class="actions" @click.stop>
-                  <button
-                    class="iconBtn"
-                    type="button"
-                    :class="{ on: !!starred[it.id] }"
-                    @click="toggleStar(it.id)"
-                    aria-label="Favoritt"
-                  >
-                    <span class="star" aria-hidden="true"></span>
-                  </button>
-                  <button
-                    class="iconBtn"
-                    type="button"
-                    :class="{ on: !!downloaded[it.id] }"
-                    @click="toggleDownload(it.id)"
-                    aria-label="Last ned"
-                  >
-                    <span class="dl" aria-hidden="true"></span>
-                  </button>
+              <footer class="footer">
+                <div v-if="a.partner_logo" class="partnerRow">
+                  <img :src="a.partner_logo" :alt="a.partner" class="partnerLogo" />
+                  <span class="partnerName">Levert i samarbeid med {{ a.partner }}</span>
                 </div>
-              </button>
+                <div v-else class="partnerName">Levert i samarbeid med {{ a.partner }}</div>
 
-              <div v-if="cat.items.length === 0" class="empty">
-                Innhold kommer snart.
-              </div>
+                <button v-if="a.pdf" class="pdfBtn" type="button" @click="openPdf(a.pdf)">
+                  <span class="dlIcon" aria-hidden="true"></span>
+                  Last ned original PDF
+                </button>
+
+                <div class="copyright">© Boost Move</div>
+              </footer>
             </div>
           </Transition>
-
         </div>
+
+        <div v-if="articles.length === 0" class="empty">Innhold kommer snart.</div>
       </section>
     </div>
   </div>
@@ -183,21 +105,14 @@ function openItem(id: string) { router.push(`/movin/knowzone/${id}`) }
 }
 
 .back {
-  width: 44px;
-  height: 44px;
-  border: none;
-  background: white;
-  border-radius: 999px;
+  width: 44px; height: 44px;
+  border: none; background: white; border-radius: 999px;
   box-shadow: 0 10px 30px rgba(20, 20, 20, 0.08);
-  cursor: pointer;
-  display: grid;
-  place-items: center;
-  flex-shrink: 0;
+  cursor: pointer; display: grid; place-items: center; flex-shrink: 0;
 }
 
 .chev {
-  width: 12px;
-  height: 12px;
+  width: 12px; height: 12px;
   border-left: 2px solid rgba(17, 24, 39, 0.55);
   border-bottom: 2px solid rgba(17, 24, 39, 0.55);
   transform: rotate(45deg);
@@ -205,40 +120,27 @@ function openItem(id: string) { router.push(`/movin/knowzone/${id}`) }
 
 .title {
   margin: 0;
-  font-size: 34px;
-  line-height: 1.05;
-  font-weight: 900;
-  letter-spacing: -0.03em;
-  color: #111827;
+  font-size: 34px; line-height: 1.05;
+  font-weight: 900; letter-spacing: -0.03em; color: #111827;
 }
 
 .subtitle {
   margin: 6px 0 0;
-  font-size: 14px;
-  font-weight: 700;
-  color: rgba(17, 24, 39, 0.45);
+  font-size: 14px; font-weight: 700; color: rgba(17, 24, 39, 0.45);
 }
 
-/* Accordion list */
-.list {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
+/* List */
+.list { display: flex; flex-direction: column; gap: 10px; }
 
-.catBlock {
-  display: flex;
-  flex-direction: column;
-}
+.block { display: flex; flex-direction: column; }
 
-/* Category row */
-.catRow {
+/* Accordion row */
+.row {
   width: 100%;
   border: 1px solid rgba(17, 24, 39, 0.07);
   background: white;
   border-radius: 20px;
-  padding: 16px 18px;
-  min-height: 64px;
+  padding: 14px 16px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -246,207 +148,163 @@ function openItem(id: string) { router.push(`/movin/knowzone/${id}`) }
   cursor: pointer;
   box-shadow: 0 4px 16px rgba(17, 24, 39, 0.06);
   transition: box-shadow 160ms ease, background 120ms ease, border-color 160ms ease;
+  text-align: left;
 }
 
-.catRow--open {
+.row--open {
   background: #f8f9fb;
   box-shadow: 0 8px 28px rgba(17, 24, 39, 0.10);
   border-color: rgba(17, 24, 39, 0.11);
+  border-radius: 20px 20px 0 0;
 }
 
-.catRow:active { background: rgba(17, 24, 39, 0.03); }
+.row:active { background: rgba(17, 24, 39, 0.03); }
 
-.catLeft {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  min-width: 0;
-}
+.rowLeft { display: flex; align-items: center; gap: 12px; min-width: 0; }
 
-/* Category icon bubble */
-.catIcon {
-  width: 40px;
-  height: 40px;
-  border-radius: 12px;
-  background: rgba(17, 24, 39, 0.06);
-  display: grid;
-  place-items: center;
+.thumb {
+  width: 56px; height: 56px;
+  border-radius: 14px;
+  background: rgba(17, 24, 39, 0.07);
   flex-shrink: 0;
-  color: rgba(17, 24, 39, 0.65);
-  transition: background 120ms ease;
+  overflow: hidden;
+  position: relative;
 }
 
-.catRow--open .catIcon {
-  background: #111827;
-  color: white;
+.thumbImg {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
-.catTitle {
-  font-size: 17px;
-  font-weight: 900;
-  color: rgba(17, 24, 39, 0.92);
-  letter-spacing: -0.01em;
-  text-align: left;
-  line-height: 1.2;
+.thumbPlaceholder {
+  width: 100%; height: 100%;
+  background: rgba(17, 24, 39, 0.07);
 }
 
-.catChev {
-  width: 10px;
-  height: 10px;
+.rowText { min-width: 0; }
+
+.rowTitle {
+  font-size: 15px; font-weight: 900;
+  color: rgba(17, 24, 39, 0.92); line-height: 1.2;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+
+.rowPartner {
+  margin-top: 3px;
+  font-size: 12px; font-weight: 700; color: rgba(17, 24, 39, 0.45);
+}
+
+.chevRight {
+  width: 10px; height: 10px; flex-shrink: 0;
   border-right: 2px solid rgba(17, 24, 39, 0.32);
   border-bottom: 2px solid rgba(17, 24, 39, 0.32);
   transform: rotate(45deg);
   transition: transform 200ms cubic-bezier(0.22, 1, 0.36, 1);
-  flex-shrink: 0;
 }
-.catChev.open { transform: rotate(-135deg); }
+.chevRight.open { transform: rotate(-135deg); }
 
-/* Items */
-.items {
-  margin-top: 8px;
+/* Body */
+.body {
+  background: white;
+  border: 1px solid rgba(17, 24, 39, 0.07);
+  border-top: none;
+  border-radius: 0 0 20px 20px;
+  overflow: hidden;
+}
+
+/* Article content */
+.content {
+  padding: 16px 18px 0;
+  font-size: 15px; line-height: 1.65;
+  font-weight: 500; color: rgba(17, 24, 39, 0.75);
+}
+
+.content :deep(h1),
+.content :deep(h2),
+.content :deep(h3) {
+  font-size: 16px; font-weight: 900;
+  color: rgba(17, 24, 39, 0.90);
+  letter-spacing: -0.02em;
+  margin: 18px 0 6px; line-height: 1.25;
+}
+
+.content :deep(p) { margin: 0 0 12px; }
+
+.content :deep(ul),
+.content :deep(ol) { padding-left: 20px; margin: 0 0 12px; }
+
+.content :deep(li) { margin-bottom: 6px; }
+
+.content :deep(hr) {
+  border: none;
+  border-top: 1px solid rgba(17, 24, 39, 0.08);
+  margin: 18px 0;
+}
+
+.content :deep(a) { color: rgba(17, 24, 39, 0.55); text-decoration: underline; }
+
+.content :deep(em) { color: rgba(17, 24, 39, 0.45); font-style: normal; }
+
+/* Footer */
+.footer {
+  margin: 16px 18px 18px;
+  padding: 16px;
+  background: rgba(17, 24, 39, 0.03);
+  border-radius: 14px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 12px;
 }
 
-.itemRow {
-  width: 100%;
-  border: 1px solid rgba(17, 24, 39, 0.05);
-  background: white;
-  border-radius: 16px;
-  padding: 14px 14px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  cursor: pointer;
-  box-shadow: 0 2px 8px rgba(17, 24, 39, 0.05);
-  transition: background 120ms ease, box-shadow 120ms ease;
+.partnerRow {
+  display: flex; align-items: center; gap: 10px;
 }
 
-.itemRow:hover {
-  background: rgba(17, 24, 39, 0.02);
-  box-shadow: 0 4px 14px rgba(17, 24, 39, 0.08);
+.partnerLogo {
+  height: 28px; max-width: 70px;
+  object-fit: contain; display: block; flex-shrink: 0;
 }
 
-.itemRow:active { background: rgba(17, 24, 39, 0.04); }
-
-.left { display: flex; align-items: center; gap: 12px; min-width: 0; }
-
-.thumb {
-  width: 64px;
-  height: 64px;
-  border-radius: 16px;
-  background: rgba(17, 24, 39, 0.07);
-  position: relative;
-  display: grid;
-  place-items: center;
-  flex-shrink: 0;
-  overflow: hidden;
+.partnerName {
+  font-size: 12px; font-weight: 700;
+  color: rgba(17, 24, 39, 0.45); line-height: 1.3;
 }
 
-.docPreview {
-  width: 44px;
-  height: 44px;
-  border-radius: 10px;
-  background: rgba(255, 255, 255, 0.75);
-  box-shadow: inset 0 0 0 1px rgba(17, 24, 39, 0.08);
+.pdfBtn {
+  display: inline-flex; align-items: center;
+  gap: 10px; height: 48px; padding: 0 20px;
+  border: none; border-radius: 12px;
+  background: #111827; color: white;
+  font-size: 13px; font-weight: 900;
+  cursor: pointer; width: 100%; justify-content: center;
+  transition: opacity 120ms ease;
 }
+.pdfBtn:active { opacity: 0.82; }
 
-.thumbImg {
-  position: absolute; inset: 0;
-  width: 100%; height: 100%;
-  object-fit: cover;
-  border-radius: 16px;
+.dlIcon {
+  width: 14px; height: 14px;
+  position: relative; display: inline-block; flex-shrink: 0;
 }
-
-.pdfMark {
-  font-size: 9px;
-  font-weight: 900;
-  letter-spacing: 0.06em;
-  color: rgba(17, 24, 39, 0.45);
-  border: 1.5px solid rgba(17, 24, 39, 0.20);
-  border-radius: 5px;
-  padding: 3px 5px;
+.dlIcon::before {
+  content: ""; position: absolute;
+  left: 6px; top: 1px; width: 2px; height: 8px; background: white;
 }
-
-.text { min-width: 0; text-align: left; }
-
-.rowTitle {
-  font-size: 15px;
-  font-weight: 900;
-  color: rgba(17, 24, 39, 0.92);
-  line-height: 1.2;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.rowSub {
-  margin-top: 3px;
-  font-size: 12px;
-  font-weight: 700;
-  color: rgba(17, 24, 39, 0.50);
-  line-height: 1.3;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.actions { display: flex; gap: 8px; flex-shrink: 0; }
-
-.iconBtn {
-  width: 44px;
-  height: 44px;
-  border-radius: 999px;
-  border: none;
-  background: rgba(17, 24, 39, 0.05);
-  display: grid;
-  place-items: center;
-  cursor: pointer;
-  transition: background 120ms ease;
-}
-
-.iconBtn:active { background: rgba(17, 24, 39, 0.10); }
-.iconBtn.on { background: rgba(16, 185, 129, 0.12); }
-
-.star {
-  width: 16px;
-  height: 16px;
-  display: inline-block;
-  background: rgba(17, 24, 39, 0.45);
-  clip-path: polygon(50% 0%, 62% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 38% 35%);
-}
-.iconBtn.on .star { background: rgba(16, 185, 129, 0.95); }
-
-.dl { width: 16px; height: 16px; position: relative; display: inline-block; }
-.dl::before {
-  content: "";
-  position: absolute;
-  left: 7px; top: 2px;
-  width: 2px; height: 9px;
-  background: rgba(17, 24, 39, 0.45);
-}
-.dl::after {
-  content: "";
-  position: absolute;
-  left: 4px; top: 8px;
-  width: 8px; height: 8px;
-  border-right: 2px solid rgba(17, 24, 39, 0.45);
-  border-bottom: 2px solid rgba(17, 24, 39, 0.45);
+.dlIcon::after {
+  content: ""; position: absolute;
+  left: 3px; top: 6px; width: 8px; height: 8px;
+  border-right: 2px solid white; border-bottom: 2px solid white;
   transform: rotate(45deg);
 }
-.iconBtn.on .dl::before { background: rgba(16, 185, 129, 0.95); }
-.iconBtn.on .dl::after {
-  border-right-color: rgba(16, 185, 129, 0.95);
-  border-bottom-color: rgba(16, 185, 129, 0.95);
+
+.copyright {
+  font-size: 11px; font-weight: 600;
+  color: rgba(17, 24, 39, 0.28); text-align: center;
 }
 
 .empty {
-  font-size: 14px;
-  font-weight: 700;
-  color: rgba(17, 24, 39, 0.38);
-  padding: 12px 4px;
+  font-size: 14px; font-weight: 700;
+  color: rgba(17, 24, 39, 0.38); padding: 20px 4px; text-align: center;
 }
 
 /* Expand transition */
@@ -456,6 +314,6 @@ function openItem(id: string) { router.push(`/movin/knowzone/${id}`) }
 .expand-leave-active {
   transition: opacity 140ms ease, transform 140ms ease;
 }
-.expand-enter-from { opacity: 0; transform: translateY(-8px); }
+.expand-enter-from { opacity: 0; transform: translateY(-6px); }
 .expand-leave-to   { opacity: 0; transform: translateY(-4px); }
 </style>

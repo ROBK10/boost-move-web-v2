@@ -29,15 +29,15 @@ function go(path: string) {
         <span class="chev" aria-hidden="true"></span>
       </button>
 
-      <button class="row" type="button" @click="go('/movin/programmer')">
-        <div class="rowTitle">Programmer</div>
-        <div class="rowSub">Trening og opplegg</div>
-        <span class="chev" aria-hidden="true"></span>
-      </button>
-
       <button class="row" type="button" @click="go('/movin/knowzone')">
         <div class="rowTitle">KnowZone</div>
         <div class="rowSub">Kunnskapsbase</div>
+        <span class="chev" aria-hidden="true"></span>
+      </button>
+
+      <button class="row" type="button" @click="go('/movin/programmer')">
+        <div class="rowTitle">Programmer</div>
+        <div class="rowSub">Trening og opplegg</div>
         <span class="chev" aria-hidden="true"></span>
       </button>
 

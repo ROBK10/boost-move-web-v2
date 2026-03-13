@@ -1,38 +1,24 @@
 <script setup lang="ts">
-import { computed, reactive, ref, onMounted } from "vue"
+import { ref } from "vue"
 import { useRouter } from "vue-router"
-import { getFordelerCategories } from "@/data/fordelerContent"
+import { useMovin } from "@/composables/useMovin"
 
 const router = useRouter()
+const { getByCategory } = useMovin()
+
+const articles = getByCategory("fordeler")
+const openSlug = ref<string | null>(null)
+
+function toggle(slug: string) {
+  openSlug.value = openSlug.value === slug ? null : slug
+}
 
 function goBack() {
   router.push("/movin")
 }
 
-function openLink() {
-  // V2: open partner / external page
-}
-
-const categories = computed(() => getFordelerCategories())
-
-const openCategoryId = ref<string | null>(null)
-
-onMounted(() => {
-  openCategoryId.value = categories.value[0]?.id ?? null
-})
-
-function toggleCategory(id: string) {
-  openCategoryId.value = openCategoryId.value === id ? null : id
-}
-
-const starred = reactive<Record<string, boolean>>({})
-const downloaded = reactive<Record<string, boolean>>({})
-
-function toggleStar(id: string) { starred[id] = !starred[id] }
-function toggleDownload(id: string) { downloaded[id] = !downloaded[id] }
-
-function openItem(id: string) {
-  router.push(`/movin/fordeler/${id}`)
+function openPdf(url: string) {
+  window.open(url, "_blank")
 }
 </script>
 
@@ -40,107 +26,61 @@ function openItem(id: string) {
   <div class="page">
     <div class="container">
       <header class="head">
-        <div class="headLeft">
-          <button class="back" type="button" @click="goBack" aria-label="Tilbake">
-            <span class="chev" aria-hidden="true"></span>
-          </button>
-
-          <div>
-            <h1 class="title">Mine fordeler</h1>
-            <p class="subtitle">Ressurser og samarbeidspartnere</p>
-          </div>
-        </div>
-
-        <button class="linkBtn" type="button" @click="openLink" aria-label="Link">
-          <span class="linkIcon" aria-hidden="true"></span>
+        <button class="back" type="button" @click="goBack" aria-label="Tilbake">
+          <span class="chev" aria-hidden="true"></span>
         </button>
+        <div>
+          <h1 class="title">Mine fordeler</h1>
+          <p class="subtitle">Ressurser og samarbeidspartnere</p>
+        </div>
       </header>
 
       <section class="list">
-        <div v-for="cat in categories" :key="cat.id" class="catBlock">
-          <!-- Category pill -->
+        <div v-for="a in articles" :key="a.slug" class="block">
           <button
-            class="catRow"
-            :class="{ 'catRow--open': openCategoryId === cat.id }"
+            class="row"
+            :class="{ 'row--open': openSlug === a.slug }"
             type="button"
-            @click="toggleCategory(cat.id)"
-            :aria-expanded="openCategoryId === cat.id"
+            @click="toggle(a.slug)"
+            :aria-expanded="openSlug === a.slug"
           >
-            <div class="catText">
-              <div class="catTitle">{{ cat.title }}</div>
+            <div class="rowLeft">
+              <div class="thumb" :class="{ 'thumb--logo': !!a.partner_logo }">
+                <img v-if="a.partner_logo" :src="a.partner_logo" :alt="a.partner" class="thumbLogo" />
+                <img v-else-if="a.image" :src="a.image" :alt="a.title" class="thumbImg" />
+                <div v-else class="thumbPlaceholder" aria-hidden="true"></div>
+              </div>
+              <div class="rowText">
+                <div class="rowTitle">{{ a.title }}</div>
+                <div class="rowPartner">{{ a.partner }}</div>
+              </div>
             </div>
-            <span class="catChev" :class="{ open: openCategoryId === cat.id }" aria-hidden="true"></span>
+            <span class="chevRight" :class="{ open: openSlug === a.slug }" aria-hidden="true"></span>
           </button>
 
-          <!-- Items -->
           <Transition name="expand">
-            <div v-if="openCategoryId === cat.id" class="items">
-              <button
-                v-for="it in cat.items"
-                :key="it.id"
-                class="itemRow"
-                type="button"
-                @click="openItem(it.id)"
-              >
-                <div class="left">
-                  <div class="thumb" :class="{ 'thumb--logo': !!it.logo }">
-                    <!-- Partner logo: contained, white bg -->
-                    <img
-                      v-if="it.logo"
-                      :src="it.logo"
-                      :alt="it.title"
-                      class="thumbLogo"
-                      aria-hidden="true"
-                    />
-                    <!-- Member benefit image: cover fill -->
-                    <img
-                      v-else-if="it.image"
-                      :src="it.image"
-                      :alt="it.title"
-                      class="thumbImg"
-                      aria-hidden="true"
-                    />
-                    <!-- PDF-only badge -->
-                    <div v-else-if="it.pdfOnly" class="pdfMark" aria-hidden="true">PDF</div>
-                    <!-- Fallback -->
-                    <div v-else class="docPreview" aria-hidden="true"></div>
-                  </div>
+            <div v-if="openSlug === a.slug" class="body">
+              <article class="content" v-html="a.content"></article>
 
-                  <div class="text">
-                    <div class="rowTitle">{{ it.title }}</div>
-                    <div class="rowSub">{{ it.subtitle }}</div>
-                  </div>
+              <footer class="footer">
+                <div v-if="a.partner_logo" class="partnerRow">
+                  <img :src="a.partner_logo" :alt="a.partner" class="partnerLogo" />
+                  <span class="partnerName">Levert i samarbeid med {{ a.partner }}</span>
                 </div>
+                <div v-else class="partnerName">Levert i samarbeid med {{ a.partner }}</div>
 
-                <div class="actions" @click.stop>
-                  <button
-                    class="iconBtn"
-                    type="button"
-                    :class="{ on: !!starred[it.id] }"
-                    @click="toggleStar(it.id)"
-                    aria-label="Favoritt"
-                  >
-                    <span class="star" aria-hidden="true"></span>
-                  </button>
+                <button v-if="a.pdf" class="pdfBtn" type="button" @click="openPdf(a.pdf)">
+                  <span class="dlIcon" aria-hidden="true"></span>
+                  Last ned original PDF
+                </button>
 
-                  <button
-                    class="iconBtn"
-                    type="button"
-                    :class="{ on: !!downloaded[it.id] }"
-                    @click="toggleDownload(it.id)"
-                    aria-label="Last ned"
-                  >
-                    <span class="dl" aria-hidden="true"></span>
-                  </button>
-                </div>
-              </button>
-
-              <div v-if="cat.items.length === 0" class="empty">
-                Innhold kommer snart.
-              </div>
+                <div class="copyright">© Boost Move</div>
+              </footer>
             </div>
           </Transition>
         </div>
+
+        <div v-if="articles.length === 0" class="empty">Innhold kommer snart.</div>
       </section>
     </div>
   </div>
@@ -155,24 +95,15 @@ function openItem(id: string) {
   padding: 18px 16px 110px;
 }
 
-/* Header */
 .head {
   display: flex;
   align-items: flex-start;
-  justify-content: space-between;
   gap: 12px;
-  margin-bottom: 14px;
-}
-
-.headLeft {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  min-width: 0;
+  margin-bottom: 20px;
 }
 
 .back {
-  width: 42px; height: 42px;
+  width: 44px; height: 44px;
   border: none; background: white; border-radius: 999px;
   box-shadow: 0 10px 30px rgba(20, 20, 20, 0.08);
   cursor: pointer; display: grid; place-items: center; flex-shrink: 0;
@@ -185,52 +116,27 @@ function openItem(id: string) {
   transform: rotate(45deg);
 }
 
-.linkBtn {
-  width: 42px; height: 42px;
-  border: none; background: rgba(255, 255, 255, 0.75);
-  border-radius: 999px;
-  box-shadow: 0 10px 24px rgba(20, 20, 20, 0.08);
-  cursor: pointer; display: grid; place-items: center; flex-shrink: 0;
-}
-
-.linkIcon { width: 18px; height: 18px; position: relative; display: inline-block; }
-.linkIcon::before {
-  content: ""; position: absolute;
-  left: 2px; top: 8px; width: 14px; height: 2px;
-  background: rgba(17, 24, 39, 0.55);
-  transform: rotate(-25deg);
-}
-.linkIcon::after {
-  content: ""; position: absolute;
-  left: 10px; top: 2px; width: 10px; height: 10px;
-  border-radius: 999px;
-  border: 2px solid rgba(17, 24, 39, 0.55);
-  box-sizing: border-box;
-}
-
-/* Typography */
 .title {
   margin: 0;
   font-size: 34px; line-height: 1.05;
   font-weight: 900; letter-spacing: -0.03em; color: #111827;
 }
+
 .subtitle {
-  margin: 8px 0 0;
+  margin: 6px 0 0;
   font-size: 14px; font-weight: 700; color: rgba(17, 24, 39, 0.45);
 }
 
-/* List */
 .list { display: flex; flex-direction: column; gap: 10px; }
-.catBlock { display: flex; flex-direction: column; }
 
-/* Category pill */
-.catRow {
+.block { display: flex; flex-direction: column; }
+
+.row {
   width: 100%;
-  border: 1px solid rgba(17, 24, 39, 0.06);
+  border: 1px solid rgba(17, 24, 39, 0.07);
   background: white;
   border-radius: 20px;
-  padding: 16px 18px;
-  min-height: 64px;
+  padding: 14px 16px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -238,66 +144,31 @@ function openItem(id: string) {
   cursor: pointer;
   box-shadow: 0 4px 16px rgba(17, 24, 39, 0.06);
   transition: box-shadow 160ms ease, background 120ms ease, border-color 160ms ease;
+  text-align: left;
 }
-.catRow--open {
-  box-shadow: 0 8px 28px rgba(17, 24, 39, 0.10);
-  border-color: rgba(17, 24, 39, 0.10);
+
+.row--open {
   background: #f8f9fb;
-}
-.catRow:active { background: rgba(17, 24, 39, 0.03); }
-
-.catText { display: flex; flex-direction: column; gap: 4px; text-align: left; min-width: 0; }
-.catTitle {
-  font-size: 17px; font-weight: 900;
-  color: rgba(17, 24, 39, 0.92); letter-spacing: -0.01em;
+  box-shadow: 0 8px 28px rgba(17, 24, 39, 0.10);
+  border-color: rgba(17, 24, 39, 0.11);
+  border-radius: 20px 20px 0 0;
 }
 
-.catChev {
-  width: 10px; height: 10px;
-  border-right: 2px solid rgba(17, 24, 39, 0.35);
-  border-bottom: 2px solid rgba(17, 24, 39, 0.35);
-  transform: rotate(45deg);
-  transition: transform 200ms cubic-bezier(0.22, 1, 0.36, 1);
-  flex-shrink: 0;
-}
-.catChev.open { transform: rotate(-135deg); }
+.row:active { background: rgba(17, 24, 39, 0.03); }
 
-/* Items list */
-.items { margin-top: 8px; display: flex; flex-direction: column; gap: 8px; }
+.rowLeft { display: flex; align-items: center; gap: 12px; min-width: 0; }
 
-/* Item row */
-.itemRow {
-  width: 100%;
-  border: 1px solid rgba(17, 24, 39, 0.05);
-  background: white;
-  border-radius: 16px;
-  padding: 14px 14px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  cursor: pointer;
-  box-shadow: 0 2px 8px rgba(17, 24, 39, 0.05);
-  transition: background 120ms ease, box-shadow 120ms ease;
-}
-.itemRow:hover { background: rgba(17, 24, 39, 0.02); box-shadow: 0 4px 14px rgba(17, 24, 39, 0.08); }
-.itemRow:active { background: rgba(17, 24, 39, 0.04); }
-
-.left { display: flex; align-items: center; gap: 12px; min-width: 0; }
-
-/* Thumbnail box */
 .thumb {
-  width: 64px; height: 64px;
-  border-radius: 16px;
-  background: rgba(17, 24, 39, 0.10);
+  width: 56px; height: 56px;
+  border-radius: 14px;
+  background: rgba(17, 24, 39, 0.07);
+  flex-shrink: 0;
+  overflow: hidden;
   position: relative;
   display: grid;
   place-items: center;
-  flex-shrink: 0;
-  overflow: hidden;
 }
 
-/* Logo variant: white bg with padding */
 .thumb--logo {
   background: white;
   border: 1px solid rgba(17, 24, 39, 0.07);
@@ -305,93 +176,148 @@ function openItem(id: string) {
   padding: 6px;
 }
 
-/* Logo: contain, fill white box */
 .thumbLogo {
   width: 100%; height: 100%;
-  object-fit: contain;
-  display: block;
+  object-fit: contain; display: block;
 }
 
-/* Benefit image: cover fill */
 .thumbImg {
   position: absolute; inset: 0;
   width: 100%; height: 100%;
-  object-fit: cover;
-  border-radius: 16px;
+  object-fit: cover; display: block;
 }
 
-.docPreview {
-  width: 52px; height: 52px;
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.7);
-  box-shadow: inset 0 0 0 1px rgba(17, 24, 39, 0.08);
+.thumbPlaceholder {
+  width: 100%; height: 100%;
+  background: rgba(17, 24, 39, 0.07);
 }
 
-.pdfMark {
-  font-size: 9px; font-weight: 900;
-  letter-spacing: 0.06em;
-  color: rgba(17, 24, 39, 0.45);
-  border: 1.5px solid rgba(17, 24, 39, 0.20);
-  border-radius: 5px;
-  padding: 3px 5px;
-}
+.rowText { min-width: 0; }
 
-.text { min-width: 0; text-align: left; }
 .rowTitle {
   font-size: 15px; font-weight: 900;
   color: rgba(17, 24, 39, 0.92); line-height: 1.2;
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
 }
-.rowSub {
+
+.rowPartner {
   margin-top: 3px;
+  font-size: 12px; font-weight: 700; color: rgba(17, 24, 39, 0.45);
+}
+
+.chevRight {
+  width: 10px; height: 10px; flex-shrink: 0;
+  border-right: 2px solid rgba(17, 24, 39, 0.32);
+  border-bottom: 2px solid rgba(17, 24, 39, 0.32);
+  transform: rotate(45deg);
+  transition: transform 200ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.chevRight.open { transform: rotate(-135deg); }
+
+.body {
+  background: white;
+  border: 1px solid rgba(17, 24, 39, 0.07);
+  border-top: none;
+  border-radius: 0 0 20px 20px;
+  overflow: hidden;
+}
+
+.content {
+  padding: 16px 18px 0;
+  font-size: 15px; line-height: 1.65;
+  font-weight: 500; color: rgba(17, 24, 39, 0.75);
+}
+
+.content :deep(h1),
+.content :deep(h2),
+.content :deep(h3) {
+  font-size: 16px; font-weight: 900;
+  color: rgba(17, 24, 39, 0.90);
+  letter-spacing: -0.02em;
+  margin: 18px 0 6px; line-height: 1.25;
+}
+
+.content :deep(p) { margin: 0 0 12px; }
+
+.content :deep(ul),
+.content :deep(ol) { padding-left: 20px; margin: 0 0 12px; }
+
+.content :deep(li) { margin-bottom: 6px; }
+
+.content :deep(hr) {
+  border: none;
+  border-top: 1px solid rgba(17, 24, 39, 0.08);
+  margin: 18px 0;
+}
+
+.content :deep(a) { color: rgba(17, 24, 39, 0.55); text-decoration: underline; }
+
+.content :deep(em) { color: rgba(17, 24, 39, 0.45); font-style: normal; }
+
+.footer {
+  margin: 16px 18px 18px;
+  padding: 16px;
+  background: rgba(17, 24, 39, 0.03);
+  border-radius: 14px;
+  display: flex; flex-direction: column; gap: 12px;
+}
+
+.partnerRow {
+  display: flex; align-items: center; gap: 10px;
+}
+
+.partnerLogo {
+  height: 28px; max-width: 70px;
+  object-fit: contain; display: block; flex-shrink: 0;
+}
+
+.partnerName {
   font-size: 12px; font-weight: 700;
-  color: rgba(17, 24, 39, 0.5); line-height: 1.3;
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  color: rgba(17, 24, 39, 0.45); line-height: 1.3;
 }
 
-.actions { display: flex; gap: 8px; flex-shrink: 0; }
-
-.iconBtn {
-  width: 44px; height: 44px;
-  border-radius: 999px; border: none;
-  background: rgba(17, 24, 39, 0.05);
-  display: grid; place-items: center; cursor: pointer;
-  transition: background 120ms ease;
+.pdfBtn {
+  display: inline-flex; align-items: center;
+  gap: 10px; height: 48px; padding: 0 20px;
+  border: none; border-radius: 12px;
+  background: #111827; color: white;
+  font-size: 13px; font-weight: 900;
+  cursor: pointer; width: 100%; justify-content: center;
+  transition: opacity 120ms ease;
 }
-.iconBtn:active { background: rgba(17, 24, 39, 0.10); }
-.iconBtn.on { background: rgba(16, 185, 129, 0.12); }
+.pdfBtn:active { opacity: 0.82; }
 
-.star {
-  width: 16px; height: 16px;
-  display: inline-block;
-  background: rgba(17, 24, 39, 0.45);
-  clip-path: polygon(50% 0%, 62% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 38% 35%);
+.dlIcon {
+  width: 14px; height: 14px;
+  position: relative; display: inline-block; flex-shrink: 0;
 }
-.iconBtn.on .star { background: rgba(16, 185, 129, 0.95); }
-
-.dl { width: 16px; height: 16px; position: relative; display: inline-block; }
-.dl::before {
+.dlIcon::before {
   content: ""; position: absolute;
-  left: 7px; top: 2px; width: 2px; height: 9px;
-  background: rgba(17, 24, 39, 0.45);
+  left: 6px; top: 1px; width: 2px; height: 8px; background: white;
 }
-.dl::after {
+.dlIcon::after {
   content: ""; position: absolute;
-  left: 4px; top: 8px; width: 8px; height: 8px;
-  border-right: 2px solid rgba(17, 24, 39, 0.45);
-  border-bottom: 2px solid rgba(17, 24, 39, 0.45);
+  left: 3px; top: 6px; width: 8px; height: 8px;
+  border-right: 2px solid white; border-bottom: 2px solid white;
   transform: rotate(45deg);
 }
-.iconBtn.on .dl::before { background: rgba(16, 185, 129, 0.95); }
-.iconBtn.on .dl::after {
-  border-right-color: rgba(16, 185, 129, 0.95);
-  border-bottom-color: rgba(16, 185, 129, 0.95);
+
+.copyright {
+  font-size: 11px; font-weight: 600;
+  color: rgba(17, 24, 39, 0.28); text-align: center;
 }
 
-.empty { font-size: 14px; font-weight: 700; color: rgba(17, 24, 39, 0.38); padding: 12px 4px; }
+.empty {
+  font-size: 14px; font-weight: 700;
+  color: rgba(17, 24, 39, 0.38); padding: 20px 4px; text-align: center;
+}
 
-.expand-enter-active { transition: opacity 220ms ease, transform 220ms cubic-bezier(0.22, 1, 0.36, 1); }
-.expand-leave-active { transition: opacity 140ms ease, transform 140ms ease; }
-.expand-enter-from { opacity: 0; transform: translateY(-8px); }
+.expand-enter-active {
+  transition: opacity 220ms ease, transform 220ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.expand-leave-active {
+  transition: opacity 140ms ease, transform 140ms ease;
+}
+.expand-enter-from { opacity: 0; transform: translateY(-6px); }
 .expand-leave-to   { opacity: 0; transform: translateY(-4px); }
 </style>

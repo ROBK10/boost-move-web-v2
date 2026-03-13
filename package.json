@@ -10,6 +10,7 @@
     "test": "node scripts/test-minhelse.mjs"
   },
   "dependencies": {
+    "marked": "^17.0.4",
     "pinia": "^3.0.4",
     "vue": "^3.5.27",
     "vue-router": "^4.6.4"
