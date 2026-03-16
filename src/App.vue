@@ -19,10 +19,11 @@ import InstallBanner from "@/components/ui/InstallBanner.vue"
 <style>
 .app-shell {
   min-height: 100vh;
+  padding-top: env(safe-area-inset-top);
 }
 
-/* Plass til bunnmenyen */
+/* Plass til bunnmenyen + safe area bunn */
 .page {
-  padding-bottom: 96px;
+  padding-bottom: calc(96px + env(safe-area-inset-bottom));
 }
 </style>

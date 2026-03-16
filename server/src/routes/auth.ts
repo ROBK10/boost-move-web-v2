@@ -28,7 +28,7 @@ function signToken(payload: { userId: string }) {
 function setAuthCookie(res: any, token: string) {
   res.cookie(COOKIE_NAME, token, {
     httpOnly: true,
-    sameSite: "lax",
+    sameSite: IS_PROD ? "none" : "lax",
     secure: IS_PROD,
     path: "/",
     maxAge: 1000 * 60 * 60 * 24 * 30,
@@ -38,7 +38,7 @@ function setAuthCookie(res: any, token: string) {
 function clearAuthCookie(res: any) {
   res.clearCookie(COOKIE_NAME, {
     httpOnly: true,
-    sameSite: "lax",
+    sameSite: IS_PROD ? "none" : "lax",
     secure: IS_PROD,
     path: "/",
   })
