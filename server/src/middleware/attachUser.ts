@@ -9,7 +9,9 @@ const COOKIE_NAME = process.env.COOKIE_NAME || "bm_token"
 
 export async function attachUser(req: ReqAny, _res: Response, next: NextFunction) {
   try {
-    const token = req.cookies?.[COOKIE_NAME]
+    const authHeader = (req as any).headers?.authorization
+    const token = (authHeader?.startsWith("Bearer ") ? authHeader.slice(7) : null)
+      || req.cookies?.[COOKIE_NAME]
     if (!token) return next()
 
     const payload = jwt.verify(token, JWT_SECRET) as any

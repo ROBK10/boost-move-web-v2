@@ -64,7 +64,10 @@ async function getUserSafe(userId: string) {
 }
 
 function readToken(req: any) {
-  return req.cookies?.[COOKIE_NAME] || null
+  const authHeader = req.headers?.authorization
+  return (authHeader?.startsWith("Bearer ") ? authHeader.slice(7) : null)
+    || req.cookies?.[COOKIE_NAME]
+    || null
 }
 
 router.get("/me", async (req, res) => {
@@ -119,7 +122,7 @@ router.post("/register", async (req, res) => {
     const token = signToken({ userId: user.id })
     setAuthCookie(res, token)
 
-    return res.json({ user })
+    return res.json({ user, token })
   } catch (err) {
     console.error(err)
     return res.status(500).json({ error: "Server error" })
@@ -141,7 +144,7 @@ router.post("/login", async (req, res) => {
     setAuthCookie(res, token)
 
     const safe = await getUserSafe(user.id)
-    return res.json({ user: safe })
+    return res.json({ user: safe, token })
   } catch (err) {
     console.error(err)
     return res.status(500).json({ error: "Server error" })

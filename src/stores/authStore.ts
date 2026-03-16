@@ -1,5 +1,5 @@
 import { defineStore } from "pinia"
-import { apiFetch } from "../services/api"
+import { apiFetch, saveToken, clearToken } from "../services/api"
 import { updateProfile as apiUpdateProfile, uploadAvatar as apiUploadAvatar } from "../services/userService"
 
 export type AuthUser = {
@@ -53,6 +53,7 @@ export const useAuthStore = defineStore("auth", {
           method: "POST",
           body: JSON.stringify({ email, password }),
         })
+        if (data.token) saveToken(data.token)
         this.user = data.user
       } catch (e: any) {
         this.error = e?.message || "Kunne ikke logge inn"
@@ -70,6 +71,7 @@ export const useAuthStore = defineStore("auth", {
           method: "POST",
           body: JSON.stringify(input),
         })
+        if (data.token) saveToken(data.token)
         this.user = data.user
       } catch (e: any) {
         this.error = e?.message || "Kunne ikke registrere"
@@ -80,7 +82,8 @@ export const useAuthStore = defineStore("auth", {
     },
 
     async logout() {
-      await apiFetch("/auth/logout", { method: "POST" })
+      await apiFetch("/auth/logout", { method: "POST" }).catch(() => {})
+      clearToken()
       this.user = null
     },
 
