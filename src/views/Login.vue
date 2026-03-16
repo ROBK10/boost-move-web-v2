@@ -36,13 +36,6 @@
         </button>
       </form>
 
-      <div class="divider"></div>
-
-      <button class="btn secondary" type="button" @click="onCreateDemo" :disabled="auth.isLoading">
-        {{ auth.isLoading ? "Oppretter..." : "Lag demo-bruker (test)" }}
-      </button>
-
-      <p class="hint">Tips: Demo-bruker lages i databasen og du blir logget inn automatisk.</p>
     </div>
   </div>
 </template>
@@ -63,20 +56,7 @@ async function onLogin() {
   router.push("/")
 }
 
-async function onCreateDemo() {
-  // Lager en unik demo-epost hver gang
-  const rand = Math.random().toString(16).slice(2, 8)
-  const demoEmail = `demo-${rand}@boostmove.no`
 
-  await auth.register({
-    name: "Demo Bruker",
-    email: demoEmail,
-    password: "Test12345!",
-    companyName: "Demo Company",
-  })
-
-  router.push("/")
-}
 </script>
 
 <style scoped>
@@ -163,21 +143,4 @@ async function onCreateDemo() {
   cursor: not-allowed;
 }
 
-.btn.secondary {
-  background: rgba(17, 24, 39, 0.06);
-  color: #111827;
-}
-
-.divider {
-  height: 1px;
-  background: rgba(17, 24, 39, 0.08);
-  margin: 16px 0;
-}
-
-.hint {
-  margin: 12px 0 0;
-  font-size: 12px;
-  font-weight: 600;
-  color: rgba(17, 24, 39, 0.5);
-}
 </style>
