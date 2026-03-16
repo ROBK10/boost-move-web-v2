@@ -48,3 +48,4 @@ server/.env.*
 
 # Uploads (user avatars)
 server/uploads/
+.vercel
