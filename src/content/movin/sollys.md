@@ -58,146 +58,32 @@ hjerte- og karhelsen.
 
 ## Melanin – kroppens naturlige solbeskyttelse
 
-## Spesielt sårbare tidspunkt:
-
-## Spesielt sårbare tidspunkt:
-
-## Spesielt sårbare tidspunkt:
-
 Når huden eksponeres for sol begynner kroppen å produsere melanin.
-
-En utøver er spesielt sårbar for skader etter perioder med lav belastning; det tar
-En utøver er spesielt sårbar for skader etter perioder med lav belastning; det tar
-En utøver er spesielt sårbar for skader etter perioder med lav belastning; det tar
-alltid tid å gjenoppbygge kroppen etter perioder med mindre trening. Ferier er et
-alltid tid å gjenoppbygge kroppen etter perioder med mindre trening. Ferier er et
-alltid tid å gjenoppbygge kroppen etter perioder med mindre trening. Ferier er et
-typisk eksempel på slike perioder hvor treningsbelastningen ofte er lav. For å
 
 ## Melanin er et pigment som fungerer som kroppens naturlige beskyttelse mot UV-
 
-typisk eksempel på slike perioder hvor treningsbelastningen ofte er lav. For å
-typisk eksempel på slike perioder hvor treningsbelastningen ofte er lav. For å
 stråler. Det absorberer deler av strålingen og beskytter hudcellene.
 
-unngå skader som følge av plutselig økning i belastning, er det viktig å
-unngå skader som følge av plutselig økning i belastning, er det viktig å
-unngå skader som følge av plutselig økning i belastning, er det viktig å
-opprettholde treningen selv i slike perioder, eller gradvis øke treningsmengden
-opprettholde treningen selv i slike perioder, eller gradvis øke treningsmengden
-opprettholde treningen selv i slike perioder, eller gradvis øke treningsmengden
 Resultatet er at huden gradvis blir mørkere – det vi kjenner som å bli brun.
 
-etter ferien.
-
-etter ferien.
-
-etter ferien.
-
 Når soleksponeringen økes gradvis, får kroppen tid til å bygge opp mer melanin.
-En annen sårbar periode er når en utøver nylig har kommet tilbake fra en skade.
-En annen sårbar periode er når en utøver nylig har kommet tilbake fra en skade.
-En annen sårbar periode er når en utøver nylig har kommet tilbake fra en skade.
 Dette gir en naturlig tilpasning til solen.
-
-## Utøveren vil ofte ha mistet mye av den viktige fysiske formen. For å unngå
-
-## Utøveren vil ofte ha mistet mye av den viktige fysiske formen. For å unngå
-
-## Utøveren vil ofte ha mistet mye av den viktige fysiske formen. For å unngå
-
-tilbakefall er det viktig at treningsbelastningen økes gradvis når utøveren går
-tilbakefall er det viktig at treningsbelastningen økes gradvis når utøveren går
-tilbakefall er det viktig at treningsbelastningen økes gradvis når utøveren går
-tilbake til trening og konkurranse.
-
-tilbake til trening og konkurranse.
-
-tilbake til trening og konkurranse.
 
 ## Solbriller og kroppens lysrespons
 
-## Store svingninger i ukentlig treningsbelastning synes å ha en avgjørende
-
-## Store svingninger i ukentlig treningsbelastning synes å ha en avgjørende
-
-## Store svingninger i ukentlig treningsbelastning synes å ha en avgjørende
-
 Øynene spiller en viktig rolle i hvordan kroppen registrerer lys.
-
-betydning på utvikling av skader. Ha kontroll på hvor mye du trener per uke,
-betydning på utvikling av skader. Ha kontroll på hvor mye du trener per uke,
-betydning på utvikling av skader. Ha kontroll på hvor mye du trener per uke,
-juster etter det – og ha nok hviletid!
-
-juster etter det – og ha nok hviletid!
-
-juster etter det – og ha nok hviletid!
 
 ## Når dagslys treffer netthinnen sendes signaler til hjernen som påvirker blant
 
 annet:
 
-## Hvordan øke:
-
-## Hvordan øke:
-
-## Hvordan øke:
-
-## Å øke treningsbelastningen kan gjøres på flere måter, som for eksempel å legge
-
-## Å øke treningsbelastningen kan gjøres på flere måter, som for eksempel å legge
-
-## Å øke treningsbelastningen kan gjøres på flere måter, som for eksempel å legge
-
-til flere kilometer til løperuten, øke tempoet eller gjøre begge deler samtidig.
-til flere kilometer til løperuten, øke tempoet eller gjøre begge deler samtidig.
-til flere kilometer til løperuten, øke tempoet eller gjøre begge deler samtidig.
-
-## Generelt sett anbefales det å fokusere primært på enten å øke treningsmengden
-
-## Generelt sett anbefales det å fokusere primært på enten å øke treningsmengden
-
-## Generelt sett anbefales det å fokusere primært på enten å øke treningsmengden
-
-(antall kilometer) eller å øke treningstempoet, avhengig av målene og den
-(antall kilometer) eller å øke treningstempoet, avhengig av målene og den
-(antall kilometer) eller å øke treningstempoet, avhengig av målene og den
-nåværende treningsstatusen.
-
-nåværende treningsstatusen.
-
-nåværende treningsstatusen.
-
 Noen forskere mener at konstant bruk av solbriller i moderat sollys kan redusere
-
-## Erfaring og anbefaling er å unngå å øke både treningsmengden og tempoet
 
 kroppens naturlige lysregistrering. Dette kan potensielt påvirke hvordan kroppen
 
-## Erfaring og anbefaling er å unngå å øke både treningsmengden og tempoet
-
-## Erfaring og anbefaling er å unngå å øke både treningsmengden og tempoet
-
 tilpasser seg sollys over tid.
 
-samtidig, da dette kan øke risikoen for skader betydelig. Å legge for mye press
-samtidig, da dette kan øke risikoen for skader betydelig. Å legge for mye press
-samtidig, da dette kan øke risikoen for skader betydelig. Å legge for mye press
-på kroppen ved å øke både avstand og hastighet samtidig kan belaste muskler,
-på kroppen ved å øke både avstand og hastighet samtidig kan belaste muskler,
-på kroppen ved å øke både avstand og hastighet samtidig kan belaste muskler,
-
 ## Solbriller kan likevel være svært nyttige ved:
-
-sener og ledd på en måte som kan føre til overbelastningsskader eller andre
-sener og ledd på en måte som kan føre til overbelastningsskader eller andre
-sener og ledd på en måte som kan føre til overbelastningsskader eller andre
-skader.
-
-skader.
-
-skader.
 
 døgnrytme
 
@@ -213,37 +99,9 @@ sjø og fjell
 
 lange perioder i direkte sol
 
-Derfor, hvis du ønsker å øke treningsbelastningen, kan det være lurt å prioritere
-Derfor, hvis du ønsker å øke treningsbelastningen, kan det være lurt å prioritere
-Derfor, hvis du ønsker å øke treningsbelastningen, kan det være lurt å prioritere
-enten å øke treningsmengden eller tempoet i en gitt periode, og deretter gradvis
-enten å øke treningsmengden eller tempoet i en gitt periode, og deretter gradvis
-enten å øke treningsmengden eller tempoet i en gitt periode, og deretter gradvis
-innføre endringer i den andre variabelen når kroppen har tilpasset seg den økte
-innføre endringer i den andre variabelen når kroppen har tilpasset seg den økte
-innføre endringer i den andre variabelen når kroppen har tilpasset seg den økte
-belastningen. Dette kan bidra til å redusere risikoen for skader og gi mer
-belastningen. Dette kan bidra til å redusere risikoen for skader og gi mer
-belastningen. Dette kan bidra til å redusere risikoen for skader og gi mer
-bærekraftig fremgang i treningen.
-
-bærekraftig fremgang i treningen.
-
-bærekraftig fremgang i treningen.
-
-## Jack Tupper Daniels, en anerkjent løpetrener fra USA, hevder at kroppen trenger
-
 ## Ved vanlig dagslys kan det være gunstig å la øynene få noe naturlig lys, slik
 
-## Jack Tupper Daniels, en anerkjent løpetrener fra USA, hevder at kroppen trenger
-
-## Jack Tupper Daniels, en anerkjent løpetrener fra USA, hevder at kroppen trenger
-
 kroppen er utviklet for.
-
-omtrent 6 uker for å absorbere og tilpasse seg en ny treningsbelastning.
-omtrent 6 uker for å absorbere og tilpasse seg en ny treningsbelastning.
-omtrent 6 uker for å absorbere og tilpasse seg en ny treningsbelastning.
 
 ## Hva med solkrem?
 

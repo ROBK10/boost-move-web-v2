@@ -5,7 +5,7 @@ import { useMovinState } from "@/composables/useMovinState"
 
 const router = useRouter()
 const { getByCategory } = useMovin()
-const { isFave, toggleFave } = useMovinState()
+const { isFave, toggleFave, isCompleted } = useMovinState()
 
 const articles = getByCategory("maler")
 
@@ -13,8 +13,8 @@ function goBack() {
   router.push("/movin")
 }
 
-function openPdf(url: string | null) {
-  if (url) window.open(url, "_blank")
+function openDetail(slug: string) {
+  router.push(`/movin/maler/${slug}`)
 }
 </script>
 
@@ -32,20 +32,28 @@ function openPdf(url: string | null) {
       </header>
 
       <section class="list">
-        <div
+        <button
           v-for="a in articles"
           :key="a.slug"
           class="card"
+          type="button"
+          @click="openDetail(a.slug)"
         >
           <div class="cardLeft">
             <div class="thumb">
               <img v-if="a.image" :src="a.image" :alt="a.title" class="thumbImg" />
               <div v-else class="thumbPlaceholder" aria-hidden="true"></div>
             </div>
-            <div class="cardTitle">{{ a.title }}</div>
+            <div class="cardMeta">
+              <div class="cardTitle">{{ a.title }}</div>
+              <span v-if="isCompleted(a.slug)" class="donePill">
+                <span class="doneDot" aria-hidden="true"></span>
+                Lastet ned
+              </span>
+            </div>
           </div>
 
-          <div class="cardActions">
+          <div class="cardActions" @click.stop>
             <button
               class="starBtn"
               type="button"
@@ -55,18 +63,9 @@ function openPdf(url: string | null) {
             >
               <span class="starIcon" aria-hidden="true"></span>
             </button>
-            <button
-              v-if="a.pdf"
-              class="pdfBtn"
-              type="button"
-              @click="openPdf(a.pdf)"
-              aria-label="Last ned PDF"
-            >
-              <span class="dlIcon" aria-hidden="true"></span>
-              PDF
-            </button>
+            <span class="chevRight" aria-hidden="true"></span>
           </div>
-        </div>
+        </button>
 
         <div v-if="articles.length === 0" class="empty">Innhold kommer snart.</div>
       </section>
@@ -128,13 +127,46 @@ function openPdf(url: string | null) {
   justify-content: space-between;
   gap: 12px;
   box-shadow: 0 4px 16px rgba(17, 24, 39, 0.06);
+  cursor: pointer;
+  text-align: left;
+  transition: box-shadow 120ms ease;
 }
+.card:active { box-shadow: 0 6px 24px rgba(17,24,39,0.10); }
 
 .cardLeft {
   display: flex;
   align-items: center;
   gap: 12px;
   min-width: 0;
+  flex: 1;
+}
+
+.cardMeta {
+  display: flex; flex-direction: column; gap: 4px; min-width: 0;
+}
+
+.donePill {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 11px; font-weight: 800;
+  color: rgba(17,24,39,0.70);
+  background: rgba(185,255,0,0.25);
+  border-radius: 999px;
+  padding: 3px 8px 3px 6px;
+  width: fit-content;
+}
+
+.doneDot {
+  width: 5px; height: 5px;
+  border-radius: 999px;
+  background: rgba(60,120,0,0.65);
+  flex-shrink: 0;
+}
+
+.chevRight {
+  width: 10px; height: 10px; flex-shrink: 0;
+  border-right: 2px solid rgba(17,24,39,0.25);
+  border-top: 2px solid rgba(17,24,39,0.25);
+  transform: rotate(45deg);
 }
 
 .thumb {
@@ -184,32 +216,6 @@ function openPdf(url: string | null) {
   transition: background 120ms ease;
 }
 .starBtn.active .starIcon { background: rgba(251,191,36,0.95); }
-
-.pdfBtn {
-  display: inline-flex; align-items: center;
-  gap: 8px; height: 42px; padding: 0 16px;
-  border: none; border-radius: 12px;
-  background: #111827; color: white;
-  font-size: 13px; font-weight: 900;
-  cursor: pointer; flex-shrink: 0;
-  transition: opacity 120ms ease;
-}
-.pdfBtn:active { opacity: 0.82; }
-
-.dlIcon {
-  width: 14px; height: 14px;
-  position: relative; display: inline-block; flex-shrink: 0;
-}
-.dlIcon::before {
-  content: ""; position: absolute;
-  left: 6px; top: 1px; width: 2px; height: 8px; background: white;
-}
-.dlIcon::after {
-  content: ""; position: absolute;
-  left: 3px; top: 6px; width: 8px; height: 8px;
-  border-right: 2px solid white; border-bottom: 2px solid white;
-  transform: rotate(45deg);
-}
 
 .empty {
   font-size: 14px; font-weight: 700;

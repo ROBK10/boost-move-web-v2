@@ -77,5 +77,10 @@ export function useMovinState() {
     return !!_completed[slug]
   }
 
-  return { isFave, toggleFave, getProgress, setProgress, clearProgress, isCompleted }
+  function markCompleted(slug: string) {
+    _completed[slug] = true
+    persistCompleted()
+  }
+
+  return { isFave, toggleFave, getProgress, setProgress, clearProgress, isCompleted, markCompleted }
 }

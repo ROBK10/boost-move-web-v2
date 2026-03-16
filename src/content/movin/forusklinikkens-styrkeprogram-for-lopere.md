@@ -56,7 +56,6 @@ motsatt ben.
 
 ## Sett: 2-3, Repetisjoner: 8-16
 
-boost
 4.Nordic hamstrings
 Stå oppreist på knærne. La en .
 treningskamerat holde omkring Bley EP
@@ -105,8 +104,6 @@ vanskeligere ved at du lukker øyn
 7. Dead bug
 
 ## Ligg på ryggen med 90 graders b
-
-## LL TET TT ETT
 
 ---
 

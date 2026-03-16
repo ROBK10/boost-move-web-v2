@@ -107,7 +107,6 @@ function openPdf() {
         </div>
 
         <div class="pdfSection" v-if="article.pdf">
-          <p class="pdfLabel">Last ned originaldokumentet</p>
           <button class="pdfBtn" type="button" @click="openPdf">
             <span class="dlIcon" aria-hidden="true"></span>
             Last ned original PDF

@@ -8,10 +8,6 @@ partner: "Socexo"
 partner_logo: socexo.png
 ---
 
-( SOCEXO
-
-## SOCIETAL SEXOLOGY
-
 ## Som medlem av Boost move får du første
 
 innledende samtale (20min) gratis og
@@ -34,7 +30,6 @@ Pris: kr 1 200.
 ## Pris for ledere, fagpersoner og kurs tas
 
 direkte.
-Natta ban Al 2 aAlannam Airalt+a annet +:l.
 
 ---
 

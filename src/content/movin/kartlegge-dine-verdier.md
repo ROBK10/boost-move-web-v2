@@ -63,7 +63,7 @@ livsstil som er i samsvar med din verdi for helse.
 innebærer mye isolert arbeid eller lite interaksjon med andre, kan du føle deg mindre
 tilfreds. Ved å være klar over verdien av samarbeid, kan du aktivt søke etter muligheter for
 
-## PN pan nnesiunirdarn &
+å samarbeide med andre, vurdere å diskutere med leder, og også vurdere å finne en rolle som passer bedre for dine verdier.
 
 ---
 

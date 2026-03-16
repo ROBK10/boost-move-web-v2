@@ -94,7 +94,7 @@ kroppen muligheten til å reparere og gjenopprette seg selv etter fysisk aktivit
 I tillegg til fysisk hvile er det viktig å ta tid for mental avslapning. Praksis som
 pusteøvelser eller avslappende aktiviteter kan bidra til å redusere stressnivået
 og fremme en raskere restitusjon. Ved å prioritere tilstrekkelig hvile og
-paetitaacian 1 Hillamm Gil teanina tran An cam itaueare Anns hades talen radiieara
+restitusjon i tillegg til trening, kan du som utøvere oppnå bedre ytelse, redusere risikoen for skader og opprettholde en sunn og balansert livsstil.
 
 ---
 

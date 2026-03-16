@@ -4,27 +4,26 @@ import { marked } from "marked"
 export type MovinCategory = "knowzone" | "fordeler" | "maler" | "programmer" | "komgang"
 
 // Split rendered HTML into readable steps (exported for reuse in list + detail views)
-// Groups 2 heading-sections per step and 3 paragraphs per step to avoid micro-boxes.
+// One heading-section per step; merges only if the section is very short (<300 chars).
 export function splitSteps(html: string): string[] {
   // Split into blocks starting at each h2/h3
   const blocks = html.split(/(?=<h[23][^>]*>)/i).filter(s => s.trim())
 
   if (blocks.length > 1) {
-    const MAX_BLOCKS = 2   // heading-sections per step
-    const MAX_CHARS = 1400 // soft char limit per step
+    const MIN_CHARS = 300  // merge short sections into next
+    const MAX_CHARS = 900  // hard cap before forcing a new step
     const steps: string[] = []
     let current = ""
-    let count = 0
 
     for (const block of blocks) {
-      const wouldOverflow = current.length + block.length > MAX_CHARS
-      if (current && (count >= MAX_BLOCKS || wouldOverflow)) {
+      if (!current) {
+        current = block
+      } else if (current.length < MIN_CHARS && current.length + block.length <= MAX_CHARS) {
+        // current step is too short — merge this block in
+        current += block
+      } else {
         steps.push(current)
         current = block
-        count = 1
-      } else {
-        current += block
-        count++
       }
     }
     if (current) steps.push(current)
@@ -35,10 +34,10 @@ export function splitSteps(html: string): string[] {
   const byHr = html.split(/<hr\s*\/?>/i).filter(s => s.trim())
   if (byHr.length > 1) return byHr
 
-  // Fallback: group paragraphs — 3 per step
+  // Fallback: group paragraphs — 2 per step for more balanced boxes
   const paras = html.match(/<p[\s\S]*?<\/p>/gi) ?? []
-  if (paras.length > 4) {
-    const PER_STEP = 3
+  if (paras.length > 3) {
+    const PER_STEP = 2
     const steps: string[] = []
     for (let i = 0; i < paras.length; i += PER_STEP) {
       steps.push(paras.slice(i, i + PER_STEP).join(""))

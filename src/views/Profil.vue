@@ -241,6 +241,20 @@ async function onLogout() {
         <span class="chev" aria-hidden="true"></span>
       </button>
 
+      <template v-if="user?.role === 'admin'">
+        <div class="action-divider"></div>
+        <button class="action-row action-row--nav action-row--admin" type="button" @click="router.push('/admin')">
+          <span class="action-icon" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+              <rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
+            </svg>
+          </span>
+          <span class="action-label">Admin</span>
+          <span class="chev" aria-hidden="true"></span>
+        </button>
+      </template>
+
       <div class="action-divider"></div>
 
       <button class="action-row logout-row" type="button" @click="onLogout" :disabled="auth.isLoading">

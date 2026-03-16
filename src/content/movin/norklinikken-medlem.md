@@ -8,8 +8,6 @@ partner: "Norklinikken"
 partner_logo: norklinikken.png
 ---
 
-## GJ: KLINIKKEN
-
 ## Som medlem av Boost Move får du muligheten
 
 til:

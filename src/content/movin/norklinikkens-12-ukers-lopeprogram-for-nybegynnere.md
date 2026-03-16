@@ -10,7 +10,6 @@ partner_logo: norklinikken.png
 
 ## Norklinikkens 12-ukers løpeprogram for
 
-* o
 nybegynnere (nivå 1)
 Velkommen til Norklinikkens 12-ukers nybegynnerløpeprogram! Dette programmet er for
 deg som ønsker å begynne løpereisen og gradvis bygge kondisjon og utholdenhet, uten å
@@ -57,8 +56,6 @@ kroppen din.
 * Dag 3: Gå i raskt tempo i 10 min. Finn en bakke, gå oppover i 2 min, jogg
 ned - totalt 5 ganger. 10 min rolig gange etterpå.
 
-## Norklinikken /
-
 ## Uke 3: Ikke bli for tøff!
 
 * Dag 1: Rask gange 10m, 2x2m jogg, 1m gående pause + 2x1m jogg, 1m
@@ -67,7 +64,7 @@ pause. Gå 10 min.
 ## Dag 1 utfordrer deg med løpeintervaller. Fokuser på jevn pust og god
 
 form.
-« Dag 2: Tahev
+* Dag 2: Tahev
 
 ## Stå på en kant eller et trappetrinn. Senk helene ned mot gulvet, gå helt opp på
 
@@ -81,12 +78,12 @@ formen.
 
 ## Uke 4: Nå begynner det å skje ting
 
-» Dag 1: Gå 5 minutter som oppvarming, jogg 3 min, gå 1 min. Totalt cirka 30
+* Dag 1: Gå 5 minutter som oppvarming, jogg 3 min, gå 1 min. Totalt cirka 30
 minutter.
 Dag 1 i uke 4 utfordrer deg med lengre løpeintervaller. Oppretthold jevn pust og
 god teknikk.
 * Dag 2: Rolig gåtur i 40 minutter.
-« Dag 3: Ga 5 minutter som oppvarming, jogg 4 min, gå 1 min. Totalt ca. 30
+* Dag 3: Ga 5 minutter som oppvarming, jogg 4 min, gå 1 min. Totalt ca. 30
 minutter.
 På dag 3 øker du med lengre løpeintervaller. Fortsett å jobbe med teknikken din.
 
@@ -95,22 +92,14 @@ På dag 3 øker du med lengre løpeintervaller. Fortsett å jobbe med teknikken 
 * Dag 1: Gå i raskt tempo 10 min. Finn en bakke, gå oppover i 2 min, jogg ned
 - totalt 7 ganger. 10 min rolig gange etterpå
 Dag 1 i uke 5 fokuserer på å øke treningsvolumet.
-« Dag 2: Gå 10 min. Jogg 4 min, gå 30 sek, jogg 3 min, gå 30 sek, jogg 2 min,
+* Dag 2: Gå 10 min. Jogg 4 min, gå 30 sek, jogg 3 min, gå 30 sek, jogg 2 min,
 gå 30 sek, jogg 1 min, gå 5 min.
 * Dag 3: Gå 10 minutter. Jogg 1 min, gå 30 sek, jogg 2 min, gå 30 sek, jogg 3
 min, gå 30 sek, jogg 4 min, gå 5 min.
 
-## Norklinikken /Boost Athlete —
-
-www.ooostathlete.no / Instagram: boostathlete
-
-## Programmet er
-
-au oost
-
 ## Uke 6: Du er rå! Hold deg til programmet
 
-« Dag 1: Jogg 5 min, gå 30 sek i 30 min
+* Dag 1: Jogg 5 min, gå 30 sek i 30 min
 Dag 1 utfordrer deg med flere løpeintervaller.
 * Dag 2: Jogg/gå 10 min. Jogg 4 min, gå 15 sek, jogg 2 min, gå 15 sek, jogg 4
 min, gå 15 sek, jogg 2min, gå/jogg 4 min.
@@ -125,7 +114,7 @@ Fokuser på god form og teknikk.
 
 ## Uke 7: Oh my - dette er spinnvillt!
 
-» Dag 1: Rolig tur, 50 minutter. Avslutt med tåhev.
+* Dag 1: Rolig tur, 50 minutter. Avslutt med tåhev.
 
 ## Dag 1 i uke 7 introduserer lengre økter. Fokuser på jevn intensitet og
 
@@ -143,17 +132,10 @@ og tilpass tempoet.
 
 * Dag 1: Jogg 7 min, gå 30 sek i til sammen 30 minutter.
 Dag 1 utfordrer deg med lengre løpeøkter. Fokuser på jevn pust og god teknikk.
-« Dag 2: Gå 10 min. Jogg 10 min. Gå 10 min.
+* Dag 2: Gå 10 min. Jogg 10 min. Gå 10 min.
 Prøv å opprettholde en jevn pusterytme.
 * Dag 3: Gå 10 min. Finn en bakke, gå oppover i 2 min, jogg ned - totalt 9
 ganger. 5 min rolig gange etterpå.
-
-## Norklinikken /80ost Athlete
-
-wwwboostathtete.no [I Instagram: @boostathiete
-Programmet er kun ti privat bruk. Programmet må ikke kopieres, vdereselges eter videreformidles
-ou er meget velkommen ti å dele din opplevelse på instagram med #Bo0stAthlete doost.
-od Forneyelse ATHLETE
 
 ## Uke 9: YES!! Du løper, jo!
 
@@ -173,12 +155,12 @@ pusting.
 
 ## Uke 10: Mektig, mektig imponert!
 
-« Dag 1: Rolig jogg 10 min. 10 min litt raskere tempo. Rolig jogg 5 min.
+* Dag 1: Rolig jogg 10 min. 10 min litt raskere tempo. Rolig jogg 5 min.
 
 ## Dag 1 i uke 10 fokuserer på å forbedre utholdenheten din. Oppretthold jevn pust
 
 og tempo.
-« Dag 2: Jogg 30 min.
+* Dag 2: Jogg 30 min.
 
 ## Dag 2 fortsetter med fokus på utholdenhet. Pass på at du følger riktig teknikk
 
@@ -196,23 +178,11 @@ Dag 2, Fokuser på god teknikk og jevn pust.
 * Dag 3: Rolig jogg 12 min. Løp 3 min, 2 min, 1 min med pauser på 1 min
 gange. Rolig jogg 10 min.
 
-## Norklinikk
-
-Programmet er kun ti privat bruk.
-
 ## Uke 12: Siste innspurt og påfølg:
 
 * Dag 1: Jogg 35 min.
 
-## Dag 1 i uke 12 er tiden for å oppn
-
-har oppnådd.
-¢ Dag 2: Rolig jogg 15 min. Lop’
-på 1 min gange. Jogg 10 min.
-
-## Dag 2 gir deg muligheten til å set
-
-fullføre løpeturen din.
+* Dag 2: Rolig jogg 15 min. Lop’
 
 ---
 

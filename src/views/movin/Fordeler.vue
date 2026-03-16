@@ -1,26 +1,19 @@
 <script setup lang="ts">
-import { ref } from "vue"
 import { useRouter } from "vue-router"
 import { useMovin } from "@/composables/useMovin"
 import { useMovinState } from "@/composables/useMovinState"
 
 const router = useRouter()
 const { getByCategory } = useMovin()
-const { isFave, toggleFave } = useMovinState()
+const { isFave, toggleFave, isCompleted } = useMovinState()
 
 const articles = getByCategory("fordeler")
-const openSlug = ref<string | null>(null)
-
-function toggle(slug: string) {
-  openSlug.value = openSlug.value === slug ? null : slug
-}
-
 function goBack() {
   router.push("/movin")
 }
 
-function openPdf(url: string) {
-  window.open(url, "_blank")
+function openDetail(slug: string) {
+  router.push(`/movin/fordeler/${slug}`)
 }
 </script>
 
@@ -41,10 +34,8 @@ function openPdf(url: string) {
         <div v-for="a in articles" :key="a.slug" class="block">
           <button
             class="row"
-            :class="{ 'row--open': openSlug === a.slug }"
             type="button"
-            @click="toggle(a.slug)"
-            :aria-expanded="openSlug === a.slug"
+            @click="openDetail(a.slug)"
           >
             <div class="rowLeft">
               <div class="thumb" :class="{ 'thumb--logo': !!a.partner_logo }">
@@ -55,6 +46,10 @@ function openPdf(url: string) {
               <div class="rowText">
                 <div class="rowTitle">{{ a.title }}</div>
                 <div class="rowPartner">{{ a.partner }}</div>
+                <span v-if="isCompleted(a.slug)" class="donePill">
+                  <span class="doneDot" aria-hidden="true"></span>
+                  Lest
+                </span>
               </div>
             </div>
             <div class="rowActions" @click.stop>
@@ -67,30 +62,9 @@ function openPdf(url: string) {
               >
                 <span class="starIcon" aria-hidden="true"></span>
               </button>
-              <span class="chevRight" :class="{ open: openSlug === a.slug }" aria-hidden="true"></span>
+              <span class="chevRight" aria-hidden="true"></span>
             </div>
           </button>
-
-          <Transition name="expand">
-            <div v-if="openSlug === a.slug" class="body">
-              <article class="content" v-html="a.content"></article>
-
-              <footer class="footer">
-                <div v-if="a.partner_logo" class="partnerRow">
-                  <img :src="a.partner_logo" :alt="a.partner" class="partnerLogo" />
-                  <span class="partnerName">Levert i samarbeid med {{ a.partner }}</span>
-                </div>
-                <div v-else class="partnerName">Levert i samarbeid med {{ a.partner }}</div>
-
-                <button v-if="a.pdf" class="pdfBtn" type="button" @click="openPdf(a.pdf)">
-                  <span class="dlIcon" aria-hidden="true"></span>
-                  Last ned original PDF
-                </button>
-
-                <div class="copyright">© Boost Move</div>
-              </footer>
-            </div>
-          </Transition>
         </div>
 
         <div v-if="articles.length === 0" class="empty">Innhold kommer snart.</div>
@@ -158,13 +132,6 @@ function openPdf(url: string) {
   box-shadow: 0 4px 16px rgba(17, 24, 39, 0.06);
   transition: box-shadow 160ms ease, background 120ms ease, border-color 160ms ease;
   text-align: left;
-}
-
-.row--open {
-  background: #f8f9fb;
-  box-shadow: 0 8px 28px rgba(17, 24, 39, 0.10);
-  border-color: rgba(17, 24, 39, 0.11);
-  border-radius: 20px 20px 0 0;
 }
 
 .row:active { background: rgba(17, 24, 39, 0.03); }
@@ -246,115 +213,31 @@ function openPdf(url: string) {
   width: 10px; height: 10px; flex-shrink: 0;
   border-right: 2px solid rgba(17, 24, 39, 0.32);
   border-bottom: 2px solid rgba(17, 24, 39, 0.32);
-  transform: rotate(45deg);
-  transition: transform 200ms cubic-bezier(0.22, 1, 0.36, 1);
-}
-.chevRight.open { transform: rotate(-135deg); }
-
-.body {
-  background: white;
-  border: 1px solid rgba(17, 24, 39, 0.07);
-  border-top: none;
-  border-radius: 0 0 20px 20px;
-  overflow: hidden;
+  transform: rotate(-45deg);
 }
 
-.content {
-  padding: 16px 18px 0;
-  font-size: 15px; line-height: 1.65;
-  font-weight: 500; color: rgba(17, 24, 39, 0.75);
+.donePill {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 10px; font-weight: 800;
+  color: rgba(17,24,39,0.65);
+  background: rgba(185,255,0,0.25);
+  border-radius: 999px;
+  padding: 2px 7px 2px 5px;
+  margin-top: 3px;
+  width: fit-content;
 }
 
-.content :deep(h1),
-.content :deep(h2),
-.content :deep(h3) {
-  font-size: 16px; font-weight: 900;
-  color: rgba(17, 24, 39, 0.90);
-  letter-spacing: -0.02em;
-  margin: 18px 0 6px; line-height: 1.25;
+.doneDot {
+  width: 5px; height: 5px;
+  border-radius: 999px;
+  background: rgba(60,120,0,0.65);
+  flex-shrink: 0;
 }
 
-.content :deep(p) { margin: 0 0 12px; }
-
-.content :deep(ul),
-.content :deep(ol) { padding-left: 20px; margin: 0 0 12px; }
-
-.content :deep(li) { margin-bottom: 6px; }
-
-.content :deep(hr) {
-  border: none;
-  border-top: 1px solid rgba(17, 24, 39, 0.08);
-  margin: 18px 0;
-}
-
-.content :deep(a) { color: rgba(17, 24, 39, 0.55); text-decoration: underline; }
-
-.content :deep(em) { color: rgba(17, 24, 39, 0.45); font-style: normal; }
-
-.footer {
-  margin: 16px 18px 18px;
-  padding: 16px;
-  background: rgba(17, 24, 39, 0.03);
-  border-radius: 14px;
-  display: flex; flex-direction: column; gap: 12px;
-}
-
-.partnerRow {
-  display: flex; align-items: center; gap: 10px;
-}
-
-.partnerLogo {
-  height: 28px; max-width: 70px;
-  object-fit: contain; display: block; flex-shrink: 0;
-}
-
-.partnerName {
-  font-size: 12px; font-weight: 700;
-  color: rgba(17, 24, 39, 0.45); line-height: 1.3;
-}
-
-.pdfBtn {
-  display: inline-flex; align-items: center;
-  gap: 10px; height: 48px; padding: 0 20px;
-  border: none; border-radius: 12px;
-  background: #111827; color: white;
-  font-size: 13px; font-weight: 900;
-  cursor: pointer; width: 100%; justify-content: center;
-  transition: opacity 120ms ease;
-}
-.pdfBtn:active { opacity: 0.82; }
-
-.dlIcon {
-  width: 14px; height: 14px;
-  position: relative; display: inline-block; flex-shrink: 0;
-}
-.dlIcon::before {
-  content: ""; position: absolute;
-  left: 6px; top: 1px; width: 2px; height: 8px; background: white;
-}
-.dlIcon::after {
-  content: ""; position: absolute;
-  left: 3px; top: 6px; width: 8px; height: 8px;
-  border-right: 2px solid white; border-bottom: 2px solid white;
-  transform: rotate(45deg);
-}
-
-.copyright {
-  font-size: 11px; font-weight: 600;
-  color: rgba(17, 24, 39, 0.28); text-align: center;
-}
 
 .empty {
   font-size: 14px; font-weight: 700;
   color: rgba(17, 24, 39, 0.38); padding: 20px 4px; text-align: center;
 }
 
-.expand-enter-active {
-  transition: opacity 220ms ease, transform 220ms cubic-bezier(0.22, 1, 0.36, 1);
-}
-.expand-leave-active {
-  transition: opacity 140ms ease, transform 140ms ease;
-}
-.expand-enter-from { opacity: 0; transform: translateY(-6px); }
-.expand-leave-to   { opacity: 0; transform: translateY(-4px); }
 </style>

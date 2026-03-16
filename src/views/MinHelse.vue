@@ -4,6 +4,7 @@ import { useRouter } from "vue-router"
 import { getTodayCheckIn, saveCheckIn, type DailyCheckIn, type DailyCheckInInput } from "@/services/minhelseApi"
 import { useMinHelseStore } from "@/stores/minHelseStore"
 import HealthScoreCard from "@/components/Hjem/HealthScoreCard.vue"
+import { pickTip, bandFromMinHelse, type HealthTip } from "@/data/healthTips"
 
 type Step = 1 | 2 | 3 | 4
 type CapacityBand = "low" | "mid" | "high"
@@ -27,6 +28,7 @@ const form = ref<DailyCheckInInput>({
 
 const hasCheckedInToday = computed(() => !!todayCheckin.value && !isEditing.value)
 const showTipModal = ref(false)
+const currentTip = ref<HealthTip | null>(null)
 
 const month = computed(() => {
   const now = new Date()
@@ -187,6 +189,9 @@ async function submit() {
     isEditing.value = false
     minHelseStore.latestScore = res.checkin.capacityScore
     minHelseStore.fetchMonthCheckins(minHelseStore.monthKey).catch(() => {})
+    // Pick a tip based on the user's body + energy answers
+    const band = bandFromMinHelse(form.value.body, form.value.energy)
+    currentTip.value = pickTip({ band })
     showTipModal.value = true
   } catch (e: any) {
     error.value = e?.message || "Kunne ikke lagre innsjekk"
@@ -208,13 +213,14 @@ function editToday() {
   startCheckIn()
 }
 
-function acceptTip() {
+function closeTip() {
   showTipModal.value = false
-  router.push("/movin/boost-moment")
 }
 
-function declineTip() {
-  showTipModal.value = false
+function refreshTip() {
+  if (!currentTip.value) return
+  const band = bandFromMinHelse(form.value.body, form.value.energy)
+  currentTip.value = pickTip({ band, excludeText: currentTip.value.text })
 }
 </script>
 
@@ -236,11 +242,11 @@ function declineTip() {
               <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
             </svg>
           </div>
-          <h2 id="tip-title" class="modal-title">Ønsker du et tips?</h2>
-          <p class="modal-body">Vi har et forslag til en liten Boost tilpasset dagens innsjekk.</p>
+          <h2 id="tip-title" class="modal-title">Tips for deg nå</h2>
+          <p class="modal-tip">{{ currentTip?.text }}</p>
           <div class="modal-actions">
-            <button class="btn modal-ja" type="button" @click="acceptTip">Ja</button>
-            <button class="btn secondary modal-nei" type="button" @click="declineTip">Nei</button>
+            <button class="btn modal-ja" type="button" @click="closeTip">Takk!</button>
+            <button class="btn secondary modal-nei" type="button" @click="refreshTip" aria-label="Nytt tips">↺ Nytt</button>
           </div>
         </div>
       </div>
@@ -541,6 +547,15 @@ function declineTip() {
   font-weight: 600;
   color: rgba(17, 24, 39, 0.55);
   line-height: 1.5;
+}
+
+.modal-tip {
+  margin: 0 0 24px;
+  font-size: 17px;
+  font-weight: 800;
+  color: #111827;
+  line-height: 1.45;
+  letter-spacing: -0.01em;
 }
 
 .modal-actions {

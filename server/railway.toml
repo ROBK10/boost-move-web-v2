@@ -1,0 +1,7 @@
+[build]
+builder = "nixpacks"
+buildCommand = "npm install && npm run build && npx prisma generate --schema src/prisma/schema.prisma && npx prisma migrate deploy --schema src/prisma/schema.prisma"
+
+[deploy]
+startCommand = "npm start"
+restartPolicyType = "on_failure"

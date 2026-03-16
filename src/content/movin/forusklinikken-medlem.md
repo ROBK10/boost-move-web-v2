@@ -8,8 +8,6 @@ partner: "Forus Klinikken"
 partner_logo: forus-klinikken.png
 ---
 
-forusklinikken
-
 ## Som medlem av Boost Move får du muligheten
 
 til:
@@ -30,8 +28,6 @@ kiropraktor eller manuellterapeut til 820kr
 ## Dette kan gjøres på følgende 2 metoder:
 
 1. Fremvis e-post fra arbeidsgiver.
-
-## QD | nnnoinn Cramvyicaoa: Avtiv Aritvar i ann
 
 ---
 

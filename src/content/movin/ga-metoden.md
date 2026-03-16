@@ -77,7 +77,6 @@ Gjenta løpe/gå mønsteret ditt til du har dekket måldistansen eller -tiden di
 eksempel, hvis du vil løpe/gå i 16 minutter, kan du løpe/gå med en 1:7 ratio i to
 
 sykluser. Sørg for å bruke riktig teknikk både på løpe- og gåsegmentene dine.
-boost
 
 ## Fokuser pa a holde et godt tempo pa gangedelene dine
 
@@ -134,8 +133,6 @@ gjøre det, bruk samme intervaller som du har brukt i treningen. Eller noen løp
 liker å bruke lengre løpeintervaller for å nå målstreken raskere.
 
 Vær sikker på å være forsiktig og praktisere god løpeetikett når du bruker løp/gå
-
-under lan hile du etannar far Å ta sansintarualliat ditt eosaem far av dat [Pia ar
 
 ---
 

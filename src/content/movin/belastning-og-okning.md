@@ -44,7 +44,6 @@ perioder.
 
 påvirke utøverne forskjellig. Det er derfor viktig å tilpasse økta avhengig av hver
 enkelt utøvers forutsetning.
-boost
 
 ## Spesielt sarbare tidspunkt:
 
@@ -92,7 +91,6 @@ bærekraftig fremgang i treningen.
 ## Jack Tupper Daniels, en anerkjent løpetrener fra USA, hevder at kroppen trenger
 
 omtrent 6 uker for å absorbere og tilpasse seg en ny treningsbelastning.
-boost.
 
 10 prosent regelen:
 10 % regelen er et verktøy som ofte brukes til økning.
@@ -121,8 +119,6 @@ osv., ikke samsvarer med tidligere økter.
 ## RPE kan brukes på ulike måter avhengig av treningsmål og preferanser:
 
 1. Tilpasning av treningsintensitet: Under treningsøkten kan du bruke RPE til å
-
-tak av intarnnritntan khaeanrt ne hwuardan A falar ARN Lie An awzrnebrar 2 rama
 
 ---
 

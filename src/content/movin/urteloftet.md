@@ -8,10 +8,6 @@ partner: "Urteloftet"
 partner_logo: null
 ---
 
-## VF
-
-## URTELGFTET
-
 ## Som medlem av Boost får du mulighet til å
 
 kjøpe Urteloftets egenutviklede Honningsalve

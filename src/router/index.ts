@@ -22,11 +22,15 @@ import KnowZoneDetail from "@/views/movin/KnowZoneDetail.vue"
 import Programmer from "@/views/movin/Programmer.vue"
 import ProgrammerDetail from "@/views/movin/ProgrammerDetail.vue"
 import Maler from "@/views/movin/Maler.vue"
+import MalerDetail from "@/views/movin/MalerDetail.vue"
 import Fordeler from "@/views/movin/Fordeler.vue"
+import FordelerDetail from "@/views/movin/FordelerDetail.vue"
+import AdminPanel from "@/views/Admin.vue"
 
 const routes: RouteRecordRaw[] = [
   { path: "/", redirect: "/hjem" },
   { path: "/login", component: Login },
+  { path: "/admin", component: AdminPanel },
 
   { path: "/hjem", component: Hjem },
   { path: "/min-helse", component: MinHelse },
@@ -50,7 +54,9 @@ const routes: RouteRecordRaw[] = [
       { path: "programmer", component: Programmer },
       { path: "programmer/:slug", component: ProgrammerDetail },
       { path: "maler", component: Maler },
+      { path: "maler/:slug", component: MalerDetail },
       { path: "fordeler", component: Fordeler },
+      { path: "fordeler/:slug", component: FordelerDetail },
     ],
   },
 ]
@@ -63,6 +69,16 @@ const router = createRouter({
 // ✅ Auth guard
 router.beforeEach(async (to) => {
   const auth = useAuthStore()
+
+  // Admin-panel krever admin-rolle
+  if (to.path.startsWith("/admin")) {
+    if (!auth.user && !auth.isLoading) {
+      await auth.me()
+    }
+    if (!auth.isAuthed) return "/login"
+    if (auth.user?.role !== "admin") return "/hjem"
+    return true
+  }
 
   // Tillat alltid login-siden
   if (to.path === "/login") {

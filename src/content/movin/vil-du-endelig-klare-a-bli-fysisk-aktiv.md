@@ -51,196 +51,60 @@ bestemt deg for - så blir det mye enklere!
 
 ## System framfor mål
 
-## Spesielt sårbare tidspunkt:
-
 ## Selv om du setter deg et mål der fremme - er det bedre å fokusere på daglige
-
-## Spesielt sårbare tidspunkt:
-
-## Spesielt sårbare tidspunkt:
 
 systemer i stedet for fjerne mål er mer effektivt for å oppnå varig suksess. Mål
 definerer hvor du vil - og kan virke som en magnet som drar deg i riktig retning,
-En utøver er spesielt sårbar for skader etter perioder med lav belastning; det tar
-En utøver er spesielt sårbar for skader etter perioder med lav belastning; det tar
-En utøver er spesielt sårbar for skader etter perioder med lav belastning; det tar
-alltid tid å gjenoppbygge kroppen etter perioder med mindre trening. Ferier er et
 men systemene er selve prosessene som får deg dit. For eksempel, hvis målet
-alltid tid å gjenoppbygge kroppen etter perioder med mindre trening. Ferier er et
-alltid tid å gjenoppbygge kroppen etter perioder med mindre trening. Ferier er et
-typisk eksempel på slike perioder hvor treningsbelastningen ofte er lav. For å
 ditt er å løpe et maraton, er systemet de daglige treningsøktene, ikke bare det å
-typisk eksempel på slike perioder hvor treningsbelastningen ofte er lav. For å
-typisk eksempel på slike perioder hvor treningsbelastningen ofte er lav. For å
 krysse mållinjen. Da vil du plutselig oppdage at når datoen nærmer seg har du
-unngå skader som følge av plutselig økning i belastning, er det viktig å
-unngå skader som følge av plutselig økning i belastning, er det viktig å
-unngå skader som følge av plutselig økning i belastning, er det viktig å
 ikke gjort det du skal, og er ikke klar for å stille til start likevel. Med et godt
-opprettholde treningen selv i slike perioder, eller gradvis øke treningsmengden
-opprettholde treningen selv i slike perioder, eller gradvis øke treningsmengden
-opprettholde treningen selv i slike perioder, eller gradvis øke treningsmengden
-etter ferien.
 
 system så vet du at om du gjennomfører vil du nå målet. Da er det mindre
-etter ferien.
-
-etter ferien.
 
 overveldende og du kan fokusere på en dag om gangen.
 
-En annen sårbar periode er når en utøver nylig har kommet tilbake fra en skade.
-En annen sårbar periode er når en utøver nylig har kommet tilbake fra en skade.
-En annen sårbar periode er når en utøver nylig har kommet tilbake fra en skade.
-
-## Utøveren vil ofte ha mistet mye av den viktige fysiske formen. For å unngå
-
 ## Effekten ligger i de små endringene
-
-## Utøveren vil ofte ha mistet mye av den viktige fysiske formen. For å unngå
-
-## Utøveren vil ofte ha mistet mye av den viktige fysiske formen. For å unngå
-
-tilbakefall er det viktig at treningsbelastningen økes gradvis når utøveren går
 
 ## Små daglige steg, selv om de kan virke ubetydelige der og da - har en sterk
 
-tilbakefall er det viktig at treningsbelastningen økes gradvis når utøveren går
-tilbakefall er det viktig at treningsbelastningen økes gradvis når utøveren går
 samlet effekt på sikt. Det å stadig hoppe over treningsøkter kan over tid kan føre
-tilbake til trening og konkurranse.
-
-tilbake til trening og konkurranse.
-
-tilbake til trening og konkurranse.
 
 til dårligere fysisk form. På samme måte kan selv en kort treningsøkt bidra til
 positiv fremgang og god helse over tid. Nøkkelen er å automatisere gode vaner
 slik at de blir en del av din daglige rutine - uten å trigge den indre konflikten
 
-## Store svingninger i ukentlig treningsbelastning synes å ha en avgjørende
-
-## Store svingninger i ukentlig treningsbelastning synes å ha en avgjørende
-
-## Store svingninger i ukentlig treningsbelastning synes å ha en avgjørende
-
 mellom kortsiktig nytelse og langsiktige mål for mye. Samtidig kommer du til å
-betydning på utvikling av skader. Ha kontroll på hvor mye du trener per uke,
-betydning på utvikling av skader. Ha kontroll på hvor mye du trener per uke,
-betydning på utvikling av skader. Ha kontroll på hvor mye du trener per uke,
-juster etter det – og ha nok hviletid!
 
 oppleve den kortsiktige gleden av fysisk aktiviet - som bedre humør og mer
-
-juster etter det – og ha nok hviletid!
-
-juster etter det – og ha nok hviletid!
 
 energi, og ofte et klarer hode! Det å være fysisk sliten gjør oss også roligere og
 mer avslappet, og gir bedre søvn.
 
-## Hvordan øke:
-
-## Hvordan øke:
-
-## Hvordan øke:
-
-## Å øke treningsbelastningen kan gjøres på flere måter, som for eksempel å legge
-
-## Å øke treningsbelastningen kan gjøres på flere måter, som for eksempel å legge
-
-## Å øke treningsbelastningen kan gjøres på flere måter, som for eksempel å legge
-
-til flere kilometer til løperuten, øke tempoet eller gjøre begge deler samtidig.
-
 ## Det som er motiverende er at bare små endringer gir stor effekt. I følge james
-
-til flere kilometer til løperuten, øke tempoet eller gjøre begge deler samtidig.
-til flere kilometer til løperuten, øke tempoet eller gjøre begge deler samtidig.
 
 ## Clear - vil en daglig forbedring med bare 1% gjøre deg 37 ganger bedre - eller
 
-## Generelt sett anbefales det å fokusere primært på enten å øke treningsmengden
-
-## Generelt sett anbefales det å fokusere primært på enten å øke treningsmengden
-
-## Generelt sett anbefales det å fokusere primært på enten å øke treningsmengden
-
 verre etter et år!
-
-(antall kilometer) eller å øke treningstempoet, avhengig av målene og den
-(antall kilometer) eller å øke treningstempoet, avhengig av målene og den
-(antall kilometer) eller å øke treningstempoet, avhengig av målene og den
-nåværende treningsstatusen.
-
-nåværende treningsstatusen.
-
-nåværende treningsstatusen.
 
 ## Hvem vil du være?
 
 For å lykkes med vane-endring er det nødvendig med et skifte i tankesett, der du
 
-## Erfaring og anbefaling er å unngå å øke både treningsmengden og tempoet
-
-## Erfaring og anbefaling er å unngå å øke både treningsmengden og tempoet
-
-## Erfaring og anbefaling er å unngå å øke både treningsmengden og tempoet
-
-samtidig, da dette kan øke risikoen for skader betydelig. Å legge for mye press
 fokuserer mindre på endelige mål og mer på å etablere daglige rutiner som tar
-samtidig, da dette kan øke risikoen for skader betydelig. Å legge for mye press
-samtidig, da dette kan øke risikoen for skader betydelig. Å legge for mye press
-på kroppen ved å øke både avstand og hastighet samtidig kan belaste muskler,
 deg mot målet. Varig endring av vaner handler også om å endre hvordan du ser
-på kroppen ved å øke både avstand og hastighet samtidig kan belaste muskler,
-på kroppen ved å øke både avstand og hastighet samtidig kan belaste muskler,
 deg selv - og hva du sier til deg selv. I stedet for bare å jage et mål, tenk på
-sener og ledd på en måte som kan føre til overbelastningsskader eller andre
-sener og ledd på en måte som kan føre til overbelastningsskader eller andre
-sener og ledd på en måte som kan føre til overbelastningsskader eller andre
-skader.
 
 hvem du vil bli. Når vaner blir en refleksjon av din “hvem du er”, er det større
-skader.
-
-skader.
 
 sannsynlighet for at de varer. For eksempel, i stedet for å si “jeg vil trene mer,” si
 “jeg er en som trener.”, (eller “jeg er en Spreking”.). Gjør det også til en god vane
-Derfor, hvis du ønsker å øke treningsbelastningen, kan det være lurt å prioritere
-Derfor, hvis du ønsker å øke treningsbelastningen, kan det være lurt å prioritere
-Derfor, hvis du ønsker å øke treningsbelastningen, kan det være lurt å prioritere
-enten å øke treningsmengden eller tempoet i en gitt periode, og deretter gradvis
 å motivere deg selv og bli bevisst på den negative stemmen som kan komme i
-enten å øke treningsmengden eller tempoet i en gitt periode, og deretter gradvis
-enten å øke treningsmengden eller tempoet i en gitt periode, og deretter gradvis
-innføre endringer i den andre variabelen når kroppen har tilpasset seg den økte
 veien for endring. Personer som tror på sin egen evne til å endre seg, viser seg
-innføre endringer i den andre variabelen når kroppen har tilpasset seg den økte
-innføre endringer i den andre variabelen når kroppen har tilpasset seg den økte
 også å ha større suksess med å etablere og opprettholde nye vaner. Dette
-belastningen. Dette kan bidra til å redusere risikoen for skader og gi mer
-belastningen. Dette kan bidra til å redusere risikoen for skader og gi mer
-belastningen. Dette kan bidra til å redusere risikoen for skader og gi mer
 handler om at de er mer utholdende og tilpasningsdyktige når de møter motgang.
-bærekraftig fremgang i treningen.
-
-bærekraftig fremgang i treningen.
-
-bærekraftig fremgang i treningen.
 
 ## Så - tro på deg selv!
-
-## Jack Tupper Daniels, en anerkjent løpetrener fra USA, hevder at kroppen trenger
-
-## Jack Tupper Daniels, en anerkjent løpetrener fra USA, hevder at kroppen trenger
-
-## Jack Tupper Daniels, en anerkjent løpetrener fra USA, hevder at kroppen trenger
-
-omtrent 6 uker for å absorbere og tilpasse seg en ny treningsbelastning.
-omtrent 6 uker for å absorbere og tilpasse seg en ny treningsbelastning.
-omtrent 6 uker for å absorbere og tilpasse seg en ny treningsbelastning.
 
 ## Bli bevisst på hvilke vaner du vil ha og har, og hvilke uvaner du har
 
@@ -349,162 +213,49 @@ mennesker opplever en følelse av eufori og velvære etter saunaøkter.
 
 ## Fordeler ved Isbading
 
-## Spesielt sårbare tidspunkt:
-
 Isbading, eller kaldtvannsbad, innebærer at kroppen utsettes for kaldt vann i en
-
-## Spesielt sårbare tidspunkt:
-
-## Spesielt sårbare tidspunkt:
 
 kort periode. Dette kan gi en rekke helsefordeler som komplementerer saunaens
 varme.
 
-En utøver er spesielt sårbar for skader etter perioder med lav belastning; det tar
-En utøver er spesielt sårbar for skader etter perioder med lav belastning; det tar
-En utøver er spesielt sårbar for skader etter perioder med lav belastning; det tar
-alltid tid å gjenoppbygge kroppen etter perioder med mindre trening. Ferier er et
-alltid tid å gjenoppbygge kroppen etter perioder med mindre trening. Ferier er et
-alltid tid å gjenoppbygge kroppen etter perioder med mindre trening. Ferier er et
-typisk eksempel på slike perioder hvor treningsbelastningen ofte er lav. For å
 1. Reduksjon av Betennelse og Hevelse
 
-typisk eksempel på slike perioder hvor treningsbelastningen ofte er lav. For å
-typisk eksempel på slike perioder hvor treningsbelastningen ofte er lav. For å
 Kuldeeksponering hjelper til med å redusere betennelse og hevelse i kroppen.
-unngå skader som følge av plutselig økning i belastning, er det viktig å
-unngå skader som følge av plutselig økning i belastning, er det viktig å
-unngå skader som følge av plutselig økning i belastning, er det viktig å
-opprettholde treningen selv i slike perioder, eller gradvis øke treningsmengden
 Dette er spesielt nyttig etter intens fysisk aktivitet, da kulden kan bidra til å
-opprettholde treningen selv i slike perioder, eller gradvis øke treningsmengden
-opprettholde treningen selv i slike perioder, eller gradvis øke treningsmengden
 lindre muskelsmerter og øke restitusjonen.
-
-etter ferien.
-
-etter ferien.
-
-etter ferien.
 
 2. Forbedret Sirkulasjon
 
-En annen sårbar periode er når en utøver nylig har kommet tilbake fra en skade.
-En annen sårbar periode er når en utøver nylig har kommet tilbake fra en skade.
-En annen sårbar periode er når en utøver nylig har kommet tilbake fra en skade.
-
-## Utøveren vil ofte ha mistet mye av den viktige fysiske formen. For å unngå
-
 ## Isbading får blodårene til å trekke seg sammen, og når du kommer ut av det
 
-## Utøveren vil ofte ha mistet mye av den viktige fysiske formen. For å unngå
-
-## Utøveren vil ofte ha mistet mye av den viktige fysiske formen. For å unngå
-
-tilbakefall er det viktig at treningsbelastningen økes gradvis når utøveren går
 kalde vannet, vil blodårene utvide seg raskt igjen. Denne "pumpeeffekten"
-tilbakefall er det viktig at treningsbelastningen økes gradvis når utøveren går
-tilbakefall er det viktig at treningsbelastningen økes gradvis når utøveren går
 fremmer bedre sirkulasjon og kan bidra til raskere fjerning av avfallsstoffer og
-tilbake til trening og konkurranse.
-
-tilbake til trening og konkurranse.
-
-tilbake til trening og konkurranse.
 
 økt oksygentilførsel til vev.
 
 3. Bedre Mentalt Fokus og Klarhet
 
-## Store svingninger i ukentlig treningsbelastning synes å ha en avgjørende
-
-## Store svingninger i ukentlig treningsbelastning synes å ha en avgjørende
-
-## Store svingninger i ukentlig treningsbelastning synes å ha en avgjørende
-
-betydning på utvikling av skader. Ha kontroll på hvor mye du trener per uke,
-
 ## Kaldt vann trigger en økt produksjon av adrenalin og andre stresshormoner som
 
-betydning på utvikling av skader. Ha kontroll på hvor mye du trener per uke,
-betydning på utvikling av skader. Ha kontroll på hvor mye du trener per uke,
-juster etter det – og ha nok hviletid!
-
 kan gi deg en følelse av økt energi, fokus og mental klarhet. Mange opplever en
-juster etter det – og ha nok hviletid!
-
-juster etter det – og ha nok hviletid!
 
 oppkvikkende effekt etter isbading.
 
-## Hvordan øke:
-
-## Hvordan øke:
-
-## Hvordan øke:
-
-## Å øke treningsbelastningen kan gjøres på flere måter, som for eksempel å legge
-
 4. Styrking av Immunforsvaret
-
-## Å øke treningsbelastningen kan gjøres på flere måter, som for eksempel å legge
-
-## Å øke treningsbelastningen kan gjøres på flere måter, som for eksempel å legge
-
-til flere kilometer til løperuten, øke tempoet eller gjøre begge deler samtidig.
 
 ## Kuldeeksponering kan også styrke immunforsvaret ved å stimulere produksjonen
 
-til flere kilometer til løperuten, øke tempoet eller gjøre begge deler samtidig.
-til flere kilometer til løperuten, øke tempoet eller gjøre begge deler samtidig.
 av hvite blodceller og ved å øke kroppens evne til å motstå infeksjoner. Dette kan
-
-## Generelt sett anbefales det å fokusere primært på enten å øke treningsmengden
-
-## Generelt sett anbefales det å fokusere primært på enten å øke treningsmengden
-
-## Generelt sett anbefales det å fokusere primært på enten å øke treningsmengden
 
 gjøre kroppen mer motstandsdyktig mot sykdommer og forkjølelser.
 
-(antall kilometer) eller å øke treningstempoet, avhengig av målene og den
-(antall kilometer) eller å øke treningstempoet, avhengig av målene og den
-(antall kilometer) eller å øke treningstempoet, avhengig av målene og den
-nåværende treningsstatusen.
-
-nåværende treningsstatusen.
-
-nåværende treningsstatusen.
-
 5. Bedre Hjertehelse
-
-## Erfaring og anbefaling er å unngå å øke både treningsmengden og tempoet
 
 ## Regelmessig isbading kan bidra til å styrke hjertet og blodårene ved å forbedre
 
-## Erfaring og anbefaling er å unngå å øke både treningsmengden og tempoet
-
-## Erfaring og anbefaling er å unngå å øke både treningsmengden og tempoet
-
-samtidig, da dette kan øke risikoen for skader betydelig. Å legge for mye press
 kardiovaskulær funksjon og redusere risikoen for hjerteproblemer.
 
-samtidig, da dette kan øke risikoen for skader betydelig. Å legge for mye press
-samtidig, da dette kan øke risikoen for skader betydelig. Å legge for mye press
-
 ## Forslag til isbading:
-
-på kroppen ved å øke både avstand og hastighet samtidig kan belaste muskler,
-på kroppen ved å øke både avstand og hastighet samtidig kan belaste muskler,
-på kroppen ved å øke både avstand og hastighet samtidig kan belaste muskler,
-sener og ledd på en måte som kan føre til overbelastningsskader eller andre
-sener og ledd på en måte som kan føre til overbelastningsskader eller andre
-sener og ledd på en måte som kan føre til overbelastningsskader eller andre
-skader.
-
-skader.
-
-skader.
 
 ## Temperatur: 4–10°C
 
@@ -514,39 +265,11 @@ Varighet: 1–5 minutter per sett.
 
 ## Kombinasjon av Sauna og Isbading
 
-Derfor, hvis du ønsker å øke treningsbelastningen, kan det være lurt å prioritere
-Derfor, hvis du ønsker å øke treningsbelastningen, kan det være lurt å prioritere
-Derfor, hvis du ønsker å øke treningsbelastningen, kan det være lurt å prioritere
-enten å øke treningsmengden eller tempoet i en gitt periode, og deretter gradvis
-enten å øke treningsmengden eller tempoet i en gitt periode, og deretter gradvis
-enten å øke treningsmengden eller tempoet i en gitt periode, og deretter gradvis
-innføre endringer i den andre variabelen når kroppen har tilpasset seg den økte
-innføre endringer i den andre variabelen når kroppen har tilpasset seg den økte
-innføre endringer i den andre variabelen når kroppen har tilpasset seg den økte
-belastningen. Dette kan bidra til å redusere risikoen for skader og gi mer
-belastningen. Dette kan bidra til å redusere risikoen for skader og gi mer
-belastningen. Dette kan bidra til å redusere risikoen for skader og gi mer
-
 ## Kombinasjonen av varme og kulde i sauna og isbading har blitt kjent som
-
-bærekraftig fremgang i treningen.
-
-bærekraftig fremgang i treningen.
-
-bærekraftig fremgang i treningen.
 
 kontrastterapi, og det er flere fordeler med å veksle mellom de to ekstreme
 
-## Jack Tupper Daniels, en anerkjent løpetrener fra USA, hevder at kroppen trenger
-
-## Jack Tupper Daniels, en anerkjent løpetrener fra USA, hevder at kroppen trenger
-
-## Jack Tupper Daniels, en anerkjent løpetrener fra USA, hevder at kroppen trenger
-
 temperaturene. Dette skaper en sterkere effekt på kroppens
-omtrent 6 uker for å absorbere og tilpasse seg en ny treningsbelastning.
-omtrent 6 uker for å absorbere og tilpasse seg en ny treningsbelastning.
-omtrent 6 uker for å absorbere og tilpasse seg en ny treningsbelastning.
 sirkulasjonssystem og kan bidra til raskere restitusjon, økt energinivå og en
 generell følelse av velvære.
 

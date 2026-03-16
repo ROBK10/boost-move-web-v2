@@ -45,10 +45,22 @@ function clearAuthCookie(res: any) {
 }
 
 async function getUserSafe(userId: string) {
-  return prisma.user.findUnique({
+  const user = await prisma.user.findUnique({
     where: { id: userId },
-    select: { id: true, email: true, name: true, role: true, companyId: true },
+    select: {
+      id: true,
+      email: true,
+      name: true,
+      role: true,
+      companyId: true,
+      bio: true,
+      avatarUrl: true,
+      company: { select: { name: true } },
+    },
   })
+  if (!user) return null
+  const { company, ...rest } = user
+  return { ...rest, companyName: company?.name ?? null }
 }
 
 function readToken(req: any) {

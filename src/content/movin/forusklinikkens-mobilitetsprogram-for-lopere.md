@@ -56,7 +56,6 @@ av armene.
 
 ## Repetisjoner: 12, Sets: 1
 
-boost
 4. "Verdens beste tøying”
 
 ## Start stående. Ta et stort steg frem med

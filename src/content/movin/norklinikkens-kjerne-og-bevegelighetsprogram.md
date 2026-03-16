@@ -65,9 +65,6 @@ nerven. En prolaps kan bruke 12mnd eller lengre for VÅ VÅ I
 å bli bedre, men med kontinuerlig behandling og (I |
 spesifikk trening kan man merke en stor forskjell Do Jå
 etter 4-8 uker.
-boost
-
-## ATHLETE
 
 1. Liggende bekkenvipp
 Ligg på ryggen med fotsålene på gulvet.
@@ -119,8 +116,6 @@ underlaget. Rull gradvis ned igjen.
 
 ## Sett: 3, Repetisjoner: 20
 
-## Norkinikken/
-
 4. Ryggliggende sidebevegelse av
 bena
 
@@ -165,14 +160,6 @@ sek. eller mer etter hvert. a sf
 
 ## Repetisjoner: 3
 
-## Norklnikken/Boost Athlete —
-
-## Programmet er
-
-msn i ne i boost.
-
-## ATHLETE
-
 7. Planken med utoverforing av
 annenhvert ben
 
@@ -191,8 +178,6 @@ ben og gjenta.
 ## Støtt deg på albuer og tær. Løft
 
 bekkenet slik at kroppen er strak
-
-## An slanbal C+ram ruan. Am
 
 ---
 

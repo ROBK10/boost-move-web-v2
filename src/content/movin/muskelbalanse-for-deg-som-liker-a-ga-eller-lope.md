@@ -95,7 +95,7 @@ mobilitetstrening, tøyeøvelser eller bruk av foam roller på egen hånd.
 ## Har du plager eller ønsker å bedre løpsprestasjonene dine?
 
 Gjenopprett balansen mellom legg, lår og setesmuskulaturen. Gjør du dette vil du
-rarfiicara rieivaan far avarhalactninnceradar aa mact +ralin få mar inion far
+redusere risikoen for overbelastningsskader og mest trolig få mer igjen for løpstreningen din. Vi ser også at løpere som begynner å trene styrke i hofteregionen etter hvert kan løpe både lengre og oftere. Likevel er det gøyeste at mange opplever at de blir både raskere og kan løpe med en mye bedre teknikk.
 
 ---
 

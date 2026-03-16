@@ -3,7 +3,7 @@ import { ref, computed, onMounted } from "vue"
 import { useRouter } from "vue-router"
 import { useBoostMomentStore } from "@/stores/BoostMomentStore"
 import { useBoostStore } from "@/stores/boostStore"
-import { microActions } from "@/data/microActions"
+import { pickTip, bandFromEnergyScore } from "@/data/healthTips"
 
 const router = useRouter()
 const boostMomentStore = useBoostMomentStore()
@@ -22,7 +22,7 @@ type Step = "energy" | "action" | "done"
 
 const step = ref<Step>("energy")
 const energy = ref<number>(5)
-const action = ref<string>(microActions[0] ?? "Ta 3 dype pust")
+const action = ref<string>("")
 
 const monthTotal = computed(() => boostStore.monthTotal)
 const levels = Array.from({ length: 10 }, (_, i) => i + 1)
@@ -36,6 +36,9 @@ function setEnergy(v: number) {
 }
 
 function next() {
+  // Pick a tip based on the selected energy level
+  const band = bandFromEnergyScore(energy.value)
+  action.value = pickTip({ band }).text
   step.value = "action"
 }
 
@@ -46,8 +49,8 @@ function handleComplete() {
 }
 
 function refreshAction() {
-  const idx = Math.floor(Math.random() * microActions.length)
-  action.value = microActions[idx] ?? action.value
+  const band = bandFromEnergyScore(energy.value)
+  action.value = pickTip({ band, excludeText: action.value }).text
 }
 
 // ✅ Trappe-høyde 10%..100%

@@ -6,6 +6,7 @@ import { useMinHelseStore } from "@/stores/minHelseStore"
 import { useAuthStore } from "@/stores/authStore"
 import { useBoostStore } from "@/stores/boostStore"
 import { useTeamStore } from "@/stores/teamStore"
+import { apiFetch } from "@/services/api"
 
 import NotificationBell from "@/components/ui/NotificationBell.vue"
 import HealthScoreCard from "@/components/Hjem/HealthScoreCard.vue"
@@ -71,20 +72,21 @@ onMounted(async () => {
   ])
 })
 
-function onFeedbackSubmit(_payload: { month: string; selected: string[]; orgId?: string }) {
-  // V1: feedback collected client-side; backend submission in V2
+async function onFeedbackSubmit(payload: { month: string; selected: string[]; orgId?: string; annetText?: string }) {
+  try {
+    await apiFetch("/wishes", {
+      method: "POST",
+      body: JSON.stringify({
+        month: payload.month,
+        selected: payload.selected,
+        annetText: payload.annetText,
+      }),
+    })
+  } catch {
+    // non-critical — submission silently fails
+  }
 }
 
-// Dagens Boost — roterer daglig blant de 3 raske øktene
-const dagensBoostPrograms = [
-  { id: "5min-rygg",     label: "5 minutter rygg",     emoji: "🔙" },
-  { id: "5min-skuldre",  label: "5 minutter skuldre",   emoji: "💪" },
-  { id: "5min-energi",   label: "5 minutter energi",    emoji: "⚡" },
-]
-const dagensBoost = computed(() => {
-  const dayIndex = new Date().getDay() // 0–6
-  return dagensBoostPrograms[dayIndex % dagensBoostPrograms.length]
-})
 </script>
 
 <template>
@@ -117,23 +119,7 @@ const dagensBoost = computed(() => {
       <KomIGangMentaltCard @open="go(PATHS.komIGangMentalt)" />
     </section>
 
-    <!-- Dagens økt -->
-    <div class="boost-card" role="region" aria-label="Dagens økt">
-      <div class="boost-left">
-        <span class="boost-eyebrow">Dagens økt</span>
-        <span class="boost-title">{{ dagensBoost.label }}</span>
-      </div>
-      <button
-        class="boost-btn"
-        type="button"
-        @click="go(`/movin/programmer/${dagensBoost.id}`)"
-        aria-label="`Start ${dagensBoost.label}`"
-      >
-        Start
-      </button>
-    </div>
-
-    <DagensInnsiktCard @open="go(PATHS.knowZone)" />
+<DagensInnsiktCard @open="go(PATHS.knowZone)" />
 
     <TilbakemeldingCard :orgId="auth.user?.companyId" @submit="onFeedbackSubmit" />
   </div>
@@ -186,56 +172,4 @@ const dagensBoost = computed(() => {
   gap: 14px;
 }
 
-/* Dagens Boost card */
-.boost-card {
-  background: #0b0f17;
-  border-radius: 20px;
-  padding: 18px 20px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  box-shadow: 0 8px 24px rgba(11, 15, 23, 0.18);
-}
-
-.boost-left {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  min-width: 0;
-}
-
-.boost-eyebrow {
-  font-size: 11px;
-  font-weight: 900;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.45);
-}
-
-.boost-title {
-  font-size: 18px;
-  font-weight: 900;
-  letter-spacing: -0.02em;
-  color: white;
-}
-
-.boost-btn {
-  height: 44px;
-  padding: 0 22px;
-  border: none;
-  border-radius: 999px;
-  background: rgba(185, 255, 0, 0.95);
-  color: #0b0f17;
-  font-size: 14px;
-  font-weight: 900;
-  font-family: inherit;
-  cursor: pointer;
-  flex-shrink: 0;
-  transition: opacity 150ms ease;
-}
-
-.boost-btn:active {
-  opacity: 0.80;
-}
 </style>

@@ -52,10 +52,6 @@ skuldrene henge framover under hele
 
 ## Repetisjoner: 6 , Sets: 1
 
-doost
-
-## ATHLETE
-
 aS x Q
 4. Rist los 2 wh fa KI
 
@@ -105,7 +101,6 @@ med det andre benet. AE HL HM NN
 ## F- Å M
 
 Repetisjoner: 8 , Sets: 1 | = AI ,
-boost
 8. Knebøy m/stol x , :
 
 ## Plasser stolen bak deg. Sta med rett å fn Y
@@ -135,8 +130,6 @@ uten å slippe skulderbladenes stil
 strekke armene langsomt ut.
 
 ## Repetisjoner: 12, Sets: 1
-
-10 Ctral framnavarhay
 
 ---
 

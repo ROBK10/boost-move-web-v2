@@ -8,8 +8,6 @@ partner: "Fitgo"
 partner_logo: null
 ---
 
-## IUa- møre oxeuszes
-
 ## Som medlem av Boost Move får du en time
 
 gratis personlig trener hos FitGo.
