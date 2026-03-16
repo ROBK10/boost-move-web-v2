@@ -92,30 +92,14 @@ router.post("/register", async (req, res) => {
       companyCode?: string
     }
 
-    if (!name || !email || !password) {
-      return res.status(400).json({ error: "Missing fields" })
+    if (!name || !email || !password || !companyCode) {
+      return res.status(400).json({ error: "Bedriftskode er påkrevd" })
     }
 
-    let companyId: string | null = null
+    const company = await prisma.company.findUnique({ where: { code: companyCode } })
+    if (!company) return res.status(400).json({ error: "Ugyldig bedriftskode" })
 
-    if (companyCode) {
-      const company = await prisma.company.findUnique({ where: { code: companyCode } })
-      if (!company) return res.status(400).json({ error: "Ugyldig bedriftskode" })
-      companyId = company.id
-    } else {
-      const cname = (companyName || "Demo Company").trim()
-
-      let company = await prisma.company.findFirst({ where: { name: cname } })
-      if (!company) {
-        company = await prisma.company.create({
-          data: {
-            name: cname,
-            code: makeCompanyCode(cname),
-          },
-        })
-      }
-      companyId = company.id
-    }
+    const companyId = company.id
 
     const existing = await prisma.user.findUnique({ where: { email } })
     if (existing) return res.status(400).json({ error: "E-post er allerede i bruk" })
