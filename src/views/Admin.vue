@@ -34,7 +34,29 @@ interface AdminUser {
 
 // ── State ────────────────────────────────────────────────────────────────────
 
-const activeTab = ref<"dashboard" | "wishes" | "users" | "companies">("dashboard")
+const activeTab = ref<"dashboard" | "arbeidsmiljo" | "wishes" | "users" | "companies">("dashboard")
+
+// Arbeidsmiljø-puls
+const pulseData = ref<any>(null)
+const pulseLoading = ref(false)
+
+const SIGNAL_LABELS: Record<string, string> = {
+  for_lite_tid: "For lite tid",
+  mange_avbrytelser: "Mange avbrytelser",
+  kroppen_sliten: "Kroppen er sliten",
+  tung_mentalt: "Tung dag mentalt",
+  lite_oversikt: "Lite oversikt",
+  alt_ok: "Alt ok",
+}
+
+async function loadPulseData() {
+  if (pulseData.value) return
+  pulseLoading.value = true
+  try {
+    pulseData.value = await apiFetch("/pulse/aggregate")
+  } catch { /* ignore */ }
+  pulseLoading.value = false
+}
 
 // Dashboard
 const dashboard = ref<{
@@ -265,6 +287,14 @@ async function changeRole(userId: string, role: string) {
         </button>
         <button
           class="tab"
+          :class="{ active: activeTab === 'arbeidsmiljo' }"
+          type="button"
+          @click="activeTab = 'arbeidsmiljo'; loadPulseData()"
+        >
+          Arbeidsmiljø
+        </button>
+        <button
+          class="tab"
           :class="{ active: activeTab === 'wishes' }"
           type="button"
           @click="activeTab = 'wishes'"
@@ -371,6 +401,44 @@ async function changeRole(userId: string, role: string) {
           </button>
         </div>
         <div v-else class="empty">Laster dashboard...</div>
+      </section>
+
+      <!-- ARBEIDSMILJØ -->
+      <section v-else-if="activeTab === 'arbeidsmiljo'" class="tabContent">
+        <div v-if="pulseLoading" class="empty">Laster arbeidsmiljødata...</div>
+        <div v-else-if="!pulseData || pulseData.week.total === 0" class="empty">
+          Ingen arbeidsmiljødata ennå. Ansatte rapporterer via Boost Moment.
+        </div>
+        <template v-else>
+          <!-- Denne uken -->
+          <div class="section-head">Denne uken <span class="section-sub">({{ pulseData.week.total }} svar)</span></div>
+          <div class="pulse-list">
+            <div v-for="s in pulseData.week.signals" :key="s.signal" class="pulse-row">
+              <div class="pulse-bar-wrap">
+                <div class="pulse-bar" :style="{ width: s.pct + '%' }" :class="s.signal === 'alt_ok' ? 'ok' : 'warn'"></div>
+              </div>
+              <div class="pulse-label">{{ SIGNAL_LABELS[s.signal] || s.signal }}</div>
+              <div class="pulse-pct">{{ s.pct }}%</div>
+              <div v-if="pulseData.trends[s.signal]" class="pulse-trend" :class="pulseData.trends[s.signal] > 0 ? 'up' : 'down'">
+                {{ pulseData.trends[s.signal] > 0 ? '↑' : '↓' }} {{ Math.abs(pulseData.trends[s.signal]) }}%
+              </div>
+            </div>
+          </div>
+
+          <!-- Siste 30 dager -->
+          <div class="section-head" style="margin-top: 24px">Siste 30 dager <span class="section-sub">({{ pulseData.month.total }} svar)</span></div>
+          <div class="pulse-list">
+            <div v-for="s in pulseData.month.signals" :key="s.signal" class="pulse-row">
+              <div class="pulse-bar-wrap">
+                <div class="pulse-bar" :style="{ width: s.pct + '%' }" :class="s.signal === 'alt_ok' ? 'ok' : 'warn'"></div>
+              </div>
+              <div class="pulse-label">{{ SIGNAL_LABELS[s.signal] || s.signal }}</div>
+              <div class="pulse-pct">{{ s.pct }}%</div>
+            </div>
+          </div>
+
+          <p class="pulse-note">Data er anonymisert. Ingen individdata vises.</p>
+        </template>
       </section>
 
       <section v-else-if="activeTab === 'wishes'" class="tabContent">
@@ -773,6 +841,22 @@ async function changeRole(userId: string, role: string) {
   color: rgba(209,231,229,0.35);
   padding: 32px; text-align: center;
 }
+
+/* ARBEIDSMILJØ */
+.section-head { font-size: 16px; font-weight: 900; color: #FFFFFF; margin-bottom: 12px; }
+.section-sub { font-weight: 600; color: rgba(209,231,229,0.35); font-size: 13px; }
+.pulse-list { display: flex; flex-direction: column; gap: 10px; }
+.pulse-row { display: flex; align-items: center; gap: 10px; }
+.pulse-bar-wrap { flex: 1; height: 8px; background: rgba(209,231,229,0.08); border-radius: 4px; overflow: hidden; min-width: 60px; }
+.pulse-bar { height: 100%; border-radius: 4px; transition: width 0.4s ease; }
+.pulse-bar.warn { background: rgba(245,158,11,0.7); }
+.pulse-bar.ok { background: #BEF201; }
+.pulse-label { font-size: 13px; font-weight: 700; color: #D1E7E5; min-width: 140px; }
+.pulse-pct { font-size: 14px; font-weight: 900; color: #FFFFFF; min-width: 36px; text-align: right; }
+.pulse-trend { font-size: 12px; font-weight: 800; min-width: 40px; }
+.pulse-trend.up { color: rgba(239,68,68,0.85); }
+.pulse-trend.down { color: #BEF201; }
+.pulse-note { margin: 20px 0 0; font-size: 12px; font-weight: 600; color: rgba(209,231,229,0.25); text-align: center; }
 
 /* DASHBOARD */
 .dashboard { display: flex; flex-direction: column; gap: 16px; }

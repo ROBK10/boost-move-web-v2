@@ -215,11 +215,11 @@ function clearSearch() {
         <div class="journey-card" :class="{ active: journeyPhase === 3, locked: journeyPhase < 3 }">
           <div class="journey-num">3</div>
           <div class="journey-content">
-            <div class="journey-title">Velg et program</div>
-            <div class="journey-desc" v-if="journeyPhase === 3">Du har bygget vanen — klar for et strukturert program</div>
+            <div class="journey-title">Smart bevegelse</div>
+            <div class="journey-desc" v-if="journeyPhase === 3">16 uker tilpasset din hverdag</div>
             <div class="journey-desc" v-else>Låses opp etter fase 2</div>
           </div>
-          <button v-if="journeyPhase === 3" class="journey-btn" @click="go('/movin/programmer')">Velg</button>
+          <button v-if="journeyPhase === 3" class="journey-btn" @click="go('/movin/trening')">Start</button>
         </div>
       </section>
 
@@ -272,6 +272,12 @@ function clearSearch() {
           <button class="row" type="button" @click="go('/movin/knowzone')">
             <div class="rowTitle">KnowZone</div>
             <div class="rowSub">Kunnskapsbase</div>
+            <span class="chev"></span>
+          </button>
+
+          <button class="row" type="button" @click="go('/movin/trening')">
+            <div class="rowTitle">Smart bevegelse</div>
+            <div class="rowSub">16 uker for bedre helse</div>
             <span class="chev"></span>
           </button>
 

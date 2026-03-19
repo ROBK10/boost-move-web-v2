@@ -14,6 +14,24 @@ interface Message {
 const auth = useAuthStore()
 const messages = ref<Message[]>([])
 const inputText = ref("")
+
+// Boost Move system-meldinger (FYI-tips i chatten)
+const BOOST_TIPS = [
+  'Visste du at du har gode fordeler som medlem? Sjekk Fordeler under Movin → Utforsk.',
+  'Visste du at du har programmer skrevet av samarbeidspartnere? Finn dem under Movin → Programmer.',
+  'Visste du at du har artikler skrevet av samarbeidspartnere? Utforsk KnowZone under Movin.',
+  'Visste du at Smart bevegelse gir deg 16 uker med tilpasset trening? Finn den under Movin.',
+  'Visste du at Kom i gang gir deg 7 dager med mental trening? Start din reise under Movin.',
+  'Visste du at du kan tilpasse appen til din situasjon? Gå til Profil → Min situasjon.',
+  'Visste du at du kan se helsegevinsten din i kroner? Sjekk Helsekalkulator under Profil.',
+  'Visste du at du kan printe ut maler for treningslogg og rutiner? Finn dem under Movin → Maler.',
+  'Visste du at du kan ønske deg ting på jobben? Scroll ned på hjemmesiden og send inn ditt ønske.',
+]
+
+const boostTip = ref(BOOST_TIPS[Math.floor(Math.random() * BOOST_TIPS.length)])
+const tipDismissed = ref(false)
+
+function dismissTip() { tipDismissed.value = true }
 const listEl = ref<HTMLElement | null>(null)
 const isSending = ref(false)
 const isLoaded = ref(false)
@@ -97,6 +115,13 @@ onUnmounted(() => {
 
 <template>
   <div class="chat-pane">
+    <!-- Festet Boost Move-tips -->
+    <div v-if="!tipDismissed" class="tip-banner">
+      <div class="tip-badge">⚡ Boost Move</div>
+      <div class="tip-text">{{ boostTip }}</div>
+      <button class="tip-close" @click="dismissTip" aria-label="Lukk">✕</button>
+    </div>
+
     <div class="message-list" ref="listEl">
       <div v-if="isLoaded && messages.length === 0" class="empty">
         Ingen meldinger ennå. Si hei til teamet!
@@ -221,6 +246,43 @@ onUnmounted(() => {
   font-weight: 600;
   color: rgba(209,231,229,0.35);
   padding: 0 4px;
+}
+
+/* Boost Move tip banner (festet) */
+.tip-banner {
+  flex-shrink: 0;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 16px;
+  background: rgba(190, 242, 1, 0.06);
+  border-bottom: 1px solid rgba(190, 242, 1, 0.12);
+}
+
+.tip-badge {
+  font-size: 11px;
+  font-weight: 900;
+  color: #BEF201;
+  white-space: nowrap;
+  padding-top: 1px;
+}
+
+.tip-text {
+  flex: 1;
+  font-size: 13px;
+  font-weight: 600;
+  color: #D1E7E5;
+  line-height: 1.4;
+}
+
+.tip-close {
+  border: none;
+  background: none;
+  color: rgba(209, 231, 229, 0.35);
+  font-size: 14px;
+  cursor: pointer;
+  padding: 0;
+  flex-shrink: 0;
 }
 
 .input-area {

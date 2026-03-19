@@ -6,6 +6,7 @@ import { useBoostStore } from "@/stores/boostStore"
 import { useAuthStore } from "@/stores/authStore"
 import { pickTip, pickMoodTip, type HealthTip, type Mood } from "@/data/healthTips"
 import { microActions } from "@/data/microActions"
+import { apiFetch } from "@/services/api"
 
 const router = useRouter()
 const boostMomentStore = useBoostMomentStore()
@@ -14,8 +15,100 @@ const auth = useAuthStore()
 
 const currentTip = ref<HealthTip | null>(null)
 
-function pickAction(): HealthTip {
-  // 50% sjanse for microAction, 50% for healthTip
+// ── Sted-baserte mikro-handlinger ────────────────────────────────────────
+const LOCATION_TIPS: Record<string, string[]> = {
+  jobb: [
+    'Reis deg og strekk deg i 30 sekunder',
+    'Ta trappa i stedet for heisen',
+    'Hent et glass vann — kroppen setter pris på det',
+    'Rull skuldrene 10 ganger bakover',
+    'Se bort fra skjermen i 20 sekunder',
+    'Ta 3 dype pust med lukkede øyne',
+    'Gå en runde i gangen — 2 minutter',
+    'Strekk nakken forsiktig til hver side',
+  ],
+  hjemme: [
+    'Ta en 5-minutters gåtur ute',
+    'Strekk deg foran TV-en i 2 minutter',
+    'Drikk et glass vann',
+    'Sett på yndlingsmusikken og beveg deg',
+    'Gjør 10 knebøy mens du venter på noe',
+    'Pust rolig i 1 minutt — kjenn roen',
+  ],
+  trening: [
+    'Husk å varme opp ledd og muskler først',
+    'Fokuser på teknikk fremfor tyngde',
+    'Strekk ut godt etter økten',
+    'Drikk vann mellom settene',
+    'Lytt til kroppen — juster intensiteten',
+  ],
+  ute: [
+    'Stopp opp og ta 3 dype pust med frisk luft',
+    'Gå litt raskere i 2 minutter',
+    'Se opp — legg merke til himmelen',
+    'Strekk ut armene og nyt øyeblikket',
+    'Gå en ekstra omvei hjem',
+  ],
+  ferie: [
+    'Nyt ferien — du fortjener det',
+    'Tenk på 3 ting du er takknemlig for akkurat nå',
+    'Pust inn... og pust ut. Ingenting annet kreves.',
+    'Gå en rolig tur uten mål',
+    'Legg bort telefonen i 10 minutter og bare vær',
+    'Strekk deg i solen — kroppen takker deg',
+  ],
+}
+
+// Humør-spesifikke tips som legges til basert på humør
+const MOOD_EXTRAS: Record<string, string[]> = {
+  tung: [
+    'Det er ok å ha en tung dag. Bare pust.',
+    'Legg hendene på magen og kjenn pusten i 30 sekunder.',
+    'Du trenger ikke prestere noe. Bare vær her.',
+  ],
+  bra: [
+    'Flott! Bruk energien — gjør noe ekstra i dag.',
+    'Bra dag = bra dag å utfordre deg litt.',
+  ],
+}
+
+// Situasjon-spesifikke tips
+const SITUATION_EXTRAS: Record<string, string[]> = {
+  rygg: ['Strekk ryggen forsiktig: bøy deg fremover og hold i 10 sek.', 'Gjør 5 rolige cat-cow bevegelser.'],
+  nakke: ['Rull hodet forsiktig i sirkler — 5 ganger hver vei.', 'Press haken lett inn og hold 5 sek.'],
+  hodepine: ['Se bort fra skjermen. Lukk øynene i 30 sekunder.', 'Massér tinningene forsiktig.'],
+  stress: ['Ta 3 pust: inn i 4, hold i 4, ut i 4.', 'Skriv ned én ting som stresser deg — bare det å skrive hjelper.'],
+  sovn: ['Planlegg leggetid i kveld. 7 timer gjør morgendagen bedre.'],
+  smerter: ['Gjør en forsiktig strekk der det kjennes stramt.', 'Beveg deg rolig — bevegelse er medisin.'],
+  motivasjon: ['Du er her. Det er steg 1. Alt annet er bonus.'],
+}
+
+function pickLocationTip(location: string): HealthTip {
+  // Bygg pool: sted-tips + evt. humør-tips + evt. situasjon-tips
+  let pool = [...(LOCATION_TIPS[location] ?? LOCATION_TIPS.hjemme)]
+
+  // Legg til humør-baserte tips (30% sjanse)
+  const moodKey = moodTipText.value.includes('tung') || moodTipText.value.includes('mot') ? 'tung' : 'bra'
+  const moodExtras = MOOD_EXTRAS[moodKey]
+  if (moodExtras && Math.random() < 0.3) {
+    pool = [...moodExtras]
+  }
+
+  // Legg til situasjon-baserte tips (40% sjanse)
+  const challenge = auth.user?.healthChallenge
+  const struggle = auth.user?.biggestStruggle
+  const situationPool: string[] = []
+  if (challenge && SITUATION_EXTRAS[challenge]) situationPool.push(...SITUATION_EXTRAS[challenge])
+  if (struggle && SITUATION_EXTRAS[struggle]) situationPool.push(...SITUATION_EXTRAS[struggle])
+  if (situationPool.length > 0 && Math.random() < 0.4) {
+    pool = [...situationPool]
+  }
+
+  const text = pool[Math.floor(Math.random() * pool.length)]
+  return { text, pillar: 'bevegelse', type: 'strekk', time: 'alltid' }
+}
+
+function pickGeneralAction(): HealthTip {
   if (Math.random() < 0.5 && microActions.length > 0) {
     const text = microActions[Math.floor(Math.random() * microActions.length)]
     return { text, pillar: 'bevegelse', type: 'strekk', time: 'alltid' }
@@ -30,19 +123,30 @@ function pickAction(): HealthTip {
 
 onMounted(async () => {
   boostMomentStore.hydrate()
-  currentTip.value = pickAction()
   try {
     await boostStore.fetchMonthBoosts(boostStore.monthKey)
   } catch { /* non-critical */ }
 })
 
-type Step = "mood" | "proud" | "action" | "done"
+// ── Flyt ─────────────────────────────────────────────────────────────────
 
-const step = ref<Step>("mood")
+type Step = "location" | "mood" | "proud" | "pulse" | "action" | "done"
+
+const step = ref<Step>("location")
+const userLocation = ref("")
 const moodTipText = ref("")
-const proudChoice = ref("")
 
 const monthTotal = computed(() => boostStore.monthTotal)
+const isOnVacation = computed(() => userLocation.value === "ferie")
+const isAtWork = computed(() => userLocation.value === "jobb")
+
+const LOCATIONS = [
+  { key: "jobb", label: "På jobb", icon: "💼" },
+  { key: "hjemme", label: "Hjemme", icon: "🏠" },
+  { key: "trening", label: "På trening", icon: "💪" },
+  { key: "ute", label: "Ute", icon: "🌿" },
+  { key: "ferie", label: "På ferie", icon: "☀️" },
+]
 
 const PROUD_OPTIONS = [
   { key: "gatur", label: "Tok en gåtur" },
@@ -53,18 +157,58 @@ const PROUD_OPTIONS = [
   { key: "ingenting", label: "Ingenting spesielt — og det er ok" },
 ]
 
+const PULSE_OPTIONS = [
+  { key: "for_lite_tid", label: "For lite tid" },
+  { key: "mange_avbrytelser", label: "Mange avbrytelser" },
+  { key: "kroppen_sliten", label: "Kroppen er sliten" },
+  { key: "tung_mentalt", label: "Tung dag mentalt" },
+  { key: "lite_oversikt", label: "Lite oversikt" },
+  { key: "alt_ok", label: "Alt ok i dag" },
+]
+
 function goBack() { router.push("/movin") }
 
-function setMood(mood: Mood) {
-  moodTipText.value = pickMoodTip(mood)
-  step.value = "proud"
+// Steg 1: Hvor er du?
+function setLocation(key: string) {
+  userLocation.value = key
+  step.value = "mood"
 }
 
-function setProud(key: string) {
-  proudChoice.value = key
+// Steg 2: Hvordan har du det?
+function setMood(mood: Mood) {
+  moodTipText.value = pickMoodTip(mood)
+
+  if (isOnVacation.value) {
+    // Ferie: hopp rett til mikro-handling
+    currentTip.value = pickLocationTip("ferie")
+    step.value = "action"
+  } else {
+    step.value = "proud"
+  }
+}
+
+// Steg 3: Stolt av
+function setProud(_key: string) {
+  if (isAtWork.value) {
+    step.value = "pulse"
+  } else {
+    // Ikke på jobb: hopp over arbeidsmiljø-puls
+    currentTip.value = pickLocationTip(userLocation.value)
+    step.value = "action"
+  }
+}
+
+// Steg 4: Arbeidsmiljø-puls (kun på jobb)
+function setPulse(signal: string) {
+  apiFetch("/pulse", {
+    method: "POST",
+    body: JSON.stringify({ signal }),
+  }).catch(() => {})
+  currentTip.value = pickLocationTip("jobb")
   step.value = "action"
 }
 
+// Steg 5: Mikro-handling fullført
 function handleComplete() {
   step.value = "done"
   boostMomentStore.completeBoostToday()
@@ -74,13 +218,14 @@ function handleComplete() {
 
 function refreshAction() {
   const prev = currentTip.value?.text
-  let next = pickAction()
-  // Unngå samme som forrige
+  let next = pickLocationTip(userLocation.value)
   let attempts = 0
   while (next.text === prev && attempts < 5) {
-    next = pickAction()
+    next = pickLocationTip(userLocation.value)
     attempts++
   }
+  // Fallback til generell action hvis sted-pool er liten
+  if (next.text === prev) next = pickGeneralAction()
   currentTip.value = next
 }
 </script>
@@ -93,7 +238,6 @@ function refreshAction() {
         <button class="back" type="button" @click="goBack" aria-label="Tilbake">
           <span class="chev" aria-hidden="true"></span>
         </button>
-
         <div>
           <h1 class="title">Boost Moment</h1>
           <p class="subtitle">Reflekter og boost dagen</p>
@@ -112,8 +256,26 @@ function refreshAction() {
         <div class="trophy" aria-hidden="true"></div>
       </section>
 
-      <!-- STEG 1: Humør -->
-      <section v-if="step === 'mood'" class="panel">
+      <!-- STEG 1: Hvor er du? -->
+      <section v-if="step === 'location'" class="panel">
+        <div class="panelInner centered">
+          <h2 class="panelQ">Hvor er du nå?</h2>
+          <div class="location-grid">
+            <button
+              v-for="loc in LOCATIONS"
+              :key="loc.key"
+              class="location-btn"
+              @click="setLocation(loc.key)"
+            >
+              <span class="location-icon">{{ loc.icon }}</span>
+              <span class="location-label">{{ loc.label }}</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- STEG 2: Hvordan har du det? -->
+      <section v-else-if="step === 'mood'" class="panel">
         <div class="panelInner centered">
           <h2 class="panelQ">Hvordan har du det i dag?</h2>
           <div class="mood-grid">
@@ -130,10 +292,11 @@ function refreshAction() {
               <span class="mood-label">Bra dag</span>
             </button>
           </div>
+          <button class="back-link" type="button" @click="step = 'location'">Tilbake</button>
         </div>
       </section>
 
-      <!-- STEG 2: Stolt av -->
+      <!-- STEG 3: Stolt av (ikke ferie) -->
       <section v-else-if="step === 'proud'" class="panel">
         <div class="panelInner">
           <p class="mood-response">{{ moodTipText }}</p>
@@ -153,7 +316,25 @@ function refreshAction() {
         </div>
       </section>
 
-      <!-- STEG 3: Mikro-handling -->
+      <!-- STEG 4: Arbeidsmiljø-puls (kun jobb) -->
+      <section v-else-if="step === 'pulse'" class="panel">
+        <div class="panelInner">
+          <h2 class="panelQ">Hva kjennes tyngst i dag?</h2>
+          <div class="proud-grid">
+            <button
+              v-for="p in PULSE_OPTIONS"
+              :key="p.key"
+              class="proud-btn"
+              @click="setPulse(p.key)"
+            >
+              {{ p.label }}
+            </button>
+          </div>
+          <button class="back-link" type="button" @click="step = 'proud'">Tilbake</button>
+        </div>
+      </section>
+
+      <!-- STEG 5: Mikro-handling (tilpasset sted) -->
       <section v-else-if="step === 'action'" class="panel dark">
         <div class="panelInner">
           <div class="panelHead row">
@@ -161,36 +342,35 @@ function refreshAction() {
               <div class="panelIcon light">
                 <span class="boltMark" aria-hidden="true"></span>
               </div>
-              <h2 class="panelTitle lightText">Mikro-handling</h2>
+              <h2 class="panelTitle lightText">{{ isOnVacation ? 'Ferie-boost' : 'Mikro-handling' }}</h2>
             </div>
-
             <button class="ghost" type="button" @click="refreshAction" aria-label="Ny handling">
               <span class="refresh" aria-hidden="true"></span>
             </button>
           </div>
 
           <div class="task">
-            <div class="taskKicker">Din oppgave</div>
+            <div class="taskKicker">{{ isOnVacation ? 'Nyt øyeblikket' : 'Din oppgave' }}</div>
             <div class="taskText">{{ currentTip?.text }}</div>
           </div>
 
           <div class="actionButtons">
             <button class="primary lightBtn" type="button" @click="handleComplete">
-              Gjort
+              {{ isOnVacation ? 'Takk!' : 'Gjort' }}
             </button>
             <button class="secondary darkBtn" type="button" @click="refreshAction">
-              Passer ikke – gi meg en annen
+              Gi meg en annen
             </button>
           </div>
         </div>
       </section>
 
-      <!-- STEG 4: Ferdig -->
+      <!-- STEG 6: Ferdig -->
       <section v-else class="panel">
         <div class="panelInner done">
           <div class="check" aria-hidden="true">✓</div>
-          <h2 class="doneTitle">Bra jobbet!</h2>
-          <p class="doneText">Du har reflektert og fullført en Boost. Hver liten handling teller.</p>
+          <h2 class="doneTitle">{{ isOnVacation ? 'Nyt ferien!' : 'Bra jobbet!' }}</h2>
+          <p class="doneText">{{ isOnVacation ? 'Lad opp batteriene. Vi sees når du er tilbake.' : 'Du har reflektert og fullført en Boost. Hver liten handling teller.' }}</p>
 
           <div class="pill">
             <span class="pillDot" aria-hidden="true"></span>
@@ -236,8 +416,22 @@ function refreshAction() {
 .panelInner { min-height: 400px; display: flex; flex-direction: column; }
 .panelInner.centered { align-items: center; justify-content: center; text-align: center; }
 
-/* Mood step */
+/* Location step */
 .panelQ { margin: 0 0 24px; font-size: 24px; font-weight: 900; letter-spacing: -0.02em; color: #FFFFFF; }
+.location-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; }
+.location-btn {
+  padding: 18px 14px; border-radius: 18px;
+  border: 2px solid rgba(209,231,229,0.1); background: #034044;
+  cursor: pointer; display: flex; flex-direction: column;
+  align-items: center; gap: 8px; transition: all 0.15s;
+}
+.location-btn:active { transform: scale(0.96); }
+.location-btn:hover { border-color: rgba(190,242,1,0.3); }
+.location-btn:last-child:nth-child(odd) { grid-column: 1 / -1; }
+.location-icon { font-size: 28px; }
+.location-label { font-size: 15px; font-weight: 800; color: #D1E7E5; }
+
+/* Mood step */
 .mood-grid { display: flex; gap: 12px; }
 .mood-btn {
   flex: 1; padding: 20px 10px; border-radius: 20px;
@@ -250,7 +444,7 @@ function refreshAction() {
 .mood-emoji { font-size: 36px; }
 .mood-label { font-size: 14px; font-weight: 800; color: #D1E7E5; }
 
-/* Proud step */
+/* Proud / Pulse step */
 .mood-response { margin: 0; font-size: 15px; font-weight: 700; color: rgba(209,231,229,0.6); line-height: 1.5; padding: 8px 0; }
 .mood-divider { width: 40px; height: 2px; background: rgba(209,231,229,0.08); margin: 12px 0 16px; }
 .proud-grid { display: grid; grid-template-columns: 1fr; gap: 8px; }
@@ -271,7 +465,7 @@ function refreshAction() {
 .left { display: flex; align-items: center; gap: 12px; }
 .panelIcon { width: 84px; height: 84px; border-radius: 26px; background: #023238; display: grid; place-items: center; }
 .panelIcon.light { background: rgba(255,255,255,0.12); }
-.boltMark { width: 34px; height: 46px; background: #023238; clip-path: polygon(45% 0%, 70% 0%, 52% 38%, 78% 38%, 28% 100%, 42% 56%, 22% 56%); border-radius: 8px; }
+.boltMark { width: 34px; height: 46px; background: white; clip-path: polygon(45% 0%, 70% 0%, 52% 38%, 78% 38%, 28% 100%, 42% 56%, 22% 56%); border-radius: 8px; }
 .panelTitle { margin: 0; font-size: 34px; font-weight: 900; color: #FFFFFF; }
 .lightText { color: white; }
 

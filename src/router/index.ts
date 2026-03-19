@@ -28,6 +28,13 @@ import Fordeler from "@/views/movin/Fordeler.vue"
 import FordelerDetail from "@/views/movin/FordelerDetail.vue"
 import AdminPanel from "@/views/Admin.vue"
 import Helsekalkulator from "@/views/Helsekalkulator.vue"
+import InBodyUpload from "@/views/InBodyUpload.vue"
+import InBodyDetail from "@/views/InBodyDetail.vue"
+
+import TrainerHome from "@/views/movin/TrainerHome.vue"
+import TrainerOnboarding from "@/views/movin/TrainerOnboarding.vue"
+import ActiveWorkout from "@/views/movin/ActiveWorkout.vue"
+import WorkoutComplete from "@/views/movin/WorkoutComplete.vue"
 
 const routes: RouteRecordRaw[] = [
   { path: "/", redirect: "/hjem" },
@@ -44,6 +51,8 @@ const routes: RouteRecordRaw[] = [
   { path: "/profil/min-situasjon", component: MinSituasjon },
   { path: "/progresjon", component: Progresjon },
   { path: "/helsekalkulator", component: Helsekalkulator },
+  { path: "/inbody", component: InBodyDetail },
+  { path: "/inbody/ny", component: InBodyUpload },
 
   {
     path: "/movin",
@@ -61,8 +70,12 @@ const routes: RouteRecordRaw[] = [
       { path: "maler/:slug", component: MalerDetail },
       { path: "fordeler", component: Fordeler },
       { path: "fordeler/:slug", component: FordelerDetail },
+      { path: "trening", component: TrainerHome },
+      { path: "trening/kartlegging", component: TrainerOnboarding },
     ],
   },
+  { path: "/movin/trening/okt", component: ActiveWorkout },
+  { path: "/movin/trening/fullfort", component: WorkoutComplete },
 ]
 
 const router = createRouter({

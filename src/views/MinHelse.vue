@@ -5,11 +5,14 @@ import { useMinHelseStore } from "@/stores/minHelseStore"
 import { useBoostStore } from "@/stores/boostStore"
 import { useAuthStore } from "@/stores/authStore"
 import HealthScoreCard from "@/components/Hjem/HealthScoreCard.vue"
+import { useRouter } from "vue-router"
+import InBodyCard from "@/components/minhelse/InBodyCard.vue"
 import { getStreakMessage } from "@/data/healthTips"
 import { pickFact } from "@/data/healthFacts"
 import { estimateDailyMinutes, weeklyMinutesFromCheckins, personalSavings } from "@/utils/personalHealthSavings"
 import { generateWeeklyInsights } from "@/utils/weeklyInsights"
 
+const router = useRouter()
 const minHelseStore = useMinHelseStore()
 const boostStore = useBoostStore()
 const auth = useAuthStore()
@@ -218,6 +221,8 @@ function closeSuccess() { showSuccess.value = false }
           <div class="kpi-label">Streak</div>
         </div>
       </section>
+
+      <InBodyCard @openDetail="router.push('/inbody')" @openUpload="router.push('/inbody/ny')" />
 
       <section v-if="insights.weakest" class="card insight-card">
         <div class="insight-head">UKENS INNSIKT</div>

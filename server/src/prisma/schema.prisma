@@ -65,6 +65,10 @@ model User {
   sentDMs          DirectMessage[] @relation("SentMessages")
   receivedDMs      DirectMessage[] @relation("ReceivedMessages")
   pushSubscriptions PushSubscription[]
+  trainerProfile   TrainerProfile?
+  workoutLogs      WorkoutLog[]
+  inBodyScans      InBodyScan[]
+  dailyPulses      DailyPulse[]
 }
 
 model PushSubscription {
@@ -169,4 +173,67 @@ model MinHelseCheckin {
 
   @@unique([userId, date])
   @@index([userId, date])
+}
+
+model TrainerProfile {
+  id               String   @id @default(cuid())
+  userId           String   @unique
+  user             User     @relation(fields: [userId], references: [id])
+  workType         String   // sedentary/standing/heavy
+  cardioLevel      String   // low/medium/high
+  strengthLevel    String   // low/medium/high
+  equipment        String[] // bodyweight/band/dumbbells/gym
+  sessionDuration  Int      @default(25)
+  programWeek      Int      @default(1)
+  programStartDate DateTime @default(now())
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+model WorkoutLog {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  week        Int
+  sessionData String   // JSON
+  completedAt DateTime @default(now())
+  durationMin Int?
+  feltScore   Int?     // 1-5
+
+  @@index([userId, week])
+}
+
+model InBodyScan {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  scanDate    DateTime
+  imageUrl    String?
+
+  weight      Float?
+  bodyFatPct  Float?
+  muscleMass  Float?
+  bmi         Float?
+  bodyWater   Float?
+  visceralFat Int?
+  basalMetab  Int?
+
+  notes       String?
+  createdAt   DateTime @default(now())
+
+  @@index([userId, scanDate])
+}
+
+model DailyPulse {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  companyId String
+  date      DateTime
+  signal    String   // for_lite_tid/mange_avbrytelser/kroppen_sliten/tung_mentalt/lite_oversikt/alt_ok
+
+  createdAt DateTime @default(now())
+
+  @@unique([userId, date])
+  @@index([companyId, date])
 }

@@ -13,6 +13,7 @@ import userRoutes from "./routes/user"
 import wishesRoutes from "./routes/wishes"
 import adminRoutes from "./routes/admin"
 import notificationRoutes from "./routes/notifications"
+import trainerRoutes from "./routes/trainer"
 import { attachUser } from "./middleware/attachUser"
 
 const app = express()
@@ -60,6 +61,10 @@ app.use("/team", teamRoutes)
 app.use("/wishes", wishesRoutes)
 app.use("/admin", adminRoutes)
 app.use("/notifications", notificationRoutes)
+app.use("/trainer", trainerRoutes)
+
+import pulseRoutes from "./routes/pulse"
+app.use("/pulse", pulseRoutes)
 app.use("/", chatRoutes)
 
 const port = Number(process.env.PORT || 3001)

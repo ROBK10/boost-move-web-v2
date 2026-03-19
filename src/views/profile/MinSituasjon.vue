@@ -49,7 +49,7 @@ async function save() {
       motivation: motivation.value,
     })
     saved.value = true
-    setTimeout(() => { saved.value = false }, 2000)
+    setTimeout(() => { router.push("/profil") }, 800)
   } catch { /* ignore */ }
   saving.value = false
 }
