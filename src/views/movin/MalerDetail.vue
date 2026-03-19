@@ -111,15 +111,15 @@ function openPdf() {
 
 .back {
   width: 42px; height: 42px;
-  border: none; background: white; border-radius: 999px;
-  box-shadow: 0 10px 30px rgba(20,20,20,0.08);
+  border: none; background: #023238; border-radius: 999px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
   cursor: pointer; display: grid; place-items: center; flex-shrink: 0;
 }
 
 .chev {
   width: 12px; height: 12px;
-  border-left: 2px solid rgba(17,24,39,0.55);
-  border-bottom: 2px solid rgba(17,24,39,0.55);
+  border-left: 2px solid rgba(209,231,229,0.5);
+  border-bottom: 2px solid rgba(209,231,229,0.5);
   transform: rotate(45deg);
 }
 
@@ -130,7 +130,7 @@ function openPdf() {
 .doneBadge {
   display: inline-flex; align-items: center; gap: 5px;
   font-size: 11px; font-weight: 800;
-  color: rgba(17,24,39,0.70);
+  color: #D1E7E5;
   background: rgba(185,255,0,0.25);
   border-radius: 999px;
   padding: 5px 10px 5px 7px;
@@ -145,16 +145,16 @@ function openPdf() {
 
 .starBtn {
   width: 40px; height: 40px;
-  background: rgba(17,24,39,0.05); border: none; border-radius: 999px;
+  background: rgba(209,231,229,0.06); border: none; border-radius: 999px;
   display: grid; place-items: center; cursor: pointer;
   transition: background 120ms ease;
 }
-.starBtn:active { background: rgba(17,24,39,0.10); }
+.starBtn:active { background: rgba(209,231,229,0.1); }
 .starBtn.active { background: rgba(251,191,36,0.18); }
 
 .starIcon {
   width: 18px; height: 18px; display: block;
-  background: rgba(17,24,39,0.38);
+  background: rgba(209,231,229,0.3);
   clip-path: polygon(50% 0%,62% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,38% 35%);
   transition: background 120ms ease;
 }
@@ -163,15 +163,15 @@ function openPdf() {
 .title {
   margin: 0 0 20px;
   font-size: 28px; line-height: 1.1;
-  font-weight: 900; letter-spacing: -0.03em; color: #111827;
+  font-weight: 900; letter-spacing: -0.03em; color: #FFFFFF;
 }
 
 .previewWrap {
   border-radius: 20px;
   overflow: hidden;
-  box-shadow: 0 8px 28px rgba(17,24,39,0.12);
-  border: 1px solid rgba(17,24,39,0.06);
-  background: white;
+  box-shadow: 0 8px 28px rgba(0,0,0,0.25);
+  border: 1px solid rgba(209,231,229,0.08);
+  background: #023238;
   margin-bottom: 14px;
 }
 
@@ -180,11 +180,11 @@ function openPdf() {
 }
 
 .pdfCard {
-  background: white;
+  background: #023238;
   border-radius: 24px;
   padding: 24px 20px;
-  box-shadow: 0 8px 28px rgba(17,24,39,0.07);
-  border: 1px solid rgba(17,24,39,0.06);
+  box-shadow: 0 8px 28px rgba(0,0,0,0.25);
+  border: 1px solid rgba(209,231,229,0.08);
   display: flex; flex-direction: column; align-items: center;
   gap: 14px; text-align: center;
   margin-bottom: 14px;
@@ -192,29 +192,29 @@ function openPdf() {
 
 .pdfCardIcon {
   width: 52px; height: 60px;
-  border: 2px solid rgba(17,24,39,0.12);
+  border: 2px solid rgba(209,231,229,0.12);
   border-radius: 8px; position: relative;
-  background: rgba(17,24,39,0.03);
+  background: rgba(209,231,229,0.04);
 }
 .pdfCardIcon::before {
   content: "PDF";
   position: absolute; inset: 0;
   display: flex; align-items: center; justify-content: center;
   font-size: 11px; font-weight: 900;
-  letter-spacing: 0.05em; color: rgba(17,24,39,0.40);
+  letter-spacing: 0.05em; color: rgba(209,231,229,0.35);
 }
 
 .pdfCardText {
   margin: 0; font-size: 14px; font-weight: 700;
-  color: rgba(17,24,39,0.55); line-height: 1.5;
+  color: rgba(209,231,229,0.6); line-height: 1.5;
 }
 
 .downloadCard {
-  background: white;
+  background: #023238;
   border-radius: 20px;
   padding: 16px 18px;
-  box-shadow: 0 4px 16px rgba(17,24,39,0.05);
-  border: 1px solid rgba(17,24,39,0.05);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+  border: 1px solid rgba(209,231,229,0.08);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -224,14 +224,14 @@ function openPdf() {
 
 .downloadHint {
   margin: 0;
-  font-size: 14px; font-weight: 800; color: rgba(17,24,39,0.75);
+  font-size: 14px; font-weight: 800; color: #D1E7E5;
 }
 
 .pdfBtn {
   display: inline-flex; align-items: center; gap: 8px;
   height: 44px; padding: 0 18px;
   border: none; border-radius: 12px;
-  background: #111827; color: white;
+  background: #023238; color: white;
   font-size: 13px; font-weight: 900;
   cursor: pointer; flex-shrink: 0;
   transition: opacity 120ms ease;
@@ -244,7 +244,7 @@ function openPdf() {
 }
 .dlIcon::before {
   content: ""; position: absolute;
-  left: 6px; top: 1px; width: 2px; height: 8px; background: white;
+  left: 6px; top: 1px; width: 2px; height: 8px; background: #023238;
 }
 .dlIcon::after {
   content: ""; position: absolute;
@@ -256,7 +256,7 @@ function openPdf() {
 .credit {
   display: flex; align-items: center; gap: 10px;
   font-size: 12px; font-weight: 700;
-  color: rgba(17,24,39,0.38);
+  color: rgba(209,231,229,0.35);
   padding: 0 4px;
 }
 
@@ -268,6 +268,6 @@ function openPdf() {
 .notFound {
   margin-top: 20px;
   font-size: 15px; font-weight: 700;
-  color: rgba(17,24,39,0.45);
+  color: rgba(209,231,229,0.35);
 }
 </style>

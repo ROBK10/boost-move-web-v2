@@ -42,6 +42,28 @@ function openItem(slug: string) {
   router.push(`/movin/kom-i-gang/${slug}`)
 }
 
+const completedCount = computed(() =>
+  SLUGS.filter(s => isCompleted(s)).length
+)
+
+// Finn neste ugjorte item
+const nextSlug = computed(() => {
+  // Først: finn item med pågående progress
+  const inProgress = SLUGS.find(s => getProgress(s) > 0 && !isCompleted(s))
+  if (inProgress) return inProgress
+  // Ellers: første ikke-fullførte
+  return SLUGS.find(s => !isCompleted(s)) ?? null
+})
+
+const nextItem = computed(() => {
+  if (!nextSlug.value) return null
+  return items.value.find(it => it.slug === nextSlug.value) ?? null
+})
+
+function continueNext() {
+  if (nextSlug.value) router.push(`/movin/kom-i-gang/${nextSlug.value}`)
+}
+
 function goBack() {
   router.push("/movin")
 }
@@ -60,6 +82,24 @@ function goBack() {
           <p class="subtitle">7 dagers startblokk</p>
         </div>
       </header>
+
+      <!-- Progress + fortsett -->
+      <section v-if="nextItem" class="continue-card">
+        <div class="continue-info">
+          <div class="continue-count">{{ completedCount }} av {{ SLUGS.length }} fullført</div>
+          <div class="continue-track">
+            <div class="continue-fill" :style="{ width: (completedCount / SLUGS.length * 100) + '%' }"></div>
+          </div>
+        </div>
+        <button class="continue-btn" type="button" @click="continueNext">
+          {{ getProgress(nextSlug!) > 0 ? 'Fortsett' : 'Start neste' }}
+        </button>
+      </section>
+
+      <section v-else class="done-banner">
+        <div class="done-icon">✓</div>
+        <div class="done-text">Alle {{ SLUGS.length }} dager fullført!</div>
+      </section>
 
       <!-- List -->
       <section class="list" aria-label="Startblokk">
@@ -87,12 +127,18 @@ function goBack() {
           <!-- Text -->
           <div class="text">
             <div class="rowTitle">{{ it.article?.title }}</div>
-            <!-- Progress resume badge -->
-            <div v-if="getProgress(it.slug) > 0" class="resumePill">
-              <span class="resumeDot" aria-hidden="true"></span>
-              Side {{ getProgress(it.slug) + 1 }} av {{ totalSteps(it.slug) }}
+            <!-- Fullført -->
+            <div v-if="isCompleted(it.slug)" class="completedPill">
+              <span class="completedCheck">✓</span>
+              {{ totalSteps(it.slug) }} av {{ totalSteps(it.slug) }} lest
             </div>
-            <div v-else class="rowSub">{{ it.article?.partner }}</div>
+            <!-- Pågående -->
+            <div v-else-if="getProgress(it.slug) > 0" class="resumePill">
+              <span class="resumeDot" aria-hidden="true"></span>
+              {{ getProgress(it.slug) }} av {{ totalSteps(it.slug) }} lest
+            </div>
+            <!-- Ikke startet -->
+            <div v-else class="rowSub">{{ totalSteps(it.slug) }} sider</div>
           </div>
 
           <!-- Actions -->
@@ -132,36 +178,64 @@ function goBack() {
 
 .back {
   width: 42px; height: 42px;
-  border: none; background: white; border-radius: 999px;
-  box-shadow: 0 10px 30px rgba(20,20,20,0.08);
+  border: none; background: #023238; border-radius: 999px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
   cursor: pointer; display: grid; place-items: center; flex-shrink: 0;
 }
 
 .chev {
   width: 12px; height: 12px;
-  border-left: 2px solid rgba(17,24,39,0.55);
-  border-bottom: 2px solid rgba(17,24,39,0.55);
+  border-left: 2px solid rgba(209,231,229,0.5);
+  border-bottom: 2px solid rgba(209,231,229,0.5);
   transform: rotate(45deg);
 }
 
 .title {
   margin: 0;
   font-size: 34px; line-height: 1.05;
-  font-weight: 900; letter-spacing: -0.03em; color: #111827;
+  font-weight: 900; letter-spacing: -0.03em; color: #FFFFFF;
 }
 
 .subtitle {
   margin: 6px 0 0;
-  font-size: 14px; font-weight: 700; color: rgba(17,24,39,0.45);
+  font-size: 14px; font-weight: 700; color: rgba(209,231,229,0.35);
 }
+
+/* Continue card */
+.continue-card {
+  display: flex; align-items: center; gap: 14px;
+  background: #023238; border-radius: 18px; padding: 16px;
+  border: 1px solid rgba(190,242,1,0.15);
+  margin-bottom: 16px;
+}
+.continue-info { flex: 1; min-width: 0; }
+.continue-count { font-size: 14px; font-weight: 800; color: #D1E7E5; margin-bottom: 8px; }
+.continue-track { height: 4px; background: rgba(209,231,229,0.1); border-radius: 2px; overflow: hidden; }
+.continue-fill { height: 100%; background: #BEF201; border-radius: 2px; transition: width 0.3s ease; }
+.continue-btn {
+  padding: 10px 18px; border-radius: 12px; border: none;
+  background: #BEF201; color: #023238; font-size: 14px; font-weight: 900;
+  cursor: pointer; flex-shrink: 0; white-space: nowrap;
+}
+.continue-btn:active { opacity: 0.85; }
+
+/* Done banner */
+.done-banner {
+  display: flex; align-items: center; gap: 12px;
+  background: rgba(190,242,1,0.08); border-radius: 18px; padding: 16px;
+  border: 1px solid rgba(190,242,1,0.15);
+  margin-bottom: 16px;
+}
+.done-icon { font-size: 24px; font-weight: 900; color: #BEF201; }
+.done-text { font-size: 16px; font-weight: 900; color: #D1E7E5; }
 
 /* List */
 .list { display: flex; flex-direction: column; gap: 10px; }
 
 .row {
   width: 100%;
-  border: 1px solid rgba(17,24,39,0.06);
-  background: white;
+  border: 1px solid rgba(209,231,229,0.08);
+  background: #023238;
   border-radius: 18px;
   padding: 14px 14px;
   display: flex;
@@ -169,16 +243,16 @@ function goBack() {
   gap: 12px;
   cursor: pointer;
   text-align: left;
-  box-shadow: 0 2px 10px rgba(17,24,39,0.05);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
   transition: box-shadow 120ms ease;
 }
-.row:active { box-shadow: 0 4px 18px rgba(17,24,39,0.10); }
+.row:active { box-shadow: 0 4px 18px rgba(0,0,0,0.25); }
 
 /* Thumbnail */
 .thumb {
   width: 60px; height: 60px;
   border-radius: 15px;
-  background: rgba(17,24,39,0.07);
+  background: rgba(209,231,229,0.08);
   flex-shrink: 0;
   overflow: hidden;
   display: grid;
@@ -196,7 +270,7 @@ function goBack() {
 
 .dayNum {
   font-size: 28px; font-weight: 900;
-  color: rgba(17,24,39,0.30);
+  color: rgba(209,231,229,0.25);
   letter-spacing: -0.04em;
   line-height: 1;
 }
@@ -213,13 +287,29 @@ function goBack() {
 
 .rowTitle {
   font-size: 15px; font-weight: 900;
-  color: rgba(17,24,39,0.92); line-height: 1.2;
+  color: rgba(209,231,229,0.95); line-height: 1.2;
   display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
 }
 
 .rowSub {
   margin-top: 3px;
-  font-size: 12px; font-weight: 700; color: rgba(17,24,39,0.45);
+  font-size: 12px; font-weight: 700; color: rgba(209,231,229,0.35);
+}
+
+.completedPill {
+  margin-top: 4px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px; font-weight: 800;
+  color: #BEF201;
+  background: rgba(190,242,1,0.1);
+  border-radius: 999px;
+  padding: 3px 9px 3px 6px;
+}
+
+.completedCheck {
+  font-size: 10px; font-weight: 900;
 }
 
 .resumePill {
@@ -228,7 +318,7 @@ function goBack() {
   align-items: center;
   gap: 5px;
   font-size: 11px; font-weight: 800;
-  color: rgba(17,24,39,0.70);
+  color: #D1E7E5;
   background: rgba(185,255,0,0.25);
   border-radius: 999px;
   padding: 3px 9px 3px 6px;
@@ -246,16 +336,16 @@ function goBack() {
 
 .starBtn {
   width: 38px; height: 38px;
-  background: rgba(17,24,39,0.05); border: none; border-radius: 999px;
+  background: rgba(209,231,229,0.06); border: none; border-radius: 999px;
   display: grid; place-items: center; cursor: pointer;
   transition: background 120ms ease;
 }
-.starBtn:active { background: rgba(17,24,39,0.10); }
+.starBtn:active { background: rgba(209,231,229,0.1); }
 .starBtn.active { background: rgba(251,191,36,0.18); }
 
 .starIcon {
   width: 16px; height: 16px; display: block;
-  background: rgba(17,24,39,0.38);
+  background: rgba(209,231,229,0.3);
   clip-path: polygon(50% 0%,62% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,38% 35%);
   transition: background 120ms ease;
 }

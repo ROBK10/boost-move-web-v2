@@ -69,7 +69,7 @@ defineExpose({ filledCount })
         subtitle="TIMER"
         rightMode="stepper"
         :valueText="fmtSleep(sleep)"
-        iconBg="rgba(99,102,241,0.10)"
+        iconBg="rgba(190,242,1,0.10)"
         @minus="sleep = sleep == null ? 0 : Math.max(0, sleep - 0.5)"
         @plus="sleep = sleep == null ? 0.5 : sleep + 0.5"
       >
@@ -112,7 +112,7 @@ defineExpose({ filledCount })
         subtitle="KG"
         rightMode="value"
         :valueText="weight == null ? '–' : weight.toFixed(1)"
-        iconBg="rgba(17,24,39,0.06)"
+        iconBg="rgba(209,231,229,0.06)"
         @click="weight = weight == null ? 80 : Math.round((weight + 0.1) * 10) / 10"
       >
         <template #icon>
@@ -158,7 +158,7 @@ defineExpose({ filledCount })
   font-size: 14px;
   font-weight: 950;
   letter-spacing: 0.12em;
-  color: rgba(17, 24, 39, 0.35);
+  color: rgba(209,231,229,0.35);
 }
 
 .badge {
@@ -177,7 +177,7 @@ defineExpose({ filledCount })
 .hint {
   font-size: 12px;
   font-weight: 800;
-  color: rgba(17, 24, 39, 0.38);
+  color: rgba(209,231,229,0.35);
   margin-top: 2px;
 }
 
@@ -186,7 +186,7 @@ defineExpose({ filledCount })
   width: 28px;
   height: 28px;
   border-radius: 999px;
-  box-shadow: inset 10px 0 0 0 rgba(99,102,241,0.95);
+  box-shadow: inset 10px 0 0 0 rgba(190,242,1,0.95);
   position: relative;
 }
 .moon::after {
@@ -197,7 +197,7 @@ defineExpose({ filledCount })
   width: 16px;
   height: 16px;
   border-radius: 999px;
-  background: white;
+  background: #023238;
 }
 
 .fork {
@@ -239,7 +239,7 @@ defineExpose({ filledCount })
   width: 28px;
   height: 22px;
   border-radius: 8px;
-  background: rgba(17,24,39,0.28);
+  background: rgba(209,231,229,0.2);
   position: relative;
 }
 .scale::after {

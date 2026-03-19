@@ -35,18 +35,18 @@ const days = computed(() => {
 
 <style scoped>
 .card {
-  background: #fff;
+  background: #023238;
   border-radius: 28px;
   padding: 18px;
-  box-shadow: 0 12px 36px rgba(20, 20, 20, 0.06);
-  border: 1px solid rgba(17, 24, 39, 0.05);
+  box-shadow: 0 12px 36px rgba(0,0,0,0.25);
+  border: 1px solid rgba(209,231,229,0.08);
 }
 
 .title {
   font-weight: 900;
   letter-spacing: 0.08em;
   font-size: 12px;
-  color: rgba(17, 24, 39, 0.45);
+  color: rgba(209,231,229,0.35);
   margin-bottom: 14px;
 }
 
@@ -58,7 +58,7 @@ const days = computed(() => {
   min-height: 160px;
   padding: 10px 6px 0;
   border-radius: 18px;
-  background: rgba(17, 24, 39, 0.02);
+  background: rgba(209,231,229,0.04);
 }
 
 .col {
@@ -77,12 +77,12 @@ const days = computed(() => {
 .bar {
   width: 100%;
   border-radius: 999px;
-  background: #0b0f17;
+  background: #023238;
 }
 
 .lbl {
   font-weight: 800;
   font-size: 13px;
-  color: rgba(17, 24, 39, 0.35);
+  color: rgba(209,231,229,0.35);
 }
 </style>

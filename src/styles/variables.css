@@ -1,4 +1,55 @@
 :root {
-  --color-background: #f9fafb;
-  --color-text: #111827;
+  /* Brand Colors */
+  --brand-primary: #BEF201;
+  --brand-dark: #023238;
+  --brand-soft: #D1E7E5;
+
+  /* Dark theme — app background */
+  --color-background: #021C20;
+  --color-surface: #023238;
+  --color-surface-elevated: #034044;
+  --color-surface-highlight: rgba(190, 242, 1, 0.08);
+
+  /* Text */
+  --color-text: #D1E7E5;
+  --color-text-strong: #FFFFFF;
+  --color-text-secondary: rgba(209, 231, 229, 0.6);
+  --color-text-muted: rgba(209, 231, 229, 0.35);
+  --color-text-on-primary: #023238;
+
+  /* Cards */
+  --color-card: #023238;
+  --color-card-border: rgba(209, 231, 229, 0.08);
+
+  /* Borders */
+  --color-border: rgba(209, 231, 229, 0.1);
+  --color-border-light: rgba(209, 231, 229, 0.06);
+
+  /* Buttons */
+  --btn-primary-bg: #BEF201;
+  --btn-primary-text: #023238;
+
+  /* Navigation */
+  --nav-bg: #011a1e;
+  --nav-active: #BEF201;
+  --nav-inactive: rgba(209, 231, 229, 0.4);
+
+  /* Progress */
+  --progress-fill: #BEF201;
+  --progress-track: rgba(209, 231, 229, 0.15);
+
+  /* Typography */
+  --font-family: 'Inter', system-ui, sans-serif;
+  --font-h1: 28px;
+  --font-h2: 22px;
+  --font-h3: 18px;
+  --font-body: 16px;
+  --font-small: 14px;
+  --font-caption: 12px;
+
+  /* Spacing */
+  --space-xs: 8px;
+  --space-sm: 16px;
+  --space-md: 24px;
+  --space-lg: 32px;
 }

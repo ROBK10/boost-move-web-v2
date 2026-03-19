@@ -254,9 +254,9 @@ async function onLogout() {
   width: 42px;
   height: 42px;
   border: none;
-  background: white;
+  background: #023238;
   border-radius: 999px;
-  box-shadow: 0 10px 30px rgba(20, 20, 20, 0.08);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
   cursor: pointer;
   display: grid;
   place-items: center;
@@ -267,8 +267,8 @@ async function onLogout() {
 .chev {
   width: 12px;
   height: 12px;
-  border-left: 2px solid rgba(17, 24, 39, 0.55);
-  border-bottom: 2px solid rgba(17, 24, 39, 0.55);
+  border-left: 2px solid rgba(209,231,229,0.5);
+  border-bottom: 2px solid rgba(209,231,229,0.5);
   transform: rotate(45deg);
 }
 
@@ -277,14 +277,14 @@ async function onLogout() {
   font-size: 26px;
   font-weight: 900;
   letter-spacing: -0.03em;
-  color: #111827;
+  color: #FFFFFF;
 }
 
 .subtitle {
   margin: 6px 0 0;
   font-size: 14px;
   font-weight: 700;
-  color: rgba(17, 24, 39, 0.45);
+  color: rgba(209,231,229,0.35);
 }
 
 .section-label {
@@ -292,7 +292,7 @@ async function onLogout() {
   font-weight: 900;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: rgba(17, 24, 39, 0.42);
+  color: rgba(209,231,229,0.35);
   padding: 14px 4px 6px;
 }
 
@@ -301,10 +301,10 @@ async function onLogout() {
 }
 
 .card {
-  background: white;
+  background: #023238;
   border-radius: 20px;
-  box-shadow: 0 8px 24px rgba(20, 20, 20, 0.06);
-  border: 1px solid rgba(17, 24, 39, 0.05);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+  border: 1px solid rgba(209,231,229,0.08);
   padding: 18px;
   display: flex;
   flex-direction: column;
@@ -331,7 +331,7 @@ async function onLogout() {
 .field-label {
   font-size: 13px;
   font-weight: 800;
-  color: rgba(17, 24, 39, 0.55);
+  color: rgba(209,231,229,0.6);
 }
 
 .field-label--danger {
@@ -339,22 +339,22 @@ async function onLogout() {
 }
 
 .field-input {
-  border: 1.5px solid rgba(17, 24, 39, 0.10);
+  border: 1.5px solid rgba(209,231,229,0.1);
   border-radius: 14px;
   padding: 12px 14px;
   font-size: 15px;
   font-weight: 600;
   font-family: inherit;
-  color: #111827;
-  background: rgba(17, 24, 39, 0.025);
+  color: #FFFFFF;
+  background: rgba(209,231,229,0.04);
   transition: border-color 140ms ease, box-shadow 140ms ease;
   -webkit-appearance: none;
 }
 
 .field-input:focus {
   outline: none;
-  border-color: rgba(17, 24, 39, 0.28);
-  box-shadow: 0 0 0 3px rgba(17, 24, 39, 0.05);
+  border-color: rgba(209,231,229,0.25);
+  box-shadow: 0 0 0 3px rgba(209,231,229,0.08);
 }
 
 .field-input--danger {
@@ -368,7 +368,7 @@ async function onLogout() {
 
 .divider {
   height: 1px;
-  background: rgba(17, 24, 39, 0.06);
+  background: rgba(209,231,229,0.06);
 }
 
 .error-msg {
@@ -389,7 +389,7 @@ async function onLogout() {
   height: 50px;
   border: none;
   border-radius: 14px;
-  background: #111827;
+  background: #023238;
   color: white;
   font-size: 15px;
   font-weight: 900;
@@ -416,18 +416,18 @@ async function onLogout() {
   transition: background 120ms ease;
 }
 
-.list-row:active { background: rgba(17, 24, 39, 0.03); }
+.list-row:active { background: rgba(209,231,229,0.04); }
 .list-row:disabled { opacity: 0.5; cursor: not-allowed; }
 
 .row-icon {
   width: 36px;
   height: 36px;
-  background: rgba(17, 24, 39, 0.05);
+  background: rgba(209,231,229,0.06);
   border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: rgba(17, 24, 39, 0.65);
+  color: rgba(209,231,229,0.6);
   flex-shrink: 0;
 }
 
@@ -440,14 +440,14 @@ async function onLogout() {
   flex: 1;
   font-size: 15px;
   font-weight: 800;
-  color: #111827;
+  color: #FFFFFF;
 }
 
 .row-chev {
   width: 9px;
   height: 9px;
-  border-right: 2px solid rgba(17, 24, 39, 0.28);
-  border-top: 2px solid rgba(17, 24, 39, 0.28);
+  border-right: 2px solid rgba(209,231,229,0.25);
+  border-top: 2px solid rgba(209,231,229,0.25);
   transform: rotate(45deg);
 }
 
@@ -456,7 +456,7 @@ async function onLogout() {
   margin: 0;
   font-size: 14px;
   font-weight: 600;
-  color: rgba(17, 24, 39, 0.55);
+  color: rgba(209,231,229,0.6);
   line-height: 1.5;
 }
 
@@ -485,10 +485,10 @@ async function onLogout() {
 .cancel-btn {
   flex: 1;
   height: 48px;
-  border: 1.5px solid rgba(17, 24, 39, 0.12);
+  border: 1.5px solid rgba(209,231,229,0.12);
   border-radius: 14px;
   background: none;
-  color: rgba(17, 24, 39, 0.65);
+  color: rgba(209,231,229,0.6);
   font-size: 15px;
   font-weight: 900;
   font-family: inherit;
@@ -523,12 +523,12 @@ async function onLogout() {
   margin: 0;
   font-size: 14px;
   font-weight: 500;
-  color: rgba(17, 24, 39, 0.65);
+  color: rgba(209,231,229,0.6);
   line-height: 1.6;
 }
 
 .gdpr-text strong {
   font-weight: 800;
-  color: rgba(17, 24, 39, 0.80);
+  color: #D1E7E5;
 }
 </style>

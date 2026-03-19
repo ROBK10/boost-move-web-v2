@@ -84,10 +84,33 @@ function openPdf() {
         ></div>
       </div>
 
+      <!-- PDF-ONLY MODE (ingen sider å lese) -->
+      <template v-if="total === 0 && article.pdf">
+        <div class="pdfSection pdfOnly">
+          <p class="pdfOnlyText">Dette innholdet er tilgjengelig som PDF.</p>
+          <a class="pdfBtnPrimary" :href="article.pdf" target="_blank" rel="noopener">
+            <span class="dlIcon" aria-hidden="true"></span>
+            Åpne PDF
+          </a>
+        </div>
+
+        <button class="backToList" type="button" @click="goBack">
+          <span class="backChev" aria-hidden="true"></span>
+          Tilbake til KnowZone
+        </button>
+      </template>
+
       <!-- READING MODE -->
-      <template v-if="!completed">
+      <template v-else-if="!completed">
         <div class="stepCard">
           <div class="stepContent" v-html="steps[currentStep]"></div>
+        </div>
+
+        <!-- PDF-knapp under innholdet hvis tilgjengelig -->
+        <div v-if="article.pdf" class="pdfInline">
+          <a class="pdfBtnSmall" :href="article.pdf" target="_blank" rel="noopener">
+            Åpne PDF
+          </a>
         </div>
 
         <div class="navRow">
@@ -108,10 +131,10 @@ function openPdf() {
         </div>
 
         <div class="pdfSection" v-if="article.pdf">
-          <button class="pdfBtn" type="button" @click="openPdf">
+          <a class="pdfBtn" :href="article.pdf" target="_blank" rel="noopener">
             <span class="dlIcon" aria-hidden="true"></span>
-            Last ned original PDF
-          </button>
+            Åpne PDF
+          </a>
         </div>
 
         <div class="credit">
@@ -164,15 +187,15 @@ function openPdf() {
 
 .back {
   width: 42px; height: 42px;
-  border: none; background: white; border-radius: 999px;
-  box-shadow: 0 10px 30px rgba(20,20,20,0.08);
+  border: none; background: #023238; border-radius: 999px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
   cursor: pointer; display: grid; place-items: center; flex-shrink: 0;
 }
 
 .chev {
   width: 12px; height: 12px;
-  border-left: 2px solid rgba(17,24,39,0.55);
-  border-bottom: 2px solid rgba(17,24,39,0.55);
+  border-left: 2px solid rgba(209,231,229,0.5);
+  border-bottom: 2px solid rgba(209,231,229,0.5);
   transform: rotate(45deg);
 }
 
@@ -183,25 +206,25 @@ function openPdf() {
 }
 
 .badge {
-  background: rgba(17,24,39,0.06);
+  background: rgba(209,231,229,0.06);
   padding: 7px 14px;
   border-radius: 999px;
   font-size: 13px; font-weight: 800;
-  color: rgba(17,24,39,0.55);
+  color: rgba(209,231,229,0.6);
 }
 
 .starBtn {
   width: 40px; height: 40px;
-  background: rgba(17,24,39,0.05); border: none; border-radius: 999px;
+  background: rgba(209,231,229,0.06); border: none; border-radius: 999px;
   display: grid; place-items: center; cursor: pointer;
   transition: background 120ms ease;
 }
-.starBtn:active { background: rgba(17,24,39,0.10); }
+.starBtn:active { background: rgba(209,231,229,0.1); }
 .starBtn.active { background: rgba(251,191,36,0.18); }
 
 .starIcon {
   width: 18px; height: 18px; display: block;
-  background: rgba(17,24,39,0.38);
+  background: rgba(209,231,229,0.3);
   clip-path: polygon(50% 0%,62% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,38% 35%);
   transition: background 120ms ease;
 }
@@ -211,13 +234,13 @@ function openPdf() {
 .title {
   margin: 0 0 14px;
   font-size: 26px; line-height: 1.1;
-  font-weight: 900; letter-spacing: -0.03em; color: #111827;
+  font-weight: 900; letter-spacing: -0.03em; color: #FFFFFF;
 }
 
 /* Progress bar */
 .progressTrack {
   height: 4px;
-  background: rgba(17,24,39,0.07);
+  background: rgba(209,231,229,0.08);
   border-radius: 2px;
   overflow: hidden;
   margin-bottom: 18px;
@@ -232,24 +255,24 @@ function openPdf() {
 
 /* Step card */
 .stepCard {
-  background: white;
+  background: #023238;
   border-radius: 24px;
-  box-shadow: 0 8px 32px rgba(17,24,39,0.08);
-  border: 1px solid rgba(17,24,39,0.05);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+  border: 1px solid rgba(209,231,229,0.08);
   overflow: hidden;
 }
 
 .stepContent {
   padding: 22px 20px 24px;
   font-size: 15px; line-height: 1.70;
-  font-weight: 500; color: rgba(17,24,39,0.78);
+  font-weight: 500; color: #D1E7E5;
 }
 
 .stepContent :deep(h1),
 .stepContent :deep(h2),
 .stepContent :deep(h3) {
   font-size: 18px; font-weight: 900;
-  color: #111827; letter-spacing: -0.02em;
+  color: #FFFFFF; letter-spacing: -0.02em;
   margin: 0 0 12px; line-height: 1.2;
 }
 
@@ -257,10 +280,10 @@ function openPdf() {
 .stepContent :deep(p:last-child) { margin-bottom: 0; }
 .stepContent :deep(ul), .stepContent :deep(ol) { padding-left: 20px; margin: 0 0 12px; }
 .stepContent :deep(li) { margin-bottom: 6px; }
-.stepContent :deep(hr) { border: none; border-top: 1px solid rgba(17,24,39,0.08); margin: 16px 0; }
-.stepContent :deep(em) { color: rgba(17,24,39,0.45); font-style: normal; }
-.stepContent :deep(a) { color: rgba(17,24,39,0.55); text-decoration: underline; }
-.stepContent :deep(strong) { font-weight: 800; color: rgba(17,24,39,0.88); }
+.stepContent :deep(hr) { border: none; border-top: 1px solid rgba(209,231,229,0.1); margin: 16px 0; }
+.stepContent :deep(em) { color: rgba(209,231,229,0.35); font-style: normal; }
+.stepContent :deep(a) { color: rgba(209,231,229,0.6); text-decoration: underline; }
+.stepContent :deep(strong) { font-weight: 800; color: rgba(209,231,229,0.95); }
 
 /* Navigation */
 .navRow { padding: 16px 0 0; }
@@ -268,7 +291,7 @@ function openPdf() {
 .nextBtn {
   width: 100%; height: 56px;
   border: none; border-radius: 18px;
-  background: #111827; color: white;
+  background: #023238; color: white;
   font-size: 15px; font-weight: 900;
   cursor: pointer;
   display: flex; align-items: center; justify-content: center; gap: 10px;
@@ -285,10 +308,10 @@ function openPdf() {
 
 /* Done card */
 .doneCard {
-  background: white;
+  background: #023238;
   border-radius: 24px;
-  box-shadow: 0 8px 32px rgba(17,24,39,0.08);
-  border: 1px solid rgba(17,24,39,0.05);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+  border: 1px solid rgba(209,231,229,0.08);
   padding: 32px 24px;
   display: flex; flex-direction: column; align-items: center; gap: 10px;
   margin-bottom: 20px;
@@ -313,19 +336,19 @@ function openPdf() {
 .doneTitle {
   margin: 0;
   font-size: 20px; font-weight: 900;
-  color: #111827; letter-spacing: -0.02em;
+  color: #FFFFFF; letter-spacing: -0.02em;
 }
 
 .doneSub {
   margin: 0;
   font-size: 14px; font-weight: 600;
-  color: rgba(17,24,39,0.45);
+  color: rgba(209,231,229,0.35);
 }
 
 /* PDF section */
 .pdfSection {
-  background: rgba(17,24,39,0.03);
-  border: 1px solid rgba(17,24,39,0.07);
+  background: rgba(209,231,229,0.04);
+  border: 1px solid rgba(209,231,229,0.08);
   border-radius: 18px;
   padding: 18px;
   margin-bottom: 16px;
@@ -334,16 +357,46 @@ function openPdf() {
 .pdfLabel {
   margin: 0 0 12px;
   font-size: 13px; font-weight: 700;
-  color: rgba(17,24,39,0.45);
+  color: rgba(209,231,229,0.35);
 }
+
+.pdfOnly { text-align: center; padding: 24px; }
+.pdfOnlyText { margin: 0 0 16px; font-size: 15px; font-weight: 700; color: rgba(209,231,229,0.6); }
+.pdfBtnPrimary {
+  display: inline-flex; align-items: center; justify-content: center;
+  gap: 10px; width: 100%; height: 56px;
+  border: none; border-radius: 18px;
+  background: #BEF201; color: #023238;
+  font-size: 16px; font-weight: 900;
+  cursor: pointer; text-decoration: none;
+}
+.pdfBtnPrimary:active { opacity: 0.85; }
+
+.pdfInline { padding: 12px 0 0; }
+.pdfBtnSmall {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 13px; font-weight: 800; color: #BEF201;
+  text-decoration: none;
+}
+.pdfBtnSmall:hover { text-decoration: underline; }
+
+.backToList {
+  margin-top: 16px; width: 100%; height: 50px;
+  border: 1.5px solid rgba(209,231,229,0.12); border-radius: 14px;
+  background: transparent; color: rgba(209,231,229,0.6);
+  font-size: 14px; font-weight: 800; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.backChev { width: 8px; height: 8px; border-left: 2px solid rgba(209,231,229,0.5); border-bottom: 2px solid rgba(209,231,229,0.5); transform: rotate(45deg); }
 
 .pdfBtn {
   display: flex; align-items: center; justify-content: center;
   gap: 10px; width: 100%; height: 50px;
   border: none; border-radius: 14px;
-  background: #111827; color: white;
+  background: #023238; color: white;
   font-size: 14px; font-weight: 900;
   cursor: pointer; transition: opacity 120ms ease;
+  text-decoration: none;
 }
 .pdfBtn:active { opacity: 0.85; }
 
@@ -353,7 +406,7 @@ function openPdf() {
 }
 .dlIcon::before {
   content: ""; position: absolute;
-  left: 6px; top: 0; width: 2px; height: 9px; background: white;
+  left: 6px; top: 0; width: 2px; height: 9px; background: #023238;
 }
 .dlIcon::after {
   content: ""; position: absolute;
@@ -366,7 +419,7 @@ function openPdf() {
 .credit {
   display: flex; align-items: center; gap: 10px;
   font-size: 12px; font-weight: 700;
-  color: rgba(17,24,39,0.38);
+  color: rgba(209,231,229,0.35);
   padding: 0 4px;
 }
 
@@ -378,7 +431,7 @@ function openPdf() {
 .copyright {
   margin: 6px 0 0;
   font-size: 11px; font-weight: 600;
-  color: rgba(17,24,39,0.25);
+  color: rgba(209,231,229,0.25);
   padding: 0 4px;
 }
 
@@ -388,22 +441,22 @@ function openPdf() {
 .backToList {
   width: 100%;
   height: 50px;
-  border: 1.5px solid rgba(17,24,39,0.12);
+  border: 1.5px solid rgba(209,231,229,0.12);
   border-radius: 14px;
   background: transparent;
-  color: rgba(17,24,39,0.55);
+  color: rgba(209,231,229,0.6);
   font-size: 14px; font-weight: 800;
   cursor: pointer;
   display: flex; align-items: center; justify-content: center; gap: 8px;
   transition: background 120ms ease, border-color 120ms ease;
   letter-spacing: -0.01em;
 }
-.backToList:active { background: rgba(17,24,39,0.04); border-color: rgba(17,24,39,0.20); }
+.backToList:active { background: rgba(209,231,229,0.06); border-color: rgba(209,231,229,0.2); }
 
 .backChev {
   width: 8px; height: 8px;
-  border-left: 2px solid rgba(17,24,39,0.55);
-  border-bottom: 2px solid rgba(17,24,39,0.55);
+  border-left: 2px solid rgba(209,231,229,0.5);
+  border-bottom: 2px solid rgba(209,231,229,0.5);
   transform: rotate(45deg);
   margin-top: 1px;
 }
@@ -412,6 +465,6 @@ function openPdf() {
 .notFoundText {
   margin-top: 20px;
   font-size: 15px; font-weight: 700;
-  color: rgba(17,24,39,0.45);
+  color: rgba(209,231,229,0.35);
 }
 </style>

@@ -167,7 +167,7 @@ onUnmounted(() => {
   text-align: center;
   font-size: 14px;
   font-weight: 600;
-  color: rgba(17, 24, 39, 0.4);
+  color: rgba(209,231,229,0.35);
   padding: 32px 0;
 }
 
@@ -188,7 +188,7 @@ onUnmounted(() => {
 .sender-name {
   font-size: 11px;
   font-weight: 800;
-  color: rgba(17, 24, 39, 0.45);
+  color: rgba(209,231,229,0.35);
   padding: 0 4px;
 }
 
@@ -203,23 +203,23 @@ onUnmounted(() => {
 }
 
 .bubble.mine {
-  background: #111827;
+  background: #023238;
   color: white;
   border-bottom-right-radius: 5px;
 }
 
 .bubble.theirs {
-  background: white;
-  color: #111827;
+  background: #023238;
+  color: #FFFFFF;
   border-bottom-left-radius: 5px;
-  box-shadow: 0 3px 12px rgba(20, 20, 20, 0.07);
-  border: 1px solid rgba(17, 24, 39, 0.06);
+  box-shadow: 0 3px 12px rgba(0,0,0,0.25);
+  border: 1px solid rgba(209,231,229,0.08);
 }
 
 .ts {
   font-size: 10px;
   font-weight: 600;
-  color: rgba(17, 24, 39, 0.32);
+  color: rgba(209,231,229,0.35);
   padding: 0 4px;
 }
 
@@ -229,33 +229,33 @@ onUnmounted(() => {
   align-items: center;
   gap: 10px;
   padding: 10px 16px 24px;
-  background: rgba(249, 250, 251, 0.95);
+  background: rgba(2, 28, 32, 0.95);
   backdrop-filter: blur(12px);
-  border-top: 1px solid rgba(17, 24, 39, 0.07);
+  border-top: 1px solid rgba(209,231,229,0.08);
 }
 
 .chat-input {
   flex: 1;
   height: 46px;
-  border: 1.5px solid rgba(17, 24, 39, 0.1);
+  border: 1.5px solid rgba(209,231,229,0.1);
   border-radius: 14px;
   padding: 0 16px;
   font-size: 15px;
   font-weight: 600;
-  color: #111827;
-  background: white;
+  color: #FFFFFF;
+  background: #023238;
   outline: none;
   font-family: inherit;
   transition: border-color 150ms ease;
 }
 
 .chat-input::placeholder {
-  color: rgba(17, 24, 39, 0.35);
+  color: rgba(209,231,229,0.35);
   font-weight: 500;
 }
 
 .chat-input:focus {
-  border-color: rgba(17, 24, 39, 0.28);
+  border-color: rgba(209,231,229,0.25);
 }
 
 .chat-input:disabled {
@@ -267,7 +267,7 @@ onUnmounted(() => {
   height: 46px;
   border-radius: 14px;
   border: none;
-  background: #111827;
+  background: #023238;
   color: white;
   cursor: pointer;
   display: flex;

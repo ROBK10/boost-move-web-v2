@@ -83,7 +83,7 @@ function dismiss() {
   display: flex;
   align-items: center;
   gap: 12px;
-  box-shadow: 0 16px 40px rgba(17, 24, 39, 0.28);
+  box-shadow: 0 16px 40px rgba(0,0,0,0.35);
   z-index: 100;
 }
 
@@ -119,7 +119,7 @@ function dismiss() {
   padding: 0 14px;
   border: none;
   border-radius: 999px;
-  background: white;
+  background: #023238;
   color: #0f172a;
   font-size: 13px;
   font-weight: 900;

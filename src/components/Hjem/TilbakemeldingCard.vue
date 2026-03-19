@@ -128,7 +128,7 @@ function submit() {
 <style scoped>
 .card {
   border-radius: 22px;
-  background: #0b0f17;
+  background: #023238;
   color: rgba(255, 255, 255, 0.92);
   padding: 14px;
   box-shadow: 0 18px 44px rgba(11, 15, 23, 0.22);
@@ -245,7 +245,7 @@ function submit() {
 }
 
 .annet-input::placeholder {
-  color: rgba(255, 255, 255, 0.38);
+  color: rgba(209,231,229,0.3);
   font-weight: 600;
 }
 
@@ -259,7 +259,7 @@ function submit() {
   border: none;
   border-radius: 16px;
   background: rgba(185, 255, 0, 0.95);
-  color: #0b0f17;
+  color: #FFFFFF;
   font-weight: 950;
   font-size: 15px;
   cursor: pointer;

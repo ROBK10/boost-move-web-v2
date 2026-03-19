@@ -119,7 +119,7 @@ function switchTab(tab: Tab) {
   font-size: 34px;
   font-weight: 900;
   letter-spacing: -0.03em;
-  color: #111827;
+  color: #FFFFFF;
   line-height: 1.05;
 }
 
@@ -127,26 +127,26 @@ function switchTab(tab: Tab) {
   margin: 4px 0 0;
   font-size: 14px;
   font-weight: 600;
-  color: rgba(17, 24, 39, 0.5);
+  color: rgba(209,231,229,0.6);
 }
 
 .back-btn {
   width: 38px;
   height: 38px;
   border: none;
-  background: rgba(17, 24, 39, 0.06);
+  background: rgba(209,231,229,0.06);
   border-radius: 12px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #111827;
+  color: #FFFFFF;
   flex-shrink: 0;
   transition: background 120ms ease;
 }
 
 .back-btn:hover {
-  background: rgba(17, 24, 39, 0.1);
+  background: rgba(209,231,229,0.1);
 }
 
 .dm-header-info {
@@ -158,14 +158,14 @@ function switchTab(tab: Tab) {
 .dm-name {
   font-size: 17px;
   font-weight: 900;
-  color: #111827;
+  color: #FFFFFF;
   letter-spacing: -0.01em;
 }
 
 .dm-sub {
   font-size: 12px;
   font-weight: 600;
-  color: rgba(17, 24, 39, 0.45);
+  color: rgba(209,231,229,0.35);
 }
 
 /* TAB BAR */
@@ -187,14 +187,14 @@ function switchTab(tab: Tab) {
   font-size: 13px;
   font-weight: 800;
   cursor: pointer;
-  color: rgba(17, 24, 39, 0.5);
-  background: rgba(17, 24, 39, 0.05);
+  color: rgba(209,231,229,0.6);
+  background: rgba(209,231,229,0.06);
   transition: background 150ms ease, color 150ms ease;
   font-family: inherit;
 }
 
 .tab-btn.active {
-  background: #111827;
+  background: #034044;
   color: white;
 }
 </style>

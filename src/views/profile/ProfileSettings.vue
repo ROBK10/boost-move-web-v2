@@ -1,10 +1,70 @@
 <script setup lang="ts">
-import { ref } from "vue"
+import { ref, onMounted } from "vue"
 import { useRouter } from "vue-router"
 import { useAuthStore } from "@/stores/authStore"
+import { subscribePush, unsubscribePush, isPushSubscribed, sendTestPush } from "@/services/pushService"
+import { isBreakReminderEnabled, startBreakReminder, stopBreakReminder, getBreakInterval, setBreakInterval } from "@/services/breakReminder"
 
 const router = useRouter()
 const auth = useAuthStore()
+
+// Push state
+const pushEnabled = ref(false)
+const pushLoading = ref(false)
+
+// Break reminder state
+const breakEnabled = ref(false)
+const breakInterval = ref(45)
+
+onMounted(async () => {
+  pushEnabled.value = await isPushSubscribed()
+  breakEnabled.value = isBreakReminderEnabled()
+  breakInterval.value = getBreakInterval()
+})
+
+function toggleBreak() {
+  if (breakEnabled.value) {
+    stopBreakReminder()
+    breakEnabled.value = false
+  } else {
+    startBreakReminder()
+    breakEnabled.value = true
+  }
+}
+
+// Weekly goal
+const weeklyGoal = ref(auth.user?.weeklyGoal ?? 150)
+
+async function onGoalChange(e: Event) {
+  const v = Number((e.target as HTMLSelectElement).value)
+  weeklyGoal.value = v
+  try { await auth.updateProfile({ weeklyGoal: v }) } catch { /* ignore */ }
+}
+
+function onBreakIntervalChange(e: Event) {
+  const v = Number((e.target as HTMLSelectElement).value)
+  breakInterval.value = v
+  setBreakInterval(v)
+}
+
+async function togglePush() {
+  pushLoading.value = true
+  try {
+    if (pushEnabled.value) {
+      await unsubscribePush()
+      pushEnabled.value = false
+    } else {
+      const ok = await subscribePush()
+      pushEnabled.value = ok
+    }
+  } finally {
+    pushLoading.value = false
+  }
+}
+
+async function testPush() {
+  try { await sendTestPush() } catch { /* ignore */ }
+}
 
 // Konto fields
 const name = ref(auth.user?.name ?? "")
@@ -119,6 +179,89 @@ async function onLogout() {
         </div>
       </div>
 
+      <!-- Section: Mål -->
+      <div class="section-label">Aktivitetsmål</div>
+      <div class="card card--list">
+        <div class="list-row">
+          <span class="row-icon" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <circle cx="12" cy="12" r="6"/>
+              <circle cx="12" cy="12" r="2"/>
+            </svg>
+          </span>
+          <span class="row-label">Ukentlig mål</span>
+          <select class="interval-select" :value="weeklyGoal" @change="onGoalChange">
+            <option value="10">10 min</option>
+            <option value="30">30 min</option>
+            <option value="75">75 min</option>
+            <option value="150">150 min</option>
+            <option value="300">300 min</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Section: Påminnelser -->
+      <div class="section-label">Påminnelser</div>
+      <div class="card card--list">
+        <div class="list-row">
+          <span class="row-icon" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+              <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+            </svg>
+          </span>
+          <span class="row-label">Push-påminnelser</span>
+          <button
+            class="toggle"
+            :class="{ on: pushEnabled }"
+            type="button"
+            role="switch"
+            :aria-checked="pushEnabled"
+            :disabled="pushLoading"
+            @click="togglePush"
+          >
+            <span class="toggle-thumb"></span>
+          </button>
+        </div>
+        <div v-if="pushEnabled" class="list-row" style="border-top: 1px solid rgba(209,231,229,0.08)">
+          <span class="row-label" style="font-size: 13px; color: rgba(209,231,229,0.6)">Send test-varsling</span>
+          <button class="test-btn" type="button" @click="testPush">Test</button>
+        </div>
+      </div>
+
+      <!-- Section: Sittepause -->
+      <div class="section-label">Sittepause</div>
+      <div class="card card--list">
+        <div class="list-row">
+          <span class="row-icon" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <polyline points="12 6 12 12 16 14"/>
+            </svg>
+          </span>
+          <span class="row-label">Påminnelse om å reise deg</span>
+          <button
+            class="toggle"
+            :class="{ on: breakEnabled }"
+            type="button"
+            role="switch"
+            :aria-checked="breakEnabled"
+            @click="toggleBreak"
+          >
+            <span class="toggle-thumb"></span>
+          </button>
+        </div>
+        <div v-if="breakEnabled" class="list-row" style="border-top: 1px solid rgba(209,231,229,0.08)">
+          <span class="row-label" style="font-size: 13px; color: rgba(209,231,229,0.6)">Intervall</span>
+          <select class="interval-select" :value="breakInterval" @change="onBreakIntervalChange">
+            <option value="30">Hvert 30 min</option>
+            <option value="45">Hvert 45 min</option>
+            <option value="60">Hver time</option>
+          </select>
+        </div>
+      </div>
+
       <!-- Section: Konto handlinger -->
       <div class="section-label">Konto handlinger</div>
       <div class="card card--list">
@@ -160,9 +303,9 @@ async function onLogout() {
   width: 42px;
   height: 42px;
   border: none;
-  background: white;
+  background: #023238;
   border-radius: 999px;
-  box-shadow: 0 10px 30px rgba(20, 20, 20, 0.08);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
   cursor: pointer;
   display: grid;
   place-items: center;
@@ -172,8 +315,8 @@ async function onLogout() {
 .chev {
   width: 12px;
   height: 12px;
-  border-left: 2px solid rgba(17, 24, 39, 0.55);
-  border-bottom: 2px solid rgba(17, 24, 39, 0.55);
+  border-left: 2px solid rgba(209,231,229,0.5);
+  border-bottom: 2px solid rgba(209,231,229,0.5);
   transform: rotate(45deg);
 }
 
@@ -182,7 +325,7 @@ async function onLogout() {
   font-size: 28px;
   font-weight: 900;
   letter-spacing: -0.03em;
-  color: #111827;
+  color: #FFFFFF;
 }
 
 .section-label {
@@ -190,15 +333,15 @@ async function onLogout() {
   font-weight: 900;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: rgba(17, 24, 39, 0.42);
+  color: rgba(209,231,229,0.35);
   padding: 14px 4px 6px;
 }
 
 .card {
-  background: white;
+  background: #023238;
   border-radius: 20px;
-  box-shadow: 0 8px 24px rgba(20, 20, 20, 0.06);
-  border: 1px solid rgba(17, 24, 39, 0.05);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+  border: 1px solid rgba(209,231,229,0.08);
   padding: 18px;
   display: flex;
   flex-direction: column;
@@ -220,31 +363,31 @@ async function onLogout() {
 .field-label {
   font-size: 13px;
   font-weight: 800;
-  color: rgba(17, 24, 39, 0.55);
+  color: rgba(209,231,229,0.6);
 }
 
 .optional {
   font-weight: 600;
-  color: rgba(17, 24, 39, 0.35);
+  color: rgba(209,231,229,0.35);
 }
 
 .field-input {
-  border: 1.5px solid rgba(17, 24, 39, 0.10);
+  border: 1.5px solid rgba(209,231,229,0.1);
   border-radius: 14px;
   padding: 12px 14px;
   font-size: 15px;
   font-weight: 600;
   font-family: inherit;
-  color: #111827;
-  background: rgba(17, 24, 39, 0.025);
+  color: #FFFFFF;
+  background: rgba(209,231,229,0.04);
   transition: border-color 140ms ease, box-shadow 140ms ease;
   -webkit-appearance: none;
 }
 
 .field-input:focus {
   outline: none;
-  border-color: rgba(17, 24, 39, 0.28);
-  box-shadow: 0 0 0 3px rgba(17, 24, 39, 0.05);
+  border-color: rgba(209,231,229,0.25);
+  box-shadow: 0 0 0 3px rgba(209,231,229,0.08);
 }
 
 .field-textarea {
@@ -254,7 +397,7 @@ async function onLogout() {
 
 .divider {
   height: 1px;
-  background: rgba(17, 24, 39, 0.06);
+  background: rgba(209,231,229,0.06);
 }
 
 .error-msg {
@@ -268,7 +411,7 @@ async function onLogout() {
   height: 50px;
   border: none;
   border-radius: 14px;
-  background: #111827;
+  background: #023238;
   color: white;
   font-size: 15px;
   font-weight: 900;
@@ -311,12 +454,12 @@ async function onLogout() {
 .row-icon {
   width: 36px;
   height: 36px;
-  background: rgba(17, 24, 39, 0.05);
+  background: rgba(209,231,229,0.06);
   border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: rgba(17, 24, 39, 0.65);
+  color: rgba(209,231,229,0.6);
   flex-shrink: 0;
 }
 
@@ -329,7 +472,7 @@ async function onLogout() {
   flex: 1;
   font-size: 15px;
   font-weight: 800;
-  color: #111827;
+  color: #FFFFFF;
 }
 
 .row-label--danger {
@@ -342,7 +485,7 @@ async function onLogout() {
   width: 48px;
   height: 28px;
   border-radius: 999px;
-  background: rgba(17, 24, 39, 0.15);
+  background: rgba(209,231,229,0.12);
   border: none;
   cursor: pointer;
   transition: background 200ms ease;
@@ -359,10 +502,23 @@ async function onLogout() {
   width: 22px;
   height: 22px;
   border-radius: 999px;
-  background: white;
+  background: #023238;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.18);
   transition: transform 200ms ease;
 }
 
 .toggle.on .toggle-thumb { transform: translateX(20px); }
+
+.interval-select {
+  height: 36px; padding: 0 12px; border-radius: 10px;
+  border: 1.5px solid rgba(209,231,229,0.1); background: #023238;
+  font-size: 14px; font-weight: 700; font-family: inherit;
+  color: #FFFFFF; cursor: pointer;
+}
+
+.test-btn {
+  height: 32px; padding: 0 14px; border-radius: 10px;
+  border: none; background: rgba(209,231,229,0.06);
+  font-size: 13px; font-weight: 800; cursor: pointer;
+}
 </style>

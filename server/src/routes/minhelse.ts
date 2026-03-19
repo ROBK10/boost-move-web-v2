@@ -4,10 +4,7 @@ import { requireAuth } from "../middleware/requireAuth"
 
 const router = Router()
 
-type Context = "felt" | "kontor" | "hjemme" | "trening" | "pa_farten"
-type BodyState = "lett" | "ok" | "tung"
-type EnergyState = "på" | "stabil" | "tom"
-type MovementState = "ja" | "litt" | "nei"
+// Pilar-scoring (5 × 0–20 = 0–100)
 
 function getUserId(req: any) {
   if (req.user?.id) return req.user.id
@@ -32,26 +29,55 @@ function todayRange() {
   return { start, end }
 }
 
-function scoreFromWizard(input: {
-  body?: BodyState
-  energy?: EnergyState
-  movement?: MovementState
+function scoreFromPillars(input: {
+  movement?: string   // bevegelse
+  body?: string       // stillesitting
+  energy?: string     // søvn
+  context?: string    // kosthold
+  mental?: string     // stressnivå
 }) {
-  let score = 65
+  // Bevegelse (0–20)
+  const movementMap: Record<string, number> = {
+    ingen: 0, lett: 8, moderat: 15, aktiv: 20,
+    // Gamle verdier (bakoverkompatibilitet)
+    ja: 15, litt: 8, nei: 0, under_30: 5, "30_60": 12, over_60: 20,
+  }
 
-  if (input.body === "lett") score += 10
-  if (input.body === "ok") score += 0
-  if (input.body === "tung") score -= 12
+  // Stillesitting (0–20)
+  const bodyMap: Record<string, number> = {
+    ingen_pauser: 0, noen: 10, regelmessig: 20,
+    // Gamle verdier
+    lett: 15, ok: 10, tung: 5,
+    nei: 5, lett_aktivitet: 10, trening: 15,
+  }
 
-  if (input.energy === "på") score += 15
-  if (input.energy === "stabil") score += 0
-  if (input.energy === "tom") score -= 18
+  // Søvn (0–20)
+  const energyMap: Record<string, number> = {
+    under_5: 0, "5_6": 8, "7_8": 20, over_8: 15,
+    // Gamle verdier
+    "på": 20, stabil: 12, tom: 3,
+    hoy: 20, lav: 3,
+  }
 
-  if (input.movement === "ja") score += 10
-  if (input.movement === "litt") score += 4
-  if (input.movement === "nei") score -= 6
+  // Kosthold (0–20)
+  const contextMap: Record<string, number> = {
+    ingen: 0, "1_2": 8, "3_4": 15, "5_pluss": 20,
+    // Gamle verdier (kontekst ga ikke kostholdsdata)
+    felt: 10, kontor: 10, hjemme: 10, trening: 10, pa_farten: 10,
+  }
 
-  return Math.max(0, Math.min(100, Math.round(score)))
+  // Mental helse (0–20)
+  const mentalMap: Record<string, number> = {
+    hoyt: 0, middels: 10, lavt: 20,
+  }
+
+  const m = movementMap[input.movement ?? "ingen"] ?? 0
+  const b = bodyMap[input.body ?? "noen"] ?? 10
+  const e = energyMap[input.energy ?? "7_8"] ?? 10
+  const c = contextMap[input.context ?? "3_4"] ?? 10
+  const mn = input.mental ? (mentalMap[input.mental] ?? 10) : 10
+
+  return Math.max(0, Math.min(100, Math.round(m + b + e + c + mn)))
 }
 
 router.get("/today", requireAuth, async (req, res) => {
@@ -86,39 +112,39 @@ router.post("/checkin", requireAuth, async (req, res) => {
       body,
       energy,
       movement,
+      mental,
+      workplace,
       capacityScore,
     } = req.body as {
       date?: string
-      context?: Context
-      body?: BodyState
-      energy?: EnergyState
-      movement?: MovementState
+      context?: string
+      body?: string
+      energy?: string
+      movement?: string
+      mental?: string
+      workplace?: string
       capacityScore?: number
-    }
-
-    if (!context) {
-      return res.status(400).json({ error: "context is required" })
-    }
-
-    const allowedContexts = ["felt", "kontor", "hjemme", "trening", "pa_farten"]
-    if (!allowedContexts.includes(context)) {
-      return res.status(400).json({ error: "Invalid context" })
     }
 
     const d = date ? new Date(`${date}T00:00:00.000Z`) : new Date()
     const day = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate(), 0, 0, 0))
 
-    const finalBody = body ?? "ok"
-    const finalEnergy = energy ?? "stabil"
-    const finalMovement = movement ?? "litt"
+    const finalMovement = movement ?? "ingen"
+    const finalBody = body ?? "noen"
+    const finalEnergy = energy ?? "7_8"
+    const finalContext = context ?? "3_4"
+    const finalMental = mental ?? "middels"
+    const finalWorkplace = workplace ?? null
 
     const finalCapacity =
       typeof capacityScore === "number" && Number.isFinite(capacityScore)
         ? Math.max(0, Math.min(100, Math.round(capacityScore)))
-        : scoreFromWizard({
+        : scoreFromPillars({
+            movement: finalMovement,
             body: finalBody,
             energy: finalEnergy,
-            movement: finalMovement,
+            context: finalContext,
+            mental: finalMental,
           })
 
     const checkin = await prisma.dailyCheckIn.upsert({
@@ -126,48 +152,28 @@ router.post("/checkin", requireAuth, async (req, res) => {
         userId_date: { userId, date: day },
       },
       update: {
-        context,
+        context: finalContext,
         body: finalBody,
         energy: finalEnergy,
         movement: finalMovement,
+        mental: finalMental,
+        workplace: finalWorkplace,
         capacityScore: finalCapacity,
       },
       create: {
         userId,
         date: day,
-        context,
+        context: finalContext,
         body: finalBody,
         energy: finalEnergy,
         movement: finalMovement,
+        mental: finalMental,
+        workplace: finalWorkplace,
         capacityScore: finalCapacity,
       },
     })
 
-    return res.json({
-      checkin,
-      boost: {
-        band:
-          finalCapacity < 45 ? "low" : finalCapacity < 70 ? "stable" : "high",
-        title:
-          finalCapacity < 45
-            ? "Lav kapasitet i dag"
-            : finalCapacity < 70
-              ? "Stabil kapasitet i dag"
-              : "Høy kapasitet i dag",
-        message:
-          finalCapacity < 45
-            ? "Kroppen signaliserer at du bør holde det enkelt."
-            : finalCapacity < 70
-              ? "Du virker stabil. Små ting kan gi litt ekstra."
-              : "Du er i flyt. Hold det jevnt og smart.",
-        suggestions:
-          finalCapacity < 45
-            ? ["Drikk vann", "3 rolige pust", "20 sek lett bevegelse"]
-            : finalCapacity < 70
-              ? ["Reis deg litt", "Rull skuldrene", "Kort pustepause"]
-              : ["Hold flyten", "Litt mobilitet", "Ett lite neste steg"],
-      },
-    })
+    return res.json({ checkin })
   } catch (err: any) {
     if (err?.message === "Not authenticated") {
       return res.status(401).json({ error: "Not authenticated" })

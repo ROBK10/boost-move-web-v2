@@ -116,10 +116,10 @@ function go(path: string) {
   right: 0;
   bottom: 0;
   z-index: 50;
-  background: rgba(255, 255, 255, 0.94);
+  background: rgba(1, 26, 30, 0.97);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
-  border-top: 1px solid rgba(17, 24, 39, 0.07);
+  border-top: 1px solid rgba(209,231,229,0.06);
   /* Safe area on iPhone (notch devices) */
   padding-bottom: env(safe-area-inset-bottom, 0px);
 }
@@ -148,14 +148,14 @@ function go(path: string) {
   gap: 4px;
   cursor: pointer;
   user-select: none;
-  color: rgba(17, 24, 39, 0.32);
+  color: #D1E7E5;
   transition: color 160ms ease;
   /* Ensure minimum 44px tap area */
   min-width: 44px;
 }
 
 .item.active {
-  color: #111827;
+  color: #BEF201;
 }
 
 .label {
@@ -178,32 +178,32 @@ function go(path: string) {
   gap: 5px;
   cursor: pointer;
   user-select: none;
-  color: rgba(17, 24, 39, 0.55);
+  color: #D1E7E5;
   transition: color 160ms ease;
   min-width: 44px;
 }
 
 .center.active {
-  color: #111827;
+  color: #BEF201;
 }
 
 .center-pill {
   width: 52px;
   height: 52px;
   border-radius: 18px;
-  background: white;
-  box-shadow: 0 4px 20px rgba(17, 24, 39, 0.12), 0 1px 4px rgba(17, 24, 39, 0.06);
+  background: #034044;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3), 0 1px 4px rgba(0,0,0,0.2);
   display: flex;
   align-items: center;
   justify-content: center;
   transform: translateY(-10px);
   transition: box-shadow 160ms ease, transform 160ms ease;
-  color: #111827;
-  border: 1px solid rgba(17, 24, 39, 0.07);
+  color: #BEF201;
+  border: 1px solid rgba(209,231,229,0.1);
 }
 
 .center.active .center-pill {
-  box-shadow: 0 6px 24px rgba(17, 24, 39, 0.16), 0 1px 4px rgba(17, 24, 39, 0.06);
+  box-shadow: 0 6px 24px rgba(0,0,0,0.35), 0 1px 4px rgba(0,0,0,0.2);
 }
 
 .center-label {

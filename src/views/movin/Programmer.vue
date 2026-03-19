@@ -95,35 +95,35 @@ function goBack() {
 
 .back {
   width: 42px; height: 42px;
-  border: none; background: white; border-radius: 999px;
-  box-shadow: 0 10px 30px rgba(20,20,20,0.08);
+  border: none; background: #023238; border-radius: 999px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
   cursor: pointer; display: grid; place-items: center; flex-shrink: 0;
 }
 
 .chev {
   width: 12px; height: 12px;
-  border-left: 2px solid rgba(17,24,39,0.55);
-  border-bottom: 2px solid rgba(17,24,39,0.55);
+  border-left: 2px solid rgba(209,231,229,0.5);
+  border-bottom: 2px solid rgba(209,231,229,0.5);
   transform: rotate(45deg);
 }
 
 .title {
   margin: 0;
   font-size: 34px; line-height: 1.05;
-  font-weight: 900; letter-spacing: -0.03em; color: #111827;
+  font-weight: 900; letter-spacing: -0.03em; color: #FFFFFF;
 }
 
 .subtitle {
   margin: 6px 0 0;
-  font-size: 14px; font-weight: 700; color: rgba(17,24,39,0.45);
+  font-size: 14px; font-weight: 700; color: rgba(209,231,229,0.35);
 }
 
 .list { display: flex; flex-direction: column; gap: 10px; }
 
 .row {
   width: 100%;
-  border: 1px solid rgba(17,24,39,0.06);
-  background: white;
+  border: 1px solid rgba(209,231,229,0.08);
+  background: #023238;
   border-radius: 18px;
   padding: 14px 14px;
   display: flex;
@@ -131,15 +131,15 @@ function goBack() {
   gap: 12px;
   cursor: pointer;
   text-align: left;
-  box-shadow: 0 2px 10px rgba(17,24,39,0.05);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
   transition: box-shadow 120ms ease;
 }
-.row:active { box-shadow: 0 4px 18px rgba(17,24,39,0.10); }
+.row:active { box-shadow: 0 4px 18px rgba(0,0,0,0.25); }
 
 .thumb {
   width: 60px; height: 60px;
   border-radius: 15px;
-  background: rgba(17,24,39,0.07);
+  background: rgba(209,231,229,0.08);
   flex-shrink: 0;
   overflow: hidden;
   display: grid;
@@ -153,20 +153,20 @@ function goBack() {
 
 .thumbPlaceholder {
   width: 100%; height: 100%;
-  background: rgba(17,24,39,0.07);
+  background: rgba(209,231,229,0.08);
 }
 
 .text { flex: 1; min-width: 0; }
 
 .rowTitle {
   font-size: 15px; font-weight: 900;
-  color: rgba(17,24,39,0.92); line-height: 1.2;
+  color: rgba(209,231,229,0.95); line-height: 1.2;
   display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
 }
 
 .rowSub {
   margin-top: 3px;
-  font-size: 12px; font-weight: 700; color: rgba(17,24,39,0.45);
+  font-size: 12px; font-weight: 700; color: rgba(209,231,229,0.35);
 }
 
 .resumePill {
@@ -175,7 +175,7 @@ function goBack() {
   align-items: center;
   gap: 5px;
   font-size: 11px; font-weight: 800;
-  color: rgba(17,24,39,0.70);
+  color: #D1E7E5;
   background: rgba(185,255,0,0.25);
   border-radius: 999px;
   padding: 3px 9px 3px 6px;
@@ -192,16 +192,16 @@ function goBack() {
 
 .starBtn {
   width: 38px; height: 38px;
-  background: rgba(17,24,39,0.05); border: none; border-radius: 999px;
+  background: rgba(209,231,229,0.06); border: none; border-radius: 999px;
   display: grid; place-items: center; cursor: pointer;
   transition: background 120ms ease;
 }
-.starBtn:active { background: rgba(17,24,39,0.10); }
+.starBtn:active { background: rgba(209,231,229,0.1); }
 .starBtn.active { background: rgba(251,191,36,0.18); }
 
 .starIcon {
   width: 16px; height: 16px; display: block;
-  background: rgba(17,24,39,0.38);
+  background: rgba(209,231,229,0.3);
   clip-path: polygon(50% 0%,62% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,38% 35%);
   transition: background 120ms ease;
 }
@@ -209,6 +209,6 @@ function goBack() {
 
 .empty {
   font-size: 14px; font-weight: 700;
-  color: rgba(17,24,39,0.38); padding: 20px 4px; text-align: center;
+  color: rgba(209,231,229,0.35); padding: 20px 4px; text-align: center;
 }
 </style>

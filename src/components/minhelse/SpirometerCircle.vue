@@ -69,7 +69,7 @@ const activeTicks = computed<number>(() => Math.round(ticks * level.value))
 }
 
 .tickOff {
-  fill: rgba(17, 24, 39, 0.18);
+  fill: rgba(209,231,229,0.15);
 }
 
 .tickOn {
@@ -88,7 +88,7 @@ const activeTicks = computed<number>(() => Math.round(ticks * level.value))
   font-size: 72px;
   font-weight: 950;
   letter-spacing: -0.03em;
-  color: #0b0f17;
+  color: #FFFFFF;
   line-height: 1;
   margin-top: 30px;
 }
@@ -98,6 +98,6 @@ const activeTicks = computed<number>(() => Math.round(ticks * level.value))
   font-size: 14px;
   font-weight: 900;
   letter-spacing: 0.14em;
-  color: rgba(17, 24, 39, 0.35);
+  color: rgba(209,231,229,0.35);
 }
 </style>

@@ -1,162 +1,278 @@
 // src/data/healthTips.ts
 //
-// Appen er for mennesker som ikke er mye i bevegelse og vil starte å tenke
-// litt på egen helse. Kodeord: lavterskel · redusere sykefravær · gode vaner.
-//
-// Alle tips er tilgjengelige for alle – ingen krav til form eller trening.
-// Band brukes kun for å tilpasse tonen, ikke for å kreve mer av brukeren.
+// Tips organisert etter 5 helsepilarer. Etter innsjekk vises et tips
+// fra pilaren med lavest score — slik at tipset alltid er relevant.
 
-export type TipBand = 'low' | 'mid' | 'high'
+export type TipPillar = 'bevegelse' | 'stillesitting' | 'sovn' | 'kosthold' | 'mental'
+export type BoostType = 'ga' | 'pust' | 'strekk'
+export type TimeOfDay = 'morgen' | 'dag' | 'kveld' | 'alltid'
 
 export interface HealthTip {
   text: string
-  bands: TipBand[]
+  pillar: TipPillar
+  type: BoostType
+  time: TimeOfDay
+}
+
+/** Returner tidspunkt basert på klokkeslett */
+export function currentTimeOfDay(): TimeOfDay {
+  const h = new Date().getHours()
+  if (h < 10) return 'morgen'
+  if (h < 17) return 'dag'
+  return 'kveld'
 }
 
 export const healthTips: HealthTip[] = [
 
-  // ── LOW – rolig tilbakestilling, mentalt og fysisk ────────────────────────
-  // For tomme eller tunge dager. Null prestasjonskrav.
+  // ── BEVEGELSE ─────────────────────────────────────────────────────────────
+  { text: 'Ta en 5-minutters gåtur ute – frisk luft er alltid verdt det', pillar: 'bevegelse', type: 'ga', time: 'alltid' },
+  { text: 'Gå trappa i stedet for heisen – bare én etasje teller', pillar: 'bevegelse', type: 'ga', time: 'dag' },
+  { text: 'Ta en rask runde rundt bygningen – 2–3 minutter', pillar: 'bevegelse', type: 'ga', time: 'dag' },
+  { text: 'Gjør 5 rolige knebøy ved siden av stolen', pillar: 'bevegelse', type: 'strekk', time: 'dag' },
+  { text: 'Planlegg en gåtur i lunsjpausen – gjerne med en kollega', pillar: 'bevegelse', type: 'ga', time: 'morgen' },
+  { text: 'Gjør 8 rolige knebøy – fokus på god form, ikke fart', pillar: 'bevegelse', type: 'strekk', time: 'alltid' },
+  { text: 'Ta 5 minutter og gå ute – bare gå uten mål', pillar: 'bevegelse', type: 'ga', time: 'alltid' },
+  { text: 'Gå til toalettet via den lengste veien i dag', pillar: 'bevegelse', type: 'ga', time: 'dag' },
+  { text: 'Gjør 2 minutter stille gange på stedet – rolig og bevisst', pillar: 'bevegelse', type: 'ga', time: 'alltid' },
+  { text: 'Gå opp og ned trappa to ganger i rolig tempo', pillar: 'bevegelse', type: 'ga', time: 'dag' },
+  { text: 'Ta en kveldsgåtur – 10 minutter gjør underverker', pillar: 'bevegelse', type: 'ga', time: 'kveld' },
+  { text: 'Start dagen med 5 minutter lett strekk – vekk kroppen forsiktig', pillar: 'bevegelse', type: 'strekk', time: 'morgen' },
 
-  { text: 'Hent et glass vann og drikk det rolig – ett slurk av gangen', bands: ['low'] },
-  { text: 'Tenk på 3 ting du er takknemlig for akkurat nå', bands: ['low'] },
-  { text: 'Pust inn i 4 sek, hold i 4, pust ut i 6 – gjenta 3 ganger', bands: ['low'] },
-  { text: 'Rull skuldrene bakover 5 ganger – sakte og bevisst', bands: ['low'] },
-  { text: 'Slapp bevisst av i kjeven og ansiktet – kjenn spenningen slippe', bands: ['low'] },
-  { text: 'Lukk øynene i 30 sekunder og bare pust', bands: ['low'] },
-  { text: 'La skuldrene synke ned fra ørene og hold der', bands: ['low'] },
-  { text: 'Se ut av vinduet i ett minutt – ikke tenk på jobben', bands: ['low'] },
-  { text: 'Strekk nakken forsiktig til siden – hold 20 sek, bytt side', bands: ['low'] },
-  { text: 'Ta 3 lange, rolige pust gjennom nesen', bands: ['low'] },
-  { text: 'Massér tinningene rolig med to fingre i 30 sekunder', bands: ['low'] },
-  { text: 'Sett begge føttene flatt på gulvet og kjenn underlaget', bands: ['low'] },
-  { text: 'Tenk på én person du setter pris på – send dem en varm tanke', bands: ['low'] },
-  { text: 'Rist hendene og underarmene løst i 15 sekunder', bands: ['low'] },
-  { text: 'Gjør ett langt, bevisst utpust – slipp alt med den pusten', bands: ['low'] },
-  { text: 'Len hodet forsiktig fremover og kjenn strekket i nakken', bands: ['low'] },
-  { text: 'Strekk fingrene vidt ut og slipp – gjenta 5 ganger', bands: ['low'] },
-  { text: 'Sitt rett i stolen, pust dypt inn og kjenn ryggen', bands: ['low'] },
-  { text: 'Lukk øynene og se for deg ett sted du trives', bands: ['low'] },
-  { text: 'Rull anklene forsiktig i sirkler – 8 ganger hver side', bands: ['low'] },
-  { text: 'Vipp hodet til siden og pust ut sakte mens du slipper', bands: ['low'] },
-  { text: 'Ta en bevisst pause fra skjermen i 30 sekunder', bands: ['low'] },
-  { text: 'Løft og senk skuldrene sakte 5 ganger', bands: ['low'] },
-  { text: 'Massér håndleddene forsiktig i 20 sekunder', bands: ['low'] },
-  { text: 'Tenk på noe som gikk bra i dag – hold fast ved det et øyeblikk', bands: ['low'] },
-  { text: 'Slipp kroppen tungt ned i stolen og pust ut', bands: ['low'] },
-  { text: 'Gjør 3 sakte nikk med hodet fremover og bakover', bands: ['low'] },
-  { text: 'Slapp av i fingrene og håndflaten – la dem ligge åpne', bands: ['low'] },
-  { text: 'Pust inn dypt og se for deg at du puster ut stress og spenning', bands: ['low'] },
-  { text: 'Plasser en hånd på magen og kjenn at magen beveger seg rolig', bands: ['low'] },
-  { text: 'Slapp av i skuldrene og la armene henge tungt ned', bands: ['low'] },
-  { text: 'Ta ett minutt uten å gjøre noe – bare vær til stede', bands: ['low'] },
+  // ── STILLESITTING ─────────────────────────────────────────────────────────
+  { text: 'Reis deg og stå i 2 minutter – bare det gjør en forskjell', pillar: 'stillesitting', type: 'strekk', time: 'dag' },
+  { text: 'Bytt stilling – flytt deg fremover eller bakover i stolen', pillar: 'stillesitting', type: 'strekk', time: 'dag' },
+  { text: 'Reis deg ved neste telefonsamtale – ta den stående', pillar: 'stillesitting', type: 'strekk', time: 'dag' },
+  { text: 'Sett en påminnelse om å reise deg hvert 30. minutt', pillar: 'stillesitting', type: 'strekk', time: 'morgen' },
+  { text: 'Stå opp og hent et glass vann – stå mens du drikker', pillar: 'stillesitting', type: 'ga', time: 'alltid' },
+  { text: 'Strekk armene over hodet og ta ett dypt pust', pillar: 'stillesitting', type: 'strekk', time: 'alltid' },
+  { text: 'Rull skuldrene fremover og bakover 10 ganger', pillar: 'stillesitting', type: 'strekk', time: 'alltid' },
+  { text: 'Plasser hender i korsryggen og len deg forsiktig bakover', pillar: 'stillesitting', type: 'strekk', time: 'dag' },
+  { text: 'Gjør 5 rolige tåhev stående – kjenn strekket i leggen', pillar: 'stillesitting', type: 'strekk', time: 'alltid' },
+  { text: 'Stå opp og bøy overkroppen forsiktig fremover – la armene henge', pillar: 'stillesitting', type: 'strekk', time: 'alltid' },
 
-  // ── MID – lett aktivisering, gode vaner i hverdagen ──────────────────────
-  // Fremdeles lavterskel – det handler om å bygge vanen, ikke om intensitet.
+  // ── SØVN ──────────────────────────────────────────────────────────────────
+  { text: 'Legg bort telefonen 30 min før sengetid i kveld', pillar: 'sovn', type: 'pust', time: 'kveld' },
+  { text: 'Prøv å legge deg til fast tid i kveld – rutine hjelper søvnen', pillar: 'sovn', type: 'pust', time: 'kveld' },
+  { text: 'Senk temperaturen i soverommet – 18°C er ideelt', pillar: 'sovn', type: 'pust', time: 'kveld' },
+  { text: 'Unngå koffein etter kl. 14 – det påvirker søvnen mer enn du tror', pillar: 'sovn', type: 'pust', time: 'dag' },
+  { text: 'Ta 5 minutter avslapning nå – pust rolig og lukk øynene', pillar: 'sovn', type: 'pust', time: 'alltid' },
+  { text: 'Skriv ned det som stresser deg før du legger deg – tøm hodet', pillar: 'sovn', type: 'pust', time: 'kveld' },
+  { text: 'Prøv 4-7-8-pusting: pust inn 4 sek, hold 7, ut 8 – roer nervesystemet', pillar: 'sovn', type: 'pust', time: 'kveld' },
+  { text: 'Bruk mørke gardiner – mørke hjelper kroppen å produsere melatonin', pillar: 'sovn', type: 'pust', time: 'kveld' },
+  { text: 'Gå en rolig tur på kvelden – det hjelper kroppen å roe seg ned', pillar: 'sovn', type: 'ga', time: 'kveld' },
+  { text: 'Kutt skjermtid i sengen – bruk sengen kun til søvn', pillar: 'sovn', type: 'pust', time: 'kveld' },
 
-  { text: 'Reis deg og hent et glass vann – stå mens du drikker', bands: ['mid'] },
-  { text: 'Gå en rolig runde til et annet rom og tilbake', bands: ['mid'] },
-  { text: 'Gjør 5 rolige knebøy ved siden av stolen', bands: ['mid'] },
-  { text: 'Strekk armene over hodet og ta ett dypt pust inn', bands: ['mid'] },
-  { text: 'Stå opp i 2 minutter – bare stå og hvil bena', bands: ['mid'] },
-  { text: 'Gjør 5 rolige tåhev stående – kjenn strekket i leggen', bands: ['mid'] },
-  { text: 'Gå til nærmeste vindu, se ut og ta 3 dype pust', bands: ['mid'] },
-  { text: 'Rull skuldrene fremover og bakover 10 ganger', bands: ['mid'] },
-  { text: 'Strekk siden: arm opp og len lett til siden – bytt', bands: ['mid'] },
-  { text: 'Strekk nakken forsiktig i alle retninger – rolig tempo', bands: ['mid'] },
-  { text: 'Stå rett opp og kjenn fotavtrykkene mot gulvet i 30 sek', bands: ['mid'] },
-  { text: 'Gjør 3 rolige sitteknebøy – bare reis deg og sett deg igjen', bands: ['mid'] },
-  { text: 'Strekk armene rett frem og hold 10 sekunder', bands: ['mid'] },
-  { text: 'Plasser hender i korsryggen og len deg forsiktig bakover', bands: ['mid'] },
-  { text: 'Gjør 5 rolige magepress – trekk inn og slipp sakte', bands: ['mid'] },
-  { text: 'Ta 5 dype pust og fokuser kun på den lange utpusten', bands: ['mid'] },
-  { text: 'Dra skuldrene bakover og åpne brystet – hold 10 sek', bands: ['mid'] },
-  { text: 'Tenk på 3 ting du er takknemlig for i dag', bands: ['mid'] },
-  { text: 'Stå opp og strekk ett ben rolig ut – hold 10 sek, bytt', bands: ['mid'] },
-  { text: 'Gjør rolige sirkler med skuldrene – 8 ganger fremover, 8 bakover', bands: ['mid'] },
-  { text: 'Ta 2 minutter og skriv ned én god ting som skjedde i dag', bands: ['mid'] },
-  { text: 'Gjør 5 tåhev og nyt strekket i leggen etterpå', bands: ['mid'] },
-  { text: 'Strekk ett ben bak og hold tå-strekk i 10 sekunder – bytt', bands: ['mid'] },
-  { text: 'Gå til toalettet via den lengste veien i dag', bands: ['mid'] },
-  { text: 'Reis deg ved neste telefonsamtale – ta den stående', bands: ['mid'] },
-  { text: 'Rist armer og skuldre løst i 15 sekunder', bands: ['mid'] },
-  { text: 'Stå opp og bøy overkroppen forsiktig fremover – la armene henge', bands: ['mid'] },
-  { text: 'Tenk: hva er én liten ting jeg kan gjøre for kroppen min i dag?', bands: ['mid'] },
-  { text: 'Gjør 3 minutter uten skjerm – se på et fast punkt i rommet', bands: ['mid'] },
-  { text: 'Gjør 5 rolige armeløft til siden og hold 5 sek', bands: ['mid'] },
-  { text: 'Rull hodet forsiktig til siden og hold 15 sek – bytt', bands: ['mid'] },
-  { text: 'Gå trappa i stedet for heisen – bare én etasje', bands: ['mid'] },
-  { text: 'Hent vann til deg og en kollega – en liten omtanke', bands: ['mid'] },
-  { text: 'Gjør 2 minutter stille gange på stedet – rolig og bevisst', bands: ['mid'] },
-  { text: 'Strekk korsryggen: sett deg fremst på stolen og len deg lett framover', bands: ['mid'] },
-  { text: 'Send en kort, hyggelig melding til noen du ikke har snakket med på en stund', bands: ['mid'] },
-  { text: 'Ta bevisst pause – sett deg tilbake og pust rolig i 2 minutter', bands: ['mid'] },
-  { text: 'Gjør 5 rolige knebøy og tenk at du investerer i kroppen din', bands: ['mid'] },
+  // ── KOSTHOLD ──────────────────────────────────────────────────────────────
+  { text: 'Spis en frukt nå – ett stykke teller som én av fem porsjoner', pillar: 'kosthold', type: 'ga', time: 'alltid' },
+  { text: 'Drikk et stort glass vann – de fleste drikker for lite', pillar: 'kosthold', type: 'ga', time: 'alltid' },
+  { text: 'Legg til grønnsaker i neste måltid – selv litt teller', pillar: 'kosthold', type: 'ga', time: 'dag' },
+  { text: 'Bytt ut snacksen med en håndfull nøtter eller frukt', pillar: 'kosthold', type: 'ga', time: 'dag' },
+  { text: 'Planlegg morgendagens lunsj i kveld – det gjør sunne valg lettere', pillar: 'kosthold', type: 'pust', time: 'kveld' },
+  { text: 'Prøv å spise et fargerikt måltid – flere farger = flere næringsstoffer', pillar: 'kosthold', type: 'ga', time: 'dag' },
+  { text: 'Velg vann fremfor brus eller juice – kroppen foretrekker det', pillar: 'kosthold', type: 'ga', time: 'alltid' },
+  { text: 'Ta deg tid til å tygge maten ordentlig – det hjelper fordøyelsen', pillar: 'kosthold', type: 'pust', time: 'dag' },
+  { text: 'Ha alltid en flaske vann tilgjengelig på pulten', pillar: 'kosthold', type: 'ga', time: 'morgen' },
+  { text: 'Spis frokost – det setter standarden for resten av dagen', pillar: 'kosthold', type: 'ga', time: 'morgen' },
 
-  // ── HIGH – litt mer aktiv, men fremdeles helt tilgjengelig for alle ────────
-  // Ikke krevende. En kort gåtur, enkel bevegelse, en god vane.
-
-  { text: 'Ta en 5-minutters gåtur ute – frisk luft er alltid verdt det', bands: ['high'] },
-  { text: 'Gjør 10 rolige tåhev og kjenn kroppen jobbe', bands: ['high'] },
-  { text: 'Gå opp én etasje i trappa – ett steg av gangen', bands: ['high'] },
-  { text: 'Gjør 5 enkle armhevinger mot veggen', bands: ['high'] },
-  { text: 'Ta en rask runde rundt bygningen – 2–3 minutter', bands: ['high'] },
-  { text: 'Strekk hele kroppen fra topp til tå og nyt det', bands: ['high'] },
-  { text: 'Gjør 8 rolige knebøy – tenk på god form, ikke fart', bands: ['high'] },
-  { text: 'Ta 5 minutter og gå ute – bare gå uten mål', bands: ['high'] },
-  { text: 'Gjør 5 rolige sidestrekk på hver side', bands: ['high'] },
-  { text: 'Gå opp og ned trappa to ganger i rolig tempo', bands: ['high'] },
-  { text: 'Drikk ett stort glass kaldt vann – nyt det sakte', bands: ['high'] },
-  { text: 'Gjør 5 push-ups mot veggen – det teller', bands: ['high'] },
-  { text: 'Ta 5 minutter med rolig bevegelse – det du har lyst til', bands: ['high'] },
-  { text: 'Planlegg en liten gåtur i lunsjpausen – gjerne med en kollega', bands: ['high'] },
-  { text: 'Gjør 3 minutter lett strekk av nakke, skuldre og hofter', bands: ['high'] },
-  { text: 'Ta 10 rolige armsirkler fremover og 10 bakover', bands: ['high'] },
-  { text: 'Ta en 3-minutters spasertur i korridoren eller utenfor', bands: ['high'] },
-  { text: 'Gjør 5 rolige utfall fremover – ett bein av gangen', bands: ['high'] },
-  { text: 'Bestem deg for én liten sunn vane å starte med i dag', bands: ['high'] },
-  { text: 'Gjør 8 rolige armhevinger mot veggen med fokus på pusten', bands: ['high'] },
-  { text: 'Nyt 5 minutter frisk luft – åpne vinduet eller gå ut', bands: ['high'] },
-  { text: 'Gjør 10 tåhev + 5 rolige knebøy – ta god tid', bands: ['high'] },
-  { text: 'Skriv ned én sunn vane du vil jobbe med denne uken', bands: ['high'] },
-  { text: 'Gjør 2 runder med 5 rolige knebøy – tenk: dette er starten', bands: ['high'] },
-  { text: 'Hent vann til deg selv og en kollega – bevegelse + omtanke', bands: ['high'] },
-  { text: 'Ta trappa ned også – begge veier er god vane', bands: ['high'] },
-  { text: 'Gjør 5 minutter lett strekk og mobilitet – akkurat slik kroppen vil', bands: ['high'] },
-  { text: 'Gå en rolig tur og tenk på noe du er glad for', bands: ['high'] },
-  { text: 'Sett deg ett lite mål for bevegelse i morgen – gjerne lavere enn du tror', bands: ['high'] },
-  { text: 'Ta 5 dype pust ute i frisk luft og kjenn at du lader litt opp', bands: ['high'] },
-
+  // ── MENTAL HELSE ──────────────────────────────────────────────────────────
+  { text: 'Ta 3 lange, rolige pust gjennom nesen – kjenn roen bre seg', pillar: 'mental', type: 'pust', time: 'alltid' },
+  { text: 'Tenk på 3 ting du er takknemlig for akkurat nå', pillar: 'mental', type: 'pust', time: 'alltid' },
+  { text: 'Ta en bevisst pause fra skjermen i 2 minutter', pillar: 'mental', type: 'pust', time: 'dag' },
+  { text: 'Si nei til én ting i dag som ikke er nødvendig – grensesetting er helse', pillar: 'mental', type: 'pust', time: 'morgen' },
+  { text: 'Gå en rolig tur uten telefon – la tankene vandre fritt', pillar: 'mental', type: 'ga', time: 'kveld' },
+  { text: 'Skriv ned én ting som gikk bra i dag – hold fast ved den', pillar: 'mental', type: 'pust', time: 'kveld' },
+  { text: 'Send en hyggelig melding til noen – sosial kontakt er medisin', pillar: 'mental', type: 'pust', time: 'alltid' },
+  { text: 'Lukk øynene i 30 sekunder og bare pust – gi hjernen en mikropause', pillar: 'mental', type: 'pust', time: 'alltid' },
+  { text: 'Avslutt arbeidsdagen med en kort oppsummering – det reduserer kveldsbekymringer', pillar: 'mental', type: 'pust', time: 'kveld' },
+  { text: 'Snakk med en kollega om noe som ikke er jobb – sosial helse teller', pillar: 'mental', type: 'pust', time: 'dag' },
+  { text: 'Sett en intensjon for dagen – hva er viktigst i dag?', pillar: 'mental', type: 'pust', time: 'morgen' },
 ]
+
+// ── HUMØR-TIPS (for lavterskel-brukere) ─────────────────────────────────────
+
+export type Mood = 'tung' | 'ok' | 'bra'
+
+export const moodTips: Record<Mood, string[]> = {
+  tung: [
+    'Det er ok å ha en tung dag. Et glass vann og 3 rolige pust er nok.',
+    'Du var her i dag — det krever mot på en tung dag.',
+    'Bare det å puste bevisst i 30 sekunder kan hjelpe litt.',
+    'Legg hendene på magen og kjenn at du puster. Det er nok.',
+    'Du trenger ikke prestere. Bare vær her.',
+    'En tung dag er ikke en dårlig dag. Den er bare tung.',
+  ],
+  ok: [
+    'Bra at du sjekket inn. Prøv å reise deg i 30 sekunder.',
+    'En ok dag er en god dag. Små valg gjør stor forskjell over tid.',
+    'Hent et glass vann — kroppen din setter pris på det.',
+    'Strekk nakken forsiktig til hver side. Kjenn at du tar vare på deg.',
+    'Du bygger en vane — det er viktigere enn noe enkelttiltak.',
+  ],
+  bra: [
+    'Flott! Ta en 2-minutters gåtur — du har energien.',
+    'Bra dag — kanskje en kort gåtur ute?',
+    'Nyt energien — gjør noe aktivt som du har lyst til.',
+    'En bra dag er en dag for å investere litt ekstra i deg selv.',
+    'Kan du ta trappa i stedet for heisen i dag?',
+  ],
+}
+
+export function pickMoodTip(mood: Mood): string {
+  const pool = moodTips[mood]
+  return pool[Math.floor(Math.random() * pool.length)]
+}
+
+// ── STREAK-MELDINGER ───────────────────────────────────────────────────────
+
+export const streakMessages: Record<number, string> = {
+  1: 'Du tok det første steget. Alt starter her.',
+  2: '2 dager — du er i gang.',
+  3: '3 dager på rad — en vane begynner å ta form.',
+  5: '5 dager! Kroppen din legger merke til det.',
+  7: 'En hel uke. Det er stort.',
+  10: '10 dager — du har bevist at du kan.',
+  14: 'To uker. For alvor.',
+  21: '3 uker — dette er en del av hvem du er nå.',
+  30: 'En måned. Du har endret en vane.',
+}
+
+export function getStreakMessage(streak: number): string {
+  // Finn høyeste terskel som er <= streak
+  const thresholds = Object.keys(streakMessages).map(Number).sort((a, b) => b - a)
+  for (const t of thresholds) {
+    if (streak >= t) return streakMessages[t]
+  }
+  return 'Du var her i dag. Det teller.'
+}
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
-/** Pick a random tip for the given band, optionally skipping one text */
-export function pickTip(opts: {
-  band: TipBand
+// ── Persona-vekting ──────────────────────────────────────────────────────────
+
+type PersonaContext = {
+  healthChallenge?: string | null  // rygg/nakke/hodepine/ingen
+  biggestStruggle?: string | null  // stress/sovn/motivasjon/smerter/ingen
+}
+
+const PERSONA_TYPE_MAP: Record<string, TipType[]> = {
+  rygg: ['strekk'],
+  nakke: ['strekk'],
+  hodepine: ['pust', 'strekk'],
+  stress: ['pust'],
+  sovn: ['pust'],
+  motivasjon: ['ga'],
+  smerter: ['strekk'],
+}
+
+/** Weighted pick — prefer tips matching persona, but allow any */
+function weightedPick(pool: HealthTip[], persona?: PersonaContext): HealthTip {
+  if (!persona) return pool[Math.floor(Math.random() * pool.length)]
+
+  const preferredTypes: TipType[] = [
+    ...(PERSONA_TYPE_MAP[persona.healthChallenge ?? ''] ?? []),
+    ...(PERSONA_TYPE_MAP[persona.biggestStruggle ?? ''] ?? []),
+  ]
+
+  if (preferredTypes.length === 0) return pool[Math.floor(Math.random() * pool.length)]
+
+  // 70% chance to pick preferred type, 30% random
+  const preferred = pool.filter(t => preferredTypes.includes(t.type))
+  if (preferred.length > 0 && Math.random() < 0.7) {
+    return preferred[Math.floor(Math.random() * preferred.length)]
+  }
+  return pool[Math.floor(Math.random() * pool.length)]
+}
+
+/** Pick a random tip for a given pillar, with optional persona weighting */
+export function pickTipByPillar(opts: {
+  pillar: TipPillar
   excludeText?: string
+  persona?: PersonaContext
 }): HealthTip {
-  const pool = healthTips.filter(t => t.bands.includes(opts.band))
+  const pool = healthTips.filter(t => t.pillar === opts.pillar)
   const available = opts.excludeText
     ? pool.filter(t => t.text !== opts.excludeText)
     : pool
   const src = available.length > 0 ? available : pool
-  return src[Math.floor(Math.random() * src.length)]
+  return weightedPick(src, opts.persona)
 }
 
-/** Derive band from Min helse answers */
-export function bandFromMinHelse(
-  body: string,
-  energy: string,
-): TipBand {
-  if (body === 'tung' || energy === 'tom') return 'low'
-  if (body === 'lett' && energy === 'på') return 'high'
-  return 'mid'
+/** Pick a random tip filtered by time of day (for Boost Moment), with persona weighting */
+export function pickTip(opts: {
+  band?: string
+  excludeText?: string
+  persona?: PersonaContext
+}): HealthTip {
+  const now = currentTimeOfDay()
+  let pool = healthTips.filter(t => t.time === now || t.time === 'alltid')
+  if (opts.excludeText) {
+    pool = pool.filter(t => t.text !== opts.excludeText)
+  }
+  const src = pool.length > 0 ? pool : healthTips
+  return weightedPick(src, opts.persona)
 }
 
-/** Derive band from Boost Moment energy score (1–10) */
-export function bandFromEnergyScore(score: number): TipBand {
-  if (score <= 3) return 'low'
-  if (score <= 7) return 'mid'
-  return 'high'
+// ── Tomorrow teaser ─────────────────────────────────────────────────────────
+
+const PILLAR_TEASERS: Record<TipPillar, string[]> = {
+  bevegelse: [
+    'en 2-minutters gåøvelse',
+    'et enkelt bevegelsestips',
+    'en lett strekkeøvelse',
+  ],
+  stillesitting: [
+    'en pause-påminnelse',
+    'en enkel skrivebordsøvelse',
+    'et tips for bedre sittestilling',
+  ],
+  sovn: [
+    'et søvntips som faktisk virker',
+    'en enkel kveldsrutine',
+    'et tips for bedre søvnkvalitet',
+  ],
+  kosthold: [
+    'en enkel kostholdsvane',
+    'et tips for mer grønt i hverdagen',
+    'en matidé som gir energi',
+  ],
+  mental: [
+    'en 1-minutts pusteøvelse',
+    'et tips for mentalt overskudd',
+    'en enkel stressmestringsteknikk',
+  ],
+}
+
+export function tomorrowTeaser(pillar: TipPillar): string {
+  const teasers = PILLAR_TEASERS[pillar]
+  const picked = teasers[Math.floor(Math.random() * teasers.length)]
+  return `I morgen: ${picked}`
+}
+
+/** Pilar-scoring maps — brukes av frontend for å finne svakeste pilar */
+export const PILLAR_SCORES: Record<TipPillar, Record<string, number>> = {
+  bevegelse:     { ingen: 0, lett: 8, moderat: 15, aktiv: 20 },
+  stillesitting: { ingen_pauser: 0, noen: 10, regelmessig: 20 },
+  sovn:          { under_5: 0, "5_6": 8, "7_8": 20, over_8: 15 },
+  kosthold:      { ingen: 0, "1_2": 8, "3_4": 15, "5_pluss": 20 },
+  mental:        { hoyt: 0, middels: 10, lavt: 20 },
+}
+
+/** Find the weakest pillar from checkin answers */
+export function weakestPillar(answers: {
+  movement: string
+  body: string
+  energy: string
+  context: string
+  mental: string
+}): TipPillar {
+  const scores: [TipPillar, number][] = [
+    ['bevegelse', PILLAR_SCORES.bevegelse[answers.movement] ?? 10],
+    ['stillesitting', PILLAR_SCORES.stillesitting[answers.body] ?? 10],
+    ['sovn', PILLAR_SCORES.sovn[answers.energy] ?? 10],
+    ['kosthold', PILLAR_SCORES.kosthold[answers.context] ?? 10],
+    ['mental', PILLAR_SCORES.mental[answers.mental] ?? 10],
+  ]
+
+  scores.sort((a, b) => a[1] - b[1])
+  return scores[0][0]
 }

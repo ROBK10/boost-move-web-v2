@@ -14,7 +14,7 @@ const props = withDefaults(
     available: false,
     score: null,
     trend: "stable",
-    title: "Lagets kapasitet",
+    title: "Lagets helsescore",
   }
 )
 
@@ -42,10 +42,10 @@ function trendText(v: "up" | "down" | "stable") {
 }
 
 function moodText(score: number) {
-  if (score >= 75) return "Laget virker i flyt i dag."
-  if (score >= 60) return "En jevn og stabil dag for laget."
-  if (score >= 45) return "Laget virker litt slitent i dag."
-  return "En tung dag for laget."
+  if (score >= 80) return "Laget scorer sterkt på alle pilarer i dag."
+  if (score >= 60) return "Laget har en god dag – de fleste pilarene er dekket."
+  if (score >= 40) return "Noen pilarer kan bli bedre – oppmuntre til små grep."
+  return "Laget trenger litt ekstra i dag – fokus på det viktigste."
 }
 </script>
 
@@ -57,7 +57,7 @@ function moodText(score: number) {
     tabindex="0"
     @click="open"
     @keydown="onKeydown"
-    aria-label="Åpne Lagets kapasitet"
+    aria-label="Åpne Lagets helsescore"
   >
     <div class="head">
       <div class="eyebrow">{{ title }}</div>
@@ -81,18 +81,18 @@ function moodText(score: number) {
 
     <div v-else class="unavailable">
       <div class="unavailableScore">—</div>
-      <div class="unavailableText">Lagstatus vises når flere har registrert innsjekk i dag.</div>
+      <div class="unavailableText">Lagets helsescore vises når flere har registrert innsjekk i dag.</div>
     </div>
   </section>
 </template>
 
 <style scoped>
 .card {
-  background: white;
+  background: #023238;
   border-radius: 28px;
   padding: 20px 18px 18px;
-  box-shadow: 0 12px 36px rgba(20, 20, 20, 0.06);
-  border: 1px solid rgba(17, 24, 39, 0.06);
+  box-shadow: 0 12px 36px rgba(0,0,0,0.25);
+  border: 1px solid rgba(209,231,229,0.08);
   cursor: pointer;
   user-select: none;
   transition: transform 120ms ease, box-shadow 120ms ease;
@@ -100,18 +100,18 @@ function moodText(score: number) {
 
 .card:hover {
   transform: translateY(-1px);
-  box-shadow: 0 16px 42px rgba(20, 20, 20, 0.08);
+  box-shadow: 0 16px 42px rgba(0,0,0,0.3);
 }
 
 .card:focus-visible {
-  outline: 3px solid rgba(99, 102, 241, 0.22);
+  outline: 3px solid rgba(190, 242, 1, 0.22);
   outline-offset: 4px;
 }
 
 .card--unavailable {
-  background: rgba(17, 24, 39, 0.03);
+  background: rgba(209,231,229,0.04);
   cursor: default;
-  border-color: rgba(17, 24, 39, 0.04);
+  border-color: rgba(209,231,229,0.06);
   box-shadow: none;
 }
 
@@ -121,11 +121,11 @@ function moodText(score: number) {
 }
 
 .card--unavailable .eyebrow {
-  color: rgba(17, 24, 39, 0.28);
+  color: rgba(209,231,229,0.25);
 }
 
 .card--unavailable .chev {
-  border-color: rgba(17, 24, 39, 0.12);
+  border-color: rgba(209,231,229,0.12);
 }
 
 .head {
@@ -140,14 +140,14 @@ function moodText(score: number) {
   font-weight: 900;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: rgba(17, 24, 39, 0.42);
+  color: rgba(209,231,229,0.35);
 }
 
 .chev {
   width: 10px;
   height: 10px;
-  border-right: 2px solid rgba(17, 24, 39, 0.24);
-  border-top: 2px solid rgba(17, 24, 39, 0.24);
+  border-right: 2px solid rgba(209,231,229,0.2);
+  border-top: 2px solid rgba(209,231,229,0.2);
   transform: rotate(45deg);
   flex-shrink: 0;
 }
@@ -164,7 +164,7 @@ function moodText(score: number) {
   line-height: 0.95;
   font-weight: 900;
   letter-spacing: -0.04em;
-  color: #111827;
+  color: #FFFFFF;
 }
 
 .meta {
@@ -187,23 +187,23 @@ function moodText(score: number) {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: rgba(17, 24, 39, 0.06);
+  background: rgba(209,231,229,0.06);
   font-size: 13px;
   font-weight: 900;
-  color: rgba(17, 24, 39, 0.8);
+  color: #D1E7E5;
 }
 
 .trendText {
   font-size: 14px;
   font-weight: 900;
-  color: rgba(17, 24, 39, 0.82);
+  color: rgba(209,231,229,0.95);
 }
 
 .mood {
   font-size: 14px;
   font-weight: 700;
   line-height: 1.25;
-  color: rgba(17, 24, 39, 0.56);
+  color: rgba(209,231,229,0.6);
   max-width: 240px;
 }
 
@@ -219,13 +219,13 @@ function moodText(score: number) {
   line-height: 0.95;
   font-weight: 900;
   letter-spacing: -0.04em;
-  color: rgba(17, 24, 39, 0.18);
+  color: rgba(209,231,229,0.15);
 }
 
 .unavailableText {
   font-size: 13px;
   font-weight: 700;
-  color: rgba(17, 24, 39, 0.42);
+  color: rgba(209,231,229,0.35);
   line-height: 1.35;
   max-width: 280px;
 }

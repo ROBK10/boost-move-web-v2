@@ -87,12 +87,12 @@ function formatDate(iso: string): string {
   })
 }
 
+// V3: context = kosthold, men vis en fornuftig label for alle versjoner
 const CONTEXT_LABEL: Record<string, string> = {
-  felt: "Ute i felt",
-  kontor: "Kontor",
-  hjemme: "Hjemme",
-  trening: "Trening",
-  pa_farten: "På farten",
+  // V3 (kosthold)
+  ingen: "Ingen frukt/grønt", "1_2": "1–2 porsjoner", "3_4": "3–4 porsjoner", "5_pluss": "5+ porsjoner",
+  // V1 (kontekst)
+  felt: "Ute i felt", kontor: "Kontor", hjemme: "Hjemme", trening: "Trening", pa_farten: "På farten",
 }
 
 function contextLabel(ctx: string): string {
@@ -108,6 +108,10 @@ function scoreBand(score: number): "high" | "mid" | "low" {
 // ─── Boost breakdown ──────────────────────────────────────────────────────────
 
 const BOOST_LABEL: Record<string, string> = {
+  ga: "Gange",
+  pust: "Pust",
+  strekk: "Strekk",
+  breath: "Pust",
   gange: "Gange",
   løping: "Løping",
   sykling: "Sykling",
@@ -181,7 +185,7 @@ onMounted(async () => {
         <!-- Active days this week (computed from checkins) -->
         <div class="stat-card">
           <span class="stat-icon" aria-hidden="true">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#BEF201" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
               <line x1="16" y1="2" x2="16" y2="6"/>
               <line x1="8" y1="2" x2="8" y2="6"/>
@@ -315,7 +319,7 @@ onMounted(async () => {
   font-size: 34px;
   font-weight: 900;
   letter-spacing: -0.03em;
-  color: #111827;
+  color: #FFFFFF;
   line-height: 1.05;
 }
 
@@ -323,7 +327,7 @@ onMounted(async () => {
   margin: 4px 0 0;
   font-size: 14px;
   font-weight: 600;
-  color: rgba(17, 24, 39, 0.5);
+  color: rgba(209,231,229,0.6);
   text-transform: capitalize;
 }
 
@@ -341,24 +345,24 @@ onMounted(async () => {
   width: 64px;
   height: 64px;
   border-radius: 20px;
-  background: rgba(17, 24, 39, 0.05);
+  background: rgba(209,231,229,0.06);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: rgba(17, 24, 39, 0.3);
+  color: rgba(209,231,229,0.35);
 }
 
 .full-empty-title {
   font-size: 17px;
   font-weight: 900;
-  color: #111827;
+  color: #FFFFFF;
   letter-spacing: -0.01em;
 }
 
 .full-empty-text {
   font-size: 14px;
   font-weight: 600;
-  color: rgba(17, 24, 39, 0.5);
+  color: rgba(209,231,229,0.6);
   line-height: 1.55;
   max-width: 300px;
 }
@@ -371,11 +375,11 @@ onMounted(async () => {
 }
 
 .stat-card {
-  background: white;
+  background: #023238;
   border-radius: 20px;
   padding: 14px 8px 12px;
-  box-shadow: 0 8px 24px rgba(20, 20, 20, 0.06);
-  border: 1px solid rgba(17, 24, 39, 0.05);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+  border: 1px solid rgba(209,231,229,0.08);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -394,14 +398,14 @@ onMounted(async () => {
   font-size: 26px;
   font-weight: 900;
   letter-spacing: -0.03em;
-  color: #111827;
+  color: #FFFFFF;
   line-height: 1;
 }
 
 .stat-denom {
   font-size: 13px;
   font-weight: 700;
-  color: rgba(17, 24, 39, 0.35);
+  color: rgba(209,231,229,0.35);
   letter-spacing: 0;
 }
 
@@ -410,7 +414,7 @@ onMounted(async () => {
   font-weight: 900;
   letter-spacing: 0.05em;
   text-transform: uppercase;
-  color: rgba(17, 24, 39, 0.5);
+  color: rgba(209,231,229,0.6);
   text-align: center;
   line-height: 1.3;
 }
@@ -418,17 +422,17 @@ onMounted(async () => {
 .stat-sub {
   font-size: 10px;
   font-weight: 600;
-  color: rgba(17, 24, 39, 0.3);
+  color: rgba(209,231,229,0.35);
   text-align: center;
 }
 
 /* CARD BASE */
 .card {
-  background: white;
+  background: #023238;
   border-radius: 20px;
   padding: 16px 16px 14px;
-  box-shadow: 0 8px 24px rgba(20, 20, 20, 0.06);
-  border: 1px solid rgba(17, 24, 39, 0.05);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+  border: 1px solid rgba(209,231,229,0.08);
 }
 
 .card-label {
@@ -436,7 +440,7 @@ onMounted(async () => {
   font-weight: 900;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: rgba(17, 24, 39, 0.38);
+  color: rgba(209,231,229,0.35);
   margin-bottom: 14px;
 }
 
@@ -462,34 +466,34 @@ onMounted(async () => {
   width: 30px;
   height: 30px;
   border-radius: 999px;
-  background: rgba(17, 24, 39, 0.06);
+  background: rgba(209,231,229,0.06);
 }
 
 .week-dot.is-checked {
-  background: #111827;
+  background: #BEF201;
 }
 
 .week-dot.is-today:not(.is-checked) {
-  box-shadow: 0 0 0 2px #111827;
+  box-shadow: 0 0 0 2px #BEF201;
 }
 
 .week-dot.is-today.is-checked {
-  box-shadow: 0 0 0 2.5px rgba(17, 24, 39, 0.25);
+  box-shadow: 0 0 0 2.5px rgba(209,231,229,0.2);
 }
 
 .week-dot.is-future {
-  background: rgba(17, 24, 39, 0.03);
+  background: rgba(209,231,229,0.04);
 }
 
 .week-day-label {
   font-size: 10px;
   font-weight: 800;
-  color: rgba(17, 24, 39, 0.38);
+  color: rgba(209,231,229,0.35);
   letter-spacing: 0.02em;
 }
 
 .week-day.is-today .week-day-label {
-  color: #111827;
+  color: #FFFFFF;
   font-weight: 900;
 }
 
@@ -497,7 +501,7 @@ onMounted(async () => {
   margin: 12px 0 0;
   font-size: 13px;
   font-weight: 600;
-  color: rgba(17, 24, 39, 0.4);
+  color: rgba(209,231,229,0.35);
 }
 
 /* BOOST BREAKDOWN */
@@ -516,7 +520,7 @@ onMounted(async () => {
 .boost-name {
   font-size: 13px;
   font-weight: 800;
-  color: #111827;
+  color: #FFFFFF;
   width: 72px;
   flex-shrink: 0;
 }
@@ -524,14 +528,14 @@ onMounted(async () => {
 .boost-bar-wrap {
   flex: 1;
   height: 6px;
-  background: rgba(17, 24, 39, 0.07);
+  background: rgba(209,231,229,0.08);
   border-radius: 999px;
   overflow: hidden;
 }
 
 .boost-bar {
   height: 100%;
-  background: #111827;
+  background: #BEF201;
   border-radius: 999px;
   min-width: 6px;
 }
@@ -539,7 +543,7 @@ onMounted(async () => {
 .boost-count {
   font-size: 13px;
   font-weight: 900;
-  color: rgba(17, 24, 39, 0.5);
+  color: rgba(209,231,229,0.6);
   width: 22px;
   text-align: right;
   flex-shrink: 0;
@@ -549,7 +553,7 @@ onMounted(async () => {
 .list-empty {
   font-size: 14px;
   font-weight: 600;
-  color: rgba(17, 24, 39, 0.4);
+  color: rgba(209,231,229,0.35);
   padding: 4px 0;
 }
 
@@ -563,7 +567,7 @@ onMounted(async () => {
   align-items: center;
   gap: 12px;
   padding: 11px 0;
-  border-bottom: 1px solid rgba(17, 24, 39, 0.06);
+  border-bottom: 1px solid rgba(209,231,229,0.08);
 }
 
 .checkin-row.is-last {
@@ -593,7 +597,7 @@ onMounted(async () => {
 .checkin-date {
   font-size: 14px;
   font-weight: 800;
-  color: #111827;
+  color: #FFFFFF;
   text-transform: capitalize;
   white-space: nowrap;
   overflow: hidden;
@@ -603,7 +607,7 @@ onMounted(async () => {
 .checkin-ctx {
   font-size: 12px;
   font-weight: 600;
-  color: rgba(17, 24, 39, 0.45);
+  color: rgba(209,231,229,0.35);
 }
 
 .score-badge {
@@ -621,14 +625,14 @@ onMounted(async () => {
 .footnote {
   font-size: 13px;
   font-weight: 600;
-  color: rgba(17, 24, 39, 0.4);
+  color: rgba(209,231,229,0.35);
   text-align: center;
   margin: 0;
   padding: 0 0 4px;
 }
 
 .footnote strong {
-  color: rgba(17, 24, 39, 0.7);
+  color: #D1E7E5;
   font-weight: 900;
 }
 </style>

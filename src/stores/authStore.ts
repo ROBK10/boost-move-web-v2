@@ -11,6 +11,14 @@ export type AuthUser = {
   companyName?: string
   bio?: string
   avatarUrl?: string
+  onboardingDone?: boolean
+  weeklyGoal?: number
+  focusPillars?: string | null
+  healthChallenge?: string | null
+  biggestStruggle?: string | null
+  motivation?: string | null
+  notifyDaily?: boolean
+  notifyTime?: string
 }
 
 type RegisterInput = {
@@ -87,11 +95,10 @@ export const useAuthStore = defineStore("auth", {
       this.user = null
     },
 
-    async updateProfile(data: { name?: string; bio?: string }) {
+    async updateProfile(data: Record<string, any>) {
       const res = await apiUpdateProfile(data)
-      if (this.user) {
-        if (res.user.name) this.user.name = res.user.name
-        if (res.user.bio !== undefined) this.user.bio = res.user.bio
+      if (this.user && res.user) {
+        Object.assign(this.user, res.user)
       }
     },
 

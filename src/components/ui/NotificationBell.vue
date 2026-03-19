@@ -138,14 +138,14 @@ function typeIcon(t: NotificationType): string {
   width: 44px;
   height: 44px;
   border: none;
-  background: white;
+  background: #023238;
   border-radius: 999px;
-  box-shadow: 0 10px 30px rgba(20, 20, 20, 0.08);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #111827;
+  color: #FFFFFF;
 }
 
 .badge {
@@ -164,7 +164,7 @@ function typeIcon(t: NotificationType): string {
   align-items: center;
   justify-content: center;
   line-height: 1;
-  border: 1.5px solid white;
+  border: 1.5px solid rgba(209,231,229,0.15);
   box-sizing: border-box;
 }
 
@@ -174,10 +174,10 @@ function typeIcon(t: NotificationType): string {
   top: calc(100% + 10px);
   right: 0;
   width: min(320px, calc(100vw - 32px));
-  background: white;
+  background: #023238;
   border-radius: 20px;
-  box-shadow: 0 20px 60px rgba(17, 24, 39, 0.14), 0 4px 16px rgba(17, 24, 39, 0.06);
-  border: 1px solid rgba(17, 24, 39, 0.07);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3), 0 4px 16px rgba(0,0,0,0.2);
+  border: 1px solid rgba(209,231,229,0.08);
   overflow: hidden;
   z-index: 300;
 }
@@ -187,13 +187,13 @@ function typeIcon(t: NotificationType): string {
   align-items: center;
   justify-content: space-between;
   padding: 14px 16px 12px;
-  border-bottom: 1px solid rgba(17, 24, 39, 0.07);
+  border-bottom: 1px solid rgba(209,231,229,0.08);
 }
 
 .panel-title {
   font-size: 14px;
   font-weight: 900;
-  color: #111827;
+  color: #FFFFFF;
 }
 
 .mark-all {
@@ -201,14 +201,14 @@ function typeIcon(t: NotificationType): string {
   border: none;
   font-size: 12px;
   font-weight: 700;
-  color: rgba(17, 24, 39, 0.45);
+  color: rgba(209,231,229,0.35);
   cursor: pointer;
   font-family: inherit;
   padding: 0;
 }
 
 .mark-all:hover {
-  color: rgba(17, 24, 39, 0.75);
+  color: #D1E7E5;
 }
 
 .mark-all--done {
@@ -221,7 +221,7 @@ function typeIcon(t: NotificationType): string {
   text-align: center;
   font-size: 14px;
   font-weight: 600;
-  color: rgba(17, 24, 39, 0.38);
+  color: rgba(209,231,229,0.35);
 }
 
 /* LIST */
@@ -240,7 +240,7 @@ function typeIcon(t: NotificationType): string {
   padding: 12px 16px;
   cursor: pointer;
   transition: background 120ms ease;
-  border-bottom: 1px solid rgba(17, 24, 39, 0.04);
+  border-bottom: 1px solid rgba(209,231,229,0.06);
 }
 
 .notif-item:last-child {
@@ -249,7 +249,7 @@ function typeIcon(t: NotificationType): string {
 
 .notif-item:hover,
 .notif-item:active {
-  background: rgba(17, 24, 39, 0.03);
+  background: rgba(209,231,229,0.04);
 }
 
 .notif-item.unread {
@@ -271,7 +271,7 @@ function typeIcon(t: NotificationType): string {
 .notif-title {
   font-size: 13px;
   font-weight: 800;
-  color: #111827;
+  color: #FFFFFF;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -281,7 +281,7 @@ function typeIcon(t: NotificationType): string {
   margin-top: 2px;
   font-size: 12px;
   font-weight: 600;
-  color: rgba(17, 24, 39, 0.6);
+  color: rgba(209,231,229,0.6);
   line-height: 1.4;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -293,7 +293,7 @@ function typeIcon(t: NotificationType): string {
   margin-top: 4px;
   font-size: 11px;
   font-weight: 700;
-  color: rgba(17, 24, 39, 0.35);
+  color: rgba(209,231,229,0.35);
 }
 
 .dismiss-btn {
@@ -301,7 +301,7 @@ function typeIcon(t: NotificationType): string {
   border: none;
   padding: 4px;
   cursor: pointer;
-  color: rgba(17, 24, 39, 0.3);
+  color: rgba(209,231,229,0.35);
   flex-shrink: 0;
   display: flex;
   align-items: center;
@@ -311,8 +311,8 @@ function typeIcon(t: NotificationType): string {
 }
 
 .dismiss-btn:hover {
-  background: rgba(17, 24, 39, 0.06);
-  color: rgba(17, 24, 39, 0.65);
+  background: rgba(209,231,229,0.06);
+  color: rgba(209,231,229,0.6);
 }
 
 /* TRANSITION */

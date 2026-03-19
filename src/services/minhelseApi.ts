@@ -1,33 +1,29 @@
 import { apiFetch } from "./api"
 
 export type DailyCheckInInput = {
-  context: "kontor" | "felt" | "hjemme" | "trening" | "pa_farten"
-  body: "tung" | "ok" | "lett"
-  energy: "tom" | "stabil" | "på"
-  movement: "nei" | "litt" | "ja"
+  movement: string   // bevegelse: ingen/lett/moderat/aktiv
+  body: string       // stillesitting: ingen_pauser/noen/regelmessig
+  energy: string     // søvn: under_5/5_6/7_8/over_8
+  context: string    // kosthold: ingen/1_2/3_4/5_pluss
+  mental: string     // stress: hoyt/middels/lavt
+  workplace?: string // kontekst: kontor/hjemme/felt
 }
 
 export type DailyCheckIn = {
   id: string
   userId: string
   date: string
-  context: DailyCheckInInput["context"]
-  body: DailyCheckInInput["body"]
-  energy: DailyCheckInInput["energy"]
-  movement: DailyCheckInInput["movement"]
+  movement: string
+  body: string
+  energy: string
+  context: string
+  mental: string | null
   capacityScore: number
   createdAt: string
   updatedAt?: string
 }
 
-export type BoostResponse = {
-  band: "low" | "stable" | "high"
-  title: string
-  message: string
-  suggestions: string[]
-}
-
-export async function saveCheckIn(input: DailyCheckInInput): Promise<{ checkin: DailyCheckIn; boost: BoostResponse }> {
+export async function saveCheckIn(input: DailyCheckInInput): Promise<{ checkin: DailyCheckIn }> {
   return apiFetch("/minhelse/checkin", {
     method: "POST",
     body: JSON.stringify(input),

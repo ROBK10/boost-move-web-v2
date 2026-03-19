@@ -78,7 +78,7 @@ function initials(name: string): string {
   font-weight: 900;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: rgba(17, 24, 39, 0.38);
+  color: rgba(209,231,229,0.35);
   padding: 4px 4px 8px;
 }
 
@@ -86,7 +86,7 @@ function initials(name: string): string {
   padding: 24px 4px;
   font-size: 14px;
   font-weight: 600;
-  color: rgba(17, 24, 39, 0.4);
+  color: rgba(209,231,229,0.35);
 }
 
 .error-msg {
@@ -98,10 +98,10 @@ function initials(name: string): string {
   align-items: center;
   gap: 14px;
   padding: 12px 14px;
-  background: white;
+  background: #023238;
   border-radius: 16px;
-  box-shadow: 0 3px 12px rgba(20, 20, 20, 0.06);
-  border: 1px solid rgba(17, 24, 39, 0.05);
+  box-shadow: 0 3px 12px rgba(0,0,0,0.25);
+  border: 1px solid rgba(209,231,229,0.08);
   cursor: pointer;
   transition: transform 120ms ease, box-shadow 120ms ease;
   user-select: none;
@@ -109,11 +109,11 @@ function initials(name: string): string {
 
 .member-row:hover {
   transform: translateY(-1px);
-  box-shadow: 0 6px 18px rgba(20, 20, 20, 0.09);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.3);
 }
 
 .member-row:focus-visible {
-  outline: 3px solid rgba(99, 102, 241, 0.22);
+  outline: 3px solid rgba(190, 242, 1, 0.22);
   outline-offset: 2px;
 }
 
@@ -121,7 +121,7 @@ function initials(name: string): string {
   width: 40px;
   height: 40px;
   border-radius: 999px;
-  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  background: linear-gradient(135deg, #BEF201 0%, #8b5cf6 100%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -135,14 +135,14 @@ function initials(name: string): string {
   flex: 1;
   font-size: 15px;
   font-weight: 800;
-  color: #111827;
+  color: #FFFFFF;
 }
 
 .chev {
   width: 9px;
   height: 9px;
-  border-right: 2px solid rgba(17, 24, 39, 0.24);
-  border-top: 2px solid rgba(17, 24, 39, 0.24);
+  border-right: 2px solid rgba(209,231,229,0.2);
+  border-top: 2px solid rgba(209,231,229,0.2);
   transform: rotate(45deg);
   flex-shrink: 0;
 }

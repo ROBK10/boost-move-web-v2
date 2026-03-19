@@ -171,7 +171,7 @@ async function onLogout() {
 
       <div class="stat-card">
         <span class="stat-icon" aria-hidden="true">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#D1E7E5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
             <circle cx="9" cy="7" r="4"/>
             <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
@@ -204,6 +204,36 @@ async function onLogout() {
           </svg>
         </span>
         <span class="action-label">Personlige detaljer</span>
+        <span class="chev" aria-hidden="true"></span>
+      </button>
+
+      <div class="action-divider"></div>
+
+      <button class="action-row action-row--nav" type="button" @click="router.push('/profil/min-situasjon')">
+        <span class="action-icon action-icon--sit" aria-hidden="true">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+          </svg>
+        </span>
+        <span class="action-label">Min situasjon</span>
+        <span class="chev" aria-hidden="true"></span>
+      </button>
+
+      <div class="action-divider"></div>
+
+      <button class="action-row action-row--nav" type="button" @click="router.push('/helsekalkulator')">
+        <span class="action-icon action-icon--calc" aria-hidden="true">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="4" y="2" width="16" height="20" rx="2"/>
+            <line x1="8" y1="6" x2="16" y2="6"/>
+            <line x1="8" y1="10" x2="10" y2="10"/>
+            <line x1="14" y1="10" x2="16" y2="10"/>
+            <line x1="8" y1="14" x2="10" y2="14"/>
+            <line x1="14" y1="14" x2="16" y2="14"/>
+            <line x1="8" y1="18" x2="16" y2="18"/>
+          </svg>
+        </span>
+        <span class="action-label">Helsekalkulator</span>
         <span class="chev" aria-hidden="true"></span>
       </button>
 
@@ -293,21 +323,21 @@ async function onLogout() {
   font-size: 34px;
   font-weight: 900;
   letter-spacing: -0.03em;
-  color: #111827;
+  color: #FFFFFF;
 }
 
 .gear-btn {
   width: 44px;
   height: 44px;
   border: none;
-  background: white;
+  background: #034044;
   border-radius: 999px;
-  box-shadow: 0 10px 30px rgba(20, 20, 20, 0.08);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: rgba(17, 24, 39, 0.7);
+  color: #D1E7E5;
   flex-shrink: 0;
 }
 
@@ -339,12 +369,12 @@ async function onLogout() {
   width: 96px;
   height: 96px;
   border-radius: 999px;
-  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  background: linear-gradient(135deg, #023238 0%, #034e56 100%);
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 3px solid white;
-  box-shadow: 0 8px 24px rgba(99, 102, 241, 0.28);
+  border: 3px solid rgba(209,231,229,0.15);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.35);
   overflow: hidden;
   transition: opacity 150ms ease;
 }
@@ -387,9 +417,9 @@ async function onLogout() {
   right: 2px;
   width: 28px;
   height: 28px;
-  background: #111827;
+  background: #034044;
   border-radius: 999px;
-  border: 2px solid white;
+  border: 2px solid #021C20;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -412,36 +442,36 @@ async function onLogout() {
   font-size: 24px;
   font-weight: 900;
   letter-spacing: -0.02em;
-  color: #111827;
+  color: #FFFFFF;
 }
 
 .user-email {
   font-size: 14px;
   font-weight: 600;
-  color: rgba(17, 24, 39, 0.5);
+  color: rgba(209,231,229,0.6);
 }
 
 .user-role-badge {
   margin-top: 6px;
   display: inline-block;
-  background: rgba(17, 24, 39, 0.07);
+  background: rgba(209,231,229,0.08);
   border-radius: 999px;
   padding: 4px 12px;
   font-size: 12px;
   font-weight: 800;
   letter-spacing: 0.04em;
   text-transform: capitalize;
-  color: rgba(17, 24, 39, 0.65);
+  color: rgba(209,231,229,0.6);
 }
 
 .dm-btn {
   margin-top: 14px;
   height: 44px;
   padding: 0 20px;
-  border: 1.5px solid rgba(17, 24, 39, 0.12);
+  border: 1.5px solid rgba(209,231,229,0.12);
   border-radius: 999px;
-  background: white;
-  color: #111827;
+  background: #034044;
+  color: #D1E7E5;
   font-size: 14px;
   font-weight: 800;
   font-family: inherit;
@@ -453,7 +483,7 @@ async function onLogout() {
 }
 
 .dm-btn:active {
-  background: rgba(17, 24, 39, 0.04);
+  background: rgba(209,231,229,0.06);
 }
 
 .user-meta-row {
@@ -462,16 +492,16 @@ async function onLogout() {
   gap: 6px;
   font-size: 13px;
   font-weight: 700;
-  color: rgba(17, 24, 39, 0.45);
+  color: rgba(209,231,229,0.35);
   margin-top: 2px;
 }
 
 /* MINE GRUPPER SECTION */
 .section-card {
-  background: white;
+  background: #023238;
   border-radius: 20px;
-  box-shadow: 0 8px 24px rgba(20, 20, 20, 0.06);
-  border: 1px solid rgba(17, 24, 39, 0.05);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+  border: 1px solid rgba(209,231,229,0.08);
   overflow: hidden;
   padding: 16px 18px;
 }
@@ -481,20 +511,20 @@ async function onLogout() {
   align-items: center;
   gap: 8px;
   margin-bottom: 12px;
-  color: rgba(17, 24, 39, 0.65);
+  color: rgba(209,231,229,0.6);
 }
 
 .section-title {
   font-size: 13px;
   font-weight: 900;
   letter-spacing: 0.02em;
-  color: rgba(17, 24, 39, 0.65);
+  color: rgba(209,231,229,0.6);
 }
 
 .group-empty {
   font-size: 14px;
   font-weight: 600;
-  color: rgba(17, 24, 39, 0.35);
+  color: rgba(209,231,229,0.35);
   padding: 4px 0 2px;
 }
 
@@ -506,11 +536,11 @@ async function onLogout() {
 }
 
 .stat-card {
-  background: white;
+  background: #023238;
   border-radius: 20px;
   padding: 16px 10px 14px;
-  box-shadow: 0 8px 24px rgba(20, 20, 20, 0.06);
-  border: 1px solid rgba(17, 24, 39, 0.05);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+  border: 1px solid rgba(209,231,229,0.08);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -528,7 +558,7 @@ async function onLogout() {
   font-size: 28px;
   font-weight: 900;
   letter-spacing: -0.03em;
-  color: #111827;
+  color: #FFFFFF;
   line-height: 1;
 }
 
@@ -536,15 +566,15 @@ async function onLogout() {
   font-size: 10px;
   font-weight: 900;
   letter-spacing: 0.1em;
-  color: rgba(17, 24, 39, 0.42);
+  color: rgba(209,231,229,0.35);
   text-transform: uppercase;
 }
 
 /* ACTION LIST FLASH */
 @keyframes settings-flash {
-  0%   { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.3); }
-  50%  { box-shadow: 0 0 0 6px rgba(99, 102, 241, 0.12); }
-  100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0); }
+  0%   { box-shadow: 0 0 0 0 rgba(190, 242, 1, 0.3); }
+  50%  { box-shadow: 0 0 0 6px rgba(190, 242, 1, 0.12); }
+  100% { box-shadow: 0 0 0 0 rgba(190, 242, 1, 0); }
 }
 
 .action-list--flash {
@@ -553,10 +583,10 @@ async function onLogout() {
 
 /* ACTION LIST */
 .action-list {
-  background: white;
+  background: #023238;
   border-radius: 20px;
-  box-shadow: 0 8px 24px rgba(20, 20, 20, 0.06);
-  border: 1px solid rgba(17, 24, 39, 0.05);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+  border: 1px solid rgba(209,231,229,0.08);
   overflow: hidden;
 }
 
@@ -577,7 +607,7 @@ async function onLogout() {
 }
 
 .action-row--nav:active {
-  background: rgba(17, 24, 39, 0.03);
+  background: rgba(209,231,229,0.04);
 }
 
 .soon-pill {
@@ -585,8 +615,8 @@ async function onLogout() {
   font-weight: 900;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: rgba(17, 24, 39, 0.5);
-  background: rgba(17, 24, 39, 0.07);
+  color: rgba(209,231,229,0.6);
+  background: rgba(209,231,229,0.08);
   border-radius: 999px;
   padding: 3px 8px;
   flex-shrink: 0;
@@ -594,7 +624,7 @@ async function onLogout() {
 
 .action-divider {
   height: 1px;
-  background: rgba(17, 24, 39, 0.06);
+  background: rgba(209,231,229,0.06);
   margin: 0 18px;
 }
 
@@ -604,24 +634,24 @@ async function onLogout() {
   justify-content: center;
   width: 36px;
   height: 36px;
-  background: rgba(17, 24, 39, 0.05);
+  background: rgba(209,231,229,0.06);
   border-radius: 10px;
   flex-shrink: 0;
-  color: rgba(17, 24, 39, 0.65);
+  color: rgba(209,231,229,0.6);
 }
 
 .action-label {
   flex: 1;
   font-size: 15px;
   font-weight: 800;
-  color: #111827;
+  color: #FFFFFF;
 }
 
 .chev {
   width: 9px;
   height: 9px;
-  border-right: 2px solid rgba(17, 24, 39, 0.28);
-  border-top: 2px solid rgba(17, 24, 39, 0.28);
+  border-right: 2px solid rgba(209,231,229,0.25);
+  border-top: 2px solid rgba(209,231,229,0.25);
   transform: rotate(45deg);
   flex-shrink: 0;
 }
@@ -632,7 +662,7 @@ async function onLogout() {
   width: 48px;
   height: 28px;
   border-radius: 999px;
-  background: rgba(17, 24, 39, 0.15);
+  background: rgba(209,231,229,0.12);
   border: none;
   cursor: pointer;
   transition: background 200ms ease;
@@ -641,7 +671,7 @@ async function onLogout() {
 }
 
 .toggle.on {
-  background: #16a34a;
+  background: #BEF201;
 }
 
 .toggle-thumb {
@@ -651,7 +681,7 @@ async function onLogout() {
   width: 22px;
   height: 22px;
   border-radius: 999px;
-  background: white;
+  background: #023238;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.18);
   transition: transform 200ms ease;
 }
@@ -678,4 +708,7 @@ async function onLogout() {
 .logout-label {
   color: #dc2626;
 }
+
+.action-icon--sit { color: #FFFFFF; background: rgba(190, 242, 1, 0.1); }
+.action-icon--calc { color: #FFFFFF; background: rgba(190, 242, 1, 0.1); }
 </style>

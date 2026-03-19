@@ -137,7 +137,7 @@ const isAndroid = /Android/.test(ua)
   width: 100vw;
   height: 100dvh;
   z-index: 200;
-  background: #f9fafb;
+  background: #021C20;
   display: flex;
   flex-direction: column;
 }
@@ -167,12 +167,12 @@ const isAndroid = /Android/.test(ua)
   width: 72px;
   height: 72px;
   border-radius: 20px;
-  background: #111827;
+  background: #023238;
   display: flex;
   align-items: center;
   justify-content: center;
   margin-bottom: 24px;
-  box-shadow: 0 8px 24px rgba(17, 24, 39, 0.2);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
   flex-shrink: 0;
 }
 
@@ -182,7 +182,7 @@ const isAndroid = /Android/.test(ua)
   font-size: 24px;
   font-weight: 900;
   letter-spacing: -0.02em;
-  color: #111827;
+  color: #FFFFFF;
   text-align: center;
   line-height: 1.2;
 }
@@ -191,7 +191,7 @@ const isAndroid = /Android/.test(ua)
   margin: 0 0 28px;
   font-size: 15px;
   font-weight: 600;
-  color: rgba(17, 24, 39, 0.55);
+  color: rgba(209,231,229,0.6);
   text-align: center;
   line-height: 1.6;
   max-width: 320px;
@@ -207,17 +207,17 @@ const isAndroid = /Android/.test(ua)
 }
 
 .platform-block {
-  background: white;
-  border: 1px solid rgba(17, 24, 39, 0.08);
+  background: #023238;
+  border: 1px solid rgba(209,231,229,0.1);
   border-radius: 16px;
   padding: 14px;
-  box-shadow: 0 2px 8px rgba(17, 24, 39, 0.04);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
 }
 
 .platform-block.highlighted {
-  background: white;
-  border-color: rgba(17, 24, 39, 0.14);
-  box-shadow: 0 4px 16px rgba(17, 24, 39, 0.08);
+  background: #023238;
+  border-color: rgba(209,231,229,0.12);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.25);
   order: -1;
 }
 
@@ -232,7 +232,7 @@ const isAndroid = /Android/.test(ua)
   width: 28px;
   height: 28px;
   border-radius: 8px;
-  background: #111827;
+  background: #023238;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -247,7 +247,7 @@ const isAndroid = /Android/.test(ua)
 .platform-name {
   font-size: 13px;
   font-weight: 900;
-  color: #111827;
+  color: #FFFFFF;
   flex: 1;
 }
 
@@ -257,7 +257,7 @@ const isAndroid = /Android/.test(ua)
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: white;
-  background: #111827;
+  background: #023238;
   border-radius: 999px;
   padding: 3px 8px;
 }
@@ -282,10 +282,10 @@ const isAndroid = /Android/.test(ua)
   width: 20px;
   height: 20px;
   border-radius: 999px;
-  background: rgba(17, 24, 39, 0.1);
+  background: rgba(209,231,229,0.1);
   font-size: 11px;
   font-weight: 900;
-  color: #111827;
+  color: #FFFFFF;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -294,31 +294,31 @@ const isAndroid = /Android/.test(ua)
 }
 
 .platform-block.highlighted .step-num {
-  background: #111827;
+  background: #023238;
   color: white;
 }
 
 .step-text {
   font-size: 13px;
   font-weight: 600;
-  color: rgba(17, 24, 39, 0.75);
+  color: #D1E7E5;
   line-height: 1.5;
 }
 
 .step-text strong {
-  color: #111827;
+  color: #FFFFFF;
   font-weight: 800;
 }
 
 .inline-icon {
   display: inline-block;
   font-size: 12px;
-  background: rgba(17, 24, 39, 0.08);
+  background: rgba(209,231,229,0.08);
   border-radius: 4px;
   padding: 0 4px;
   letter-spacing: 0;
   font-weight: 700;
-  color: #111827;
+  color: #FFFFFF;
 }
 
 /* CTA */
@@ -327,7 +327,7 @@ const isAndroid = /Android/.test(ua)
   height: 52px;
   border: none;
   border-radius: 16px;
-  background: #111827;
+  background: #023238;
   color: white;
   font-size: 16px;
   font-weight: 900;
@@ -349,7 +349,7 @@ const isAndroid = /Android/.test(ua)
   border: none;
   font-size: 13px;
   font-weight: 700;
-  color: rgba(17, 24, 39, 0.4);
+  color: rgba(209,231,229,0.35);
   cursor: pointer;
   font-family: inherit;
   padding: 4px 8px;
@@ -357,7 +357,7 @@ const isAndroid = /Android/.test(ua)
 }
 
 .skip-btn:hover {
-  color: rgba(17, 24, 39, 0.65);
+  color: rgba(209,231,229,0.6);
 }
 
 /* TRANSITION */

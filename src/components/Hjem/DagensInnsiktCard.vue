@@ -89,13 +89,13 @@ const insight = insights[Math.floor(Math.random() * insights.length)]
 
 <style scoped>
 .pill {
-  background: rgba(17, 24, 39, 0.03);
+  background: rgba(209,231,229,0.04);
   border-radius: 22px;
   padding: 14px 14px;
   display: flex;
   align-items: center;
   gap: 12px;
-  box-shadow: inset 0 0 0 1px rgba(17, 24, 39, 0.04);
+  box-shadow: inset 0 0 0 1px rgba(209,231,229,0.06);
   cursor: pointer;
   user-select: none;
   transition: transform 120ms ease;
@@ -106,7 +106,7 @@ const insight = insights[Math.floor(Math.random() * insights.length)]
 }
 
 .pill:focus-visible {
-  outline: 3px solid rgba(99, 102, 241, 0.25);
+  outline: 3px solid rgba(190, 242, 1, 0.25);
   outline-offset: 4px;
 }
 
@@ -114,7 +114,7 @@ const insight = insights[Math.floor(Math.random() * insights.length)]
   width: 10px;
   height: 10px;
   border-radius: 999px;
-  background: rgba(17, 24, 39, 0.28);
+  background: rgba(209,231,229,0.2);
 }
 
 .text {
@@ -125,22 +125,22 @@ const insight = insights[Math.floor(Math.random() * insights.length)]
   font-size: 11px;
   font-weight: 900;
   letter-spacing: 0.12em;
-  color: rgba(17, 24, 39, 0.45);
+  color: rgba(209,231,229,0.35);
 }
 
 .quote {
   margin-top: 4px;
   font-size: 15px;
   font-weight: 800;
-  color: rgba(17, 24, 39, 0.78);
+  color: #D1E7E5;
   line-height: 1.4;
 }
 
 .chev {
   width: 10px;
   height: 10px;
-  border-right: 2px solid rgba(17, 24, 39, 0.25);
-  border-top: 2px solid rgba(17, 24, 39, 0.25);
+  border-right: 2px solid rgba(209,231,229,0.25);
+  border-top: 2px solid rgba(209,231,229,0.25);
   transform: rotate(45deg);
 }
 </style>

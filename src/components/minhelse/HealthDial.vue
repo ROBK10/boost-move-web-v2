@@ -60,7 +60,7 @@ const scoreAccent = computed(() => {
           :cy="cy"
           :r="r"
           fill="none"
-          stroke="rgba(17,24,39,0.06)"
+          stroke="rgba(209,231,229,0.06)"
           stroke-width="2"
         />
 
@@ -72,7 +72,7 @@ const scoreAccent = computed(() => {
           :y1="d.y1"
           :x2="d.x2"
           :y2="d.y2"
-          :stroke="d.tracked ? 'rgba(16,185,129,0.95)' : 'rgba(17,24,39,0.18)'"
+          :stroke="d.tracked ? 'rgba(16,185,129,0.95)' : 'rgba(209,231,229,0.15)'"
           stroke-width="4"
           stroke-linecap="round"
         />
@@ -114,7 +114,7 @@ const scoreAccent = computed(() => {
   font-size: 64px;
   font-weight: 950;
   letter-spacing: -0.05em;
-  color: #0b0f17;
+  color: #FFFFFF;
   line-height: 1;
 }
 
@@ -123,7 +123,7 @@ const scoreAccent = computed(() => {
   font-size: 14px;
   font-weight: 900;
   letter-spacing: 0.18em;
-  color: rgba(17, 24, 39, 0.35);
+  color: rgba(209,231,229,0.35);
 }
 
 /* tiny soft glow */

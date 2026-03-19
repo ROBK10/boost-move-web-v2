@@ -42,14 +42,41 @@ model User {
   bio          String?
   avatarUrl    String?
 
+  // Onboarding & mål
+  onboardingDone Boolean  @default(false)
+  weeklyGoal     Int      @default(150)
+  focusPillars   String?  // JSON: ["sovn", "bevegelse"]
+
+  // Min situasjon (kartlegging)
+  healthChallenge String?  // rygg/nakke/hodepine/ingen
+  biggestStruggle String?  // stress/sovn/motivasjon/smerter/ingen
+  motivation      String?  // mer_energi/mindre_smerter/bedre_humor/se_barn_vokse_opp
+
+  // Push-påminnelser
+  notifyDaily    Boolean  @default(true)
+  notifyTime     String   @default("09:00")
+
   createdAt    DateTime @default(now())
 
-  checkIns        DailyCheckIn[]
+  checkIns         DailyCheckIn[]
   minHelseCheckins MinHelseCheckin[]
-  boostEntries    BoostEntry[]
-  messages        Message[]
-  sentDMs         DirectMessage[] @relation("SentMessages")
-  receivedDMs     DirectMessage[] @relation("ReceivedMessages")
+  boostEntries     BoostEntry[]
+  messages         Message[]
+  sentDMs          DirectMessage[] @relation("SentMessages")
+  receivedDMs      DirectMessage[] @relation("ReceivedMessages")
+  pushSubscriptions PushSubscription[]
+}
+
+model PushSubscription {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  endpoint  String
+  p256dh    String
+  auth      String
+  createdAt DateTime @default(now())
+
+  @@unique([userId, endpoint])
 }
 
 model Message {
@@ -89,12 +116,20 @@ model DailyCheckIn {
   // Context
   context       String
 
-  // Inputs fra bruker
+  // Inputs fra bruker (5 helsepilarer)
+  // movement = bevegelse (ingen/lett/moderat/aktiv)
+  // body     = stillesitting (ingen_pauser/noen/regelmessig)
+  // energy   = søvn (under_5/5_6/7_8/over_8)
+  // context  = kosthold (ingen/1_2/3_4/5_pluss)
+  // mental   = stressnivå (hoyt/middels/lavt)
+  // workplace = kontekst-tag (kontor/hjemme/felt) — metadata
   body          String
   energy        String
   movement      String
+  mental        String?
+  workplace     String?
 
-  // Spirometer-score (systemet regner, bruker ser ikke tall)
+  // Helsescore 0–100 (sum av 5 pilarer × 20)
   capacityScore Int
 
   createdAt     DateTime @default(now())

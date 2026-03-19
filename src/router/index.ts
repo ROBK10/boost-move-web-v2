@@ -11,6 +11,7 @@ import Profil from "@/views/Profil.vue"
 import ProfileSettings from "@/views/profile/ProfileSettings.vue"
 import ProfilePersonal from "@/views/profile/ProfilePersonal.vue"
 import ProfilePrivacy from "@/views/profile/ProfilePrivacy.vue"
+import MinSituasjon from "@/views/profile/MinSituasjon.vue"
 import Progresjon from "@/views/Progresjon.vue"
 import Login from "@/views/Login.vue"
 
@@ -26,6 +27,7 @@ import MalerDetail from "@/views/movin/MalerDetail.vue"
 import Fordeler from "@/views/movin/Fordeler.vue"
 import FordelerDetail from "@/views/movin/FordelerDetail.vue"
 import AdminPanel from "@/views/Admin.vue"
+import Helsekalkulator from "@/views/Helsekalkulator.vue"
 
 const routes: RouteRecordRaw[] = [
   { path: "/", redirect: "/hjem" },
@@ -39,7 +41,9 @@ const routes: RouteRecordRaw[] = [
   { path: "/profil/innstillinger", component: ProfileSettings },
   { path: "/profil/personlige-detaljer", component: ProfilePersonal },
   { path: "/profil/personvern", component: ProfilePrivacy },
+  { path: "/profil/min-situasjon", component: MinSituasjon },
   { path: "/progresjon", component: Progresjon },
+  { path: "/helsekalkulator", component: Helsekalkulator },
 
   {
     path: "/movin",

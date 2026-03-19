@@ -61,33 +61,33 @@ function onInput(e: Event) {
 .title {
   font-weight: 900;
   letter-spacing: -0.01em;
-  color: rgba(17, 24, 39, 0.92);
+  color: rgba(209,231,229,0.95);
 }
 
 .unit {
   font-size: 12px;
   font-weight: 900;
-  color: rgba(17, 24, 39, 0.45);
+  color: rgba(209,231,229,0.35);
 }
 
 .input {
   margin-top: 10px;
   width: 100%;
   padding: 12px 12px;
-  border: 1px solid rgba(17, 24, 39, 0.12);
+  border: 1px solid rgba(209,231,229,0.12);
   border-radius: 14px;
   font-weight: 800;
   outline: none;
 }
 
 .input:focus {
-  border-color: rgba(17, 24, 39, 0.28);
+  border-color: rgba(209,231,229,0.25);
 }
 
 .hint {
   margin-top: 8px;
   font-size: 12px;
   font-weight: 800;
-  color: rgba(17, 24, 39, 0.45);
+  color: rgba(209,231,229,0.35);
 }
 </style>

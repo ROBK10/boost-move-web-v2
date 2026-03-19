@@ -58,28 +58,28 @@ function iconChar() {
   border-radius: 30px;
   padding: 20px;
   min-height: 190px;
-  background: white;
-  box-shadow: 0 14px 40px rgba(20, 20, 20, 0.06);
-  color: #111827;
+  background: #023238;
+  box-shadow: 0 14px 40px rgba(0,0,0,0.25);
+  color: #FFFFFF;
   overflow: hidden;
   transition: transform 120ms ease, box-shadow 120ms ease;
 }
 
 .tile:hover {
   transform: translateY(-1px);
-  box-shadow: 0 18px 52px rgba(20, 20, 20, 0.08);
+  box-shadow: 0 18px 52px rgba(0,0,0,0.3);
 }
 
 .tile:focus-visible {
-  outline: 3px solid rgba(99, 102, 241, 0.25);
+  outline: 3px solid rgba(190, 242, 1, 0.25);
   outline-offset: 4px;
 }
 
 /* Dark (Boost Moment) */
 .tile.dark {
-  background: #0b0f17;
+  background: #023238;
   color: white;
-  box-shadow: 0 18px 60px rgba(17, 24, 39, 0.22);
+  box-shadow: 0 18px 60px rgba(0,0,0,0.35);
 }
 
 /* Icon box */
@@ -89,8 +89,8 @@ function iconChar() {
   border-radius: 18px;
   display: grid;
   place-items: center;
-  background: rgba(17, 24, 39, 0.05);
-  box-shadow: 0 10px 26px rgba(20, 20, 20, 0.08);
+  background: rgba(209,231,229,0.06);
+  box-shadow: 0 10px 26px rgba(0,0,0,0.3);
 }
 
 .iconBox.dark {
@@ -120,7 +120,7 @@ function iconChar() {
   margin-top: 10px;
   font-size: 16px;
   font-weight: 700;
-  color: rgba(17, 24, 39, 0.45);
+  color: rgba(209,231,229,0.35);
 }
 
 .tile.dark .subtitle {
@@ -135,7 +135,7 @@ function iconChar() {
   width: 44px;
   height: 44px;
   border-radius: 999px;
-  background: rgba(17, 24, 39, 0.06);
+  background: rgba(209,231,229,0.06);
   display: grid;
   place-items: center;
 }
@@ -147,8 +147,8 @@ function iconChar() {
 .chev {
   width: 14px;
   height: 14px;
-  border-right: 2px solid rgba(17, 24, 39, 0.55);
-  border-top: 2px solid rgba(17, 24, 39, 0.55);
+  border-right: 2px solid rgba(209,231,229,0.5);
+  border-top: 2px solid rgba(209,231,229,0.5);
   transform: rotate(45deg);
 }
 

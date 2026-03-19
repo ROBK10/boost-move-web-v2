@@ -57,11 +57,11 @@ const props = defineProps<{
 
 <style scoped>
 .card {
-  background: #0b0f17;
+  background: #023238;
   color: white;
   border-radius: 26px;
   padding: 18px;
-  box-shadow: 0 16px 40px rgba(17, 24, 39, 0.18);
+  box-shadow: 0 16px 40px rgba(0,0,0,0.3);
   min-height: 175px;
   display: flex;
   flex-direction: column;
@@ -73,11 +73,11 @@ const props = defineProps<{
 
 .card:hover {
   transform: translateY(-1px);
-  box-shadow: 0 20px 50px rgba(17, 24, 39, 0.22);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.35);
 }
 
 .card:focus-visible {
-  outline: 3px solid rgba(99, 102, 241, 0.25);
+  outline: 3px solid rgba(190, 242, 1, 0.25);
   outline-offset: 4px;
 }
 
@@ -137,8 +137,8 @@ const props = defineProps<{
   margin-top: 12px;
   border-radius: 999px;
   padding: 14px 16px;
-  background: white;
-  color: #111827;
+  background: #023238;
+  color: #FFFFFF;
   font-weight: 900;
   font-size: 15px;
   font-family: inherit;
@@ -153,8 +153,8 @@ const props = defineProps<{
 .arrow {
   width: 14px;
   height: 14px;
-  border-right: 2px solid rgba(17, 24, 39, 0.8);
-  border-top: 2px solid rgba(17, 24, 39, 0.8);
+  border-right: 2px solid rgba(209,231,229,0.6);
+  border-top: 2px solid rgba(209,231,229,0.6);
   transform: rotate(45deg);
 }
 </style>

@@ -96,15 +96,15 @@ const categoryLabel: Record<string, string> = {
 
 .back {
   width: 42px; height: 42px;
-  border: none; background: white; border-radius: 999px;
-  box-shadow: 0 10px 30px rgba(20, 20, 20, 0.08);
+  border: none; background: #023238; border-radius: 999px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
   cursor: pointer; display: grid; place-items: center; flex-shrink: 0;
 }
 
 .chev {
   width: 12px; height: 12px;
-  border-left: 2px solid rgba(17, 24, 39, 0.55);
-  border-bottom: 2px solid rgba(17, 24, 39, 0.55);
+  border-left: 2px solid rgba(209,231,229,0.5);
+  border-bottom: 2px solid rgba(209,231,229,0.5);
   transform: rotate(45deg);
 }
 
@@ -113,8 +113,8 @@ const categoryLabel: Record<string, string> = {
   font-weight: 900;
   letter-spacing: 0.07em;
   text-transform: uppercase;
-  color: rgba(17, 24, 39, 0.45);
-  background: rgba(17, 24, 39, 0.06);
+  color: rgba(209,231,229,0.35);
+  background: rgba(209,231,229,0.06);
   border-radius: 999px;
   padding: 6px 12px;
 }
@@ -124,7 +124,7 @@ const categoryLabel: Record<string, string> = {
   width: 100%;
   height: 220px;
   overflow: hidden;
-  background: rgba(17, 24, 39, 0.06);
+  background: rgba(209,231,229,0.06);
 }
 
 .heroImg {
@@ -145,7 +145,7 @@ const categoryLabel: Record<string, string> = {
   line-height: 1.15;
   font-weight: 900;
   letter-spacing: -0.03em;
-  color: #111827;
+  color: #FFFFFF;
 }
 
 /* Article content */
@@ -154,7 +154,7 @@ const categoryLabel: Record<string, string> = {
   font-size: 15px;
   line-height: 1.65;
   font-weight: 500;
-  color: rgba(17, 24, 39, 0.75);
+  color: #D1E7E5;
 }
 
 .content :deep(h1),
@@ -162,7 +162,7 @@ const categoryLabel: Record<string, string> = {
 .content :deep(h3) {
   font-size: 17px;
   font-weight: 900;
-  color: rgba(17, 24, 39, 0.90);
+  color: rgba(209,231,229,0.95);
   letter-spacing: -0.02em;
   margin: 20px 0 6px;
   line-height: 1.25;
@@ -184,17 +184,17 @@ const categoryLabel: Record<string, string> = {
 
 .content :deep(hr) {
   border: none;
-  border-top: 1px solid rgba(17, 24, 39, 0.08);
+  border-top: 1px solid rgba(209,231,229,0.1);
   margin: 20px 0;
 }
 
 .content :deep(a) {
-  color: rgba(17, 24, 39, 0.55);
+  color: rgba(209,231,229,0.6);
   text-decoration: underline;
 }
 
 .content :deep(em) {
-  color: rgba(17, 24, 39, 0.45);
+  color: rgba(209,231,229,0.35);
   font-style: normal;
 }
 
@@ -202,10 +202,10 @@ const categoryLabel: Record<string, string> = {
 .footer {
   margin: 24px 16px 0;
   padding: 20px;
-  background: white;
+  background: #023238;
   border-radius: 20px;
-  border: 1px solid rgba(17, 24, 39, 0.06);
-  box-shadow: 0 4px 16px rgba(17, 24, 39, 0.05);
+  border: 1px solid rgba(209,231,229,0.08);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.2);
   display: flex;
   flex-direction: column;
   gap: 14px;
@@ -219,7 +219,7 @@ const categoryLabel: Record<string, string> = {
   padding: 0 22px;
   border: none;
   border-radius: 14px;
-  background: #111827;
+  background: #023238;
   color: white;
   font-size: 14px;
   font-weight: 900;
@@ -236,7 +236,7 @@ const categoryLabel: Record<string, string> = {
 }
 .dlIcon::before {
   content: ""; position: absolute;
-  left: 7px; top: 1px; width: 2px; height: 9px; background: white;
+  left: 7px; top: 1px; width: 2px; height: 9px; background: #023238;
 }
 .dlIcon::after {
   content: ""; position: absolute;
@@ -248,7 +248,7 @@ const categoryLabel: Record<string, string> = {
 .copyright {
   font-size: 12px;
   font-weight: 600;
-  color: rgba(17, 24, 39, 0.28);
+  color: rgba(209,231,229,0.25);
   text-align: center;
 }
 
@@ -263,6 +263,6 @@ const categoryLabel: Record<string, string> = {
   margin-top: 20px;
   font-size: 15px;
   font-weight: 700;
-  color: rgba(17, 24, 39, 0.55);
+  color: rgba(209,231,229,0.6);
 }
 </style>

@@ -48,16 +48,33 @@ router.patch("/me", async (req: Request, res: Response) => {
   const userId = (req as any).user?.id
   if (!userId) return res.status(401).json({ error: "Ikke autentisert" })
 
-  const { name, bio } = req.body as { name?: string; bio?: string }
-  const data: Record<string, string> = {}
+  const { name, bio, onboardingDone, weeklyGoal, focusPillars, notifyDaily, notifyTime } = req.body as {
+    name?: string
+    bio?: string
+    onboardingDone?: boolean
+    weeklyGoal?: number
+    focusPillars?: string
+    notifyDaily?: boolean
+    notifyTime?: string
+  }
+  const data: Record<string, any> = {}
   if (name?.trim()) data.name = name.trim()
   if (bio !== undefined) data.bio = bio
+  if (onboardingDone !== undefined) data.onboardingDone = onboardingDone
+  if (weeklyGoal !== undefined) data.weeklyGoal = weeklyGoal
+  if (focusPillars !== undefined) data.focusPillars = focusPillars
+  if (notifyDaily !== undefined) data.notifyDaily = notifyDaily
+  if (notifyTime !== undefined) data.notifyTime = notifyTime
 
   try {
     const updated = await (prisma.user as any).update({
       where: { id: userId },
       data,
-      select: { id: true, email: true, name: true, role: true, companyId: true, bio: true, avatarUrl: true },
+      select: {
+        id: true, email: true, name: true, role: true, companyId: true,
+        bio: true, avatarUrl: true, onboardingDone: true, weeklyGoal: true,
+        focusPillars: true, notifyDaily: true, notifyTime: true,
+      },
     })
     res.json({ user: updated })
   } catch {

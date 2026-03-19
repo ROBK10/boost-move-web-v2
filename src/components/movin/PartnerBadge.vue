@@ -35,7 +35,7 @@ defineProps<{
 .name {
   font-size: 13px;
   font-weight: 700;
-  color: rgba(17, 24, 39, 0.45);
+  color: rgba(209,231,229,0.35);
   line-height: 1.3;
 }
 </style>

@@ -31,11 +31,11 @@ defineProps<{
 
 <style scoped>
 .card {
-  background: white;
+  background: #023238;
   border-radius: 22px;
   padding: 14px 14px 12px;
-  box-shadow: 0 12px 36px rgba(20, 20, 20, 0.06);
-  border: 1px solid rgba(17, 24, 39, 0.06);
+  box-shadow: 0 12px 36px rgba(0,0,0,0.25);
+  border: 1px solid rgba(209,231,229,0.08);
 }
 
 .top {
@@ -48,13 +48,13 @@ defineProps<{
 .t {
   font-weight: 900;
   letter-spacing: -0.02em;
-  color: rgba(17, 24, 39, 0.92);
+  color: rgba(209,231,229,0.95);
 }
 
 .hint {
   font-size: 12px;
   font-weight: 800;
-  color: rgba(17, 24, 39, 0.45);
+  color: rgba(209,231,229,0.35);
 }
 
 .grid {
@@ -67,7 +67,7 @@ defineProps<{
   width: 8px;
   height: 18px;
   border-radius: 999px;
-  background: rgba(17, 24, 39, 0.12);
+  background: rgba(209,231,229,0.1);
 }
 
 .dot.off {

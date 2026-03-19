@@ -1,25 +1,21 @@
 body {
   margin: 0;
-  font-family: system-ui, sans-serif;
-  background: #f9fafb;
-  color: #111827;
-  /* Prevent text size changes on orientation switch (iOS) */
+  font-family: var(--font-family);
+  background: var(--color-background);
+  color: var(--color-text);
   -webkit-text-size-adjust: 100%;
-  /* Smooth scroll for the whole app */
   scroll-behavior: smooth;
 }
 
-/* Remove tap highlight on all interactive elements */
 a, button, [role="button"], [tabindex] {
   -webkit-tap-highlight-color: transparent;
 }
 
-/* Prevent double-tap zoom delay on buttons */
 button, [role="button"] {
   touch-action: manipulation;
+  font-family: var(--font-family);
 }
 
-/* Box-sizing baseline */
 *, *::before, *::after {
   box-sizing: border-box;
 }

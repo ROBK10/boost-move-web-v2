@@ -91,27 +91,27 @@ function openDetail(slug: string) {
 
 .back {
   width: 44px; height: 44px;
-  border: none; background: white; border-radius: 999px;
-  box-shadow: 0 10px 30px rgba(20, 20, 20, 0.08);
+  border: none; background: #023238; border-radius: 999px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
   cursor: pointer; display: grid; place-items: center; flex-shrink: 0;
 }
 
 .chev {
   width: 12px; height: 12px;
-  border-left: 2px solid rgba(17, 24, 39, 0.55);
-  border-bottom: 2px solid rgba(17, 24, 39, 0.55);
+  border-left: 2px solid rgba(209,231,229,0.5);
+  border-bottom: 2px solid rgba(209,231,229,0.5);
   transform: rotate(45deg);
 }
 
 .title {
   margin: 0;
   font-size: 34px; line-height: 1.05;
-  font-weight: 900; letter-spacing: -0.03em; color: #111827;
+  font-weight: 900; letter-spacing: -0.03em; color: #FFFFFF;
 }
 
 .subtitle {
   margin: 6px 0 0;
-  font-size: 14px; font-weight: 700; color: rgba(17, 24, 39, 0.45);
+  font-size: 14px; font-weight: 700; color: rgba(209,231,229,0.35);
 }
 
 .list { display: flex; flex-direction: column; gap: 10px; }
@@ -120,8 +120,8 @@ function openDetail(slug: string) {
 
 .row {
   width: 100%;
-  border: 1px solid rgba(17, 24, 39, 0.07);
-  background: white;
+  border: 1px solid rgba(209,231,229,0.08);
+  background: #023238;
   border-radius: 20px;
   padding: 14px 16px;
   display: flex;
@@ -129,19 +129,19 @@ function openDetail(slug: string) {
   justify-content: space-between;
   gap: 12px;
   cursor: pointer;
-  box-shadow: 0 4px 16px rgba(17, 24, 39, 0.06);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.25);
   transition: box-shadow 160ms ease, background 120ms ease, border-color 160ms ease;
   text-align: left;
 }
 
-.row:active { background: rgba(17, 24, 39, 0.03); }
+.row:active { background: rgba(209,231,229,0.04); }
 
 .rowLeft { display: flex; align-items: center; gap: 12px; min-width: 0; }
 
 .thumb {
   width: 56px; height: 56px;
   border-radius: 14px;
-  background: rgba(17, 24, 39, 0.07);
+  background: rgba(209,231,229,0.08);
   flex-shrink: 0;
   overflow: hidden;
   position: relative;
@@ -150,9 +150,9 @@ function openDetail(slug: string) {
 }
 
 .thumb--logo {
-  background: white;
-  border: 1px solid rgba(17, 24, 39, 0.07);
-  box-shadow: 0 2px 8px rgba(17, 24, 39, 0.06);
+  background: #023238;
+  border: 1px solid rgba(209,231,229,0.08);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
   padding: 6px;
 }
 
@@ -169,20 +169,20 @@ function openDetail(slug: string) {
 
 .thumbPlaceholder {
   width: 100%; height: 100%;
-  background: rgba(17, 24, 39, 0.07);
+  background: rgba(209,231,229,0.08);
 }
 
 .rowText { min-width: 0; }
 
 .rowTitle {
   font-size: 15px; font-weight: 900;
-  color: rgba(17, 24, 39, 0.92); line-height: 1.2;
+  color: rgba(209,231,229,0.95); line-height: 1.2;
   display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
 }
 
 .rowPartner {
   margin-top: 3px;
-  font-size: 12px; font-weight: 700; color: rgba(17, 24, 39, 0.45);
+  font-size: 12px; font-weight: 700; color: rgba(209,231,229,0.35);
 }
 
 .rowActions {
@@ -194,16 +194,16 @@ function openDetail(slug: string) {
 
 .starBtn {
   width: 34px; height: 34px;
-  background: rgba(17,24,39,0.05); border: none; border-radius: 999px;
+  background: rgba(209,231,229,0.06); border: none; border-radius: 999px;
   display: grid; place-items: center; cursor: pointer;
   transition: background 120ms ease;
 }
-.starBtn:active { background: rgba(17,24,39,0.10); }
+.starBtn:active { background: rgba(209,231,229,0.1); }
 .starBtn.active { background: rgba(251,191,36,0.18); }
 
 .starIcon {
   width: 16px; height: 16px; display: block;
-  background: rgba(17,24,39,0.35);
+  background: rgba(209,231,229,0.3);
   clip-path: polygon(50% 0%,62% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,38% 35%);
   transition: background 120ms ease;
 }
@@ -211,15 +211,15 @@ function openDetail(slug: string) {
 
 .chevRight {
   width: 10px; height: 10px; flex-shrink: 0;
-  border-right: 2px solid rgba(17, 24, 39, 0.32);
-  border-bottom: 2px solid rgba(17, 24, 39, 0.32);
+  border-right: 2px solid rgba(209,231,229,0.25);
+  border-bottom: 2px solid rgba(209,231,229,0.25);
   transform: rotate(-45deg);
 }
 
 .donePill {
   display: inline-flex; align-items: center; gap: 4px;
   font-size: 10px; font-weight: 800;
-  color: rgba(17,24,39,0.65);
+  color: rgba(209,231,229,0.6);
   background: rgba(185,255,0,0.25);
   border-radius: 999px;
   padding: 2px 7px 2px 5px;
@@ -237,7 +237,7 @@ function openDetail(slug: string) {
 
 .empty {
   font-size: 14px; font-weight: 700;
-  color: rgba(17, 24, 39, 0.38); padding: 20px 4px; text-align: center;
+  color: rgba(209,231,229,0.35); padding: 20px 4px; text-align: center;
 }
 
 </style>

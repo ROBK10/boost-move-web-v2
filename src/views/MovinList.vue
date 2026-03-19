@@ -116,21 +116,21 @@ function goBoostMoment() {
   line-height: 1.05;
   font-weight: 900;
   letter-spacing: -0.03em;
-  color: #111827;
+  color: #FFFFFF;
 }
 
 .subtitle {
   margin: 8px 0 0;
   font-size: 14px;
   font-weight: 700;
-  color: rgba(17, 24, 39, 0.45);
+  color: rgba(209,231,229,0.35);
 }
 
 /* Boost Moment shortcut */
 .boostBtn {
   width: 100%;
   border: none;
-  background: #111827;
+  background: #023238;
   border-radius: 20px;
   padding: 16px 18px;
   display: flex;
@@ -182,21 +182,21 @@ function goBoostMoment() {
 
 .filterBtn {
   flex-shrink: 0;
-  border: 1.5px solid rgba(17, 24, 39, 0.10);
-  background: white;
+  border: 1.5px solid rgba(209,231,229,0.1);
+  background: #023238;
   border-radius: 999px;
   padding: 8px 16px;
   font-size: 13px;
   font-weight: 800;
-  color: rgba(17, 24, 39, 0.55);
+  color: rgba(209,231,229,0.6);
   cursor: pointer;
   transition: background 120ms ease, color 120ms ease, border-color 120ms ease;
   white-space: nowrap;
 }
 
 .filterBtn.active {
-  background: #111827;
-  border-color: #111827;
+  background: #023238;
+  border-color: #FFFFFF;
   color: white;
 }
 
@@ -210,23 +210,23 @@ function goBoostMoment() {
 /* Card */
 .card {
   width: 100%;
-  border: 1px solid rgba(17, 24, 39, 0.06);
-  background: white;
+  border: 1px solid rgba(209,231,229,0.08);
+  background: #023238;
   border-radius: 20px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
   cursor: pointer;
   text-align: left;
-  box-shadow: 0 2px 10px rgba(17, 24, 39, 0.05);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
   transition: box-shadow 120ms ease;
 }
-.card:active { box-shadow: 0 4px 18px rgba(17, 24, 39, 0.10); }
+.card:active { box-shadow: 0 4px 18px rgba(0,0,0,0.25); }
 
 .cardImg {
   width: 100%;
   height: 160px;
-  background: rgba(17, 24, 39, 0.06);
+  background: rgba(209,231,229,0.06);
   flex-shrink: 0;
   overflow: hidden;
 }
@@ -241,7 +241,7 @@ function goBoostMoment() {
 .imgPlaceholder {
   width: 100%;
   height: 100%;
-  background: rgba(17, 24, 39, 0.06);
+  background: rgba(209,231,229,0.06);
 }
 
 .cardBody {
@@ -256,13 +256,13 @@ function goBoostMoment() {
   font-weight: 900;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: rgba(17, 24, 39, 0.38);
+  color: rgba(209,231,229,0.35);
 }
 
 .cardTitle {
   font-size: 16px;
   font-weight: 900;
-  color: rgba(17, 24, 39, 0.92);
+  color: rgba(209,231,229,0.95);
   letter-spacing: -0.01em;
   line-height: 1.25;
 }
@@ -270,13 +270,13 @@ function goBoostMoment() {
 .cardPartner {
   font-size: 12px;
   font-weight: 700;
-  color: rgba(17, 24, 39, 0.45);
+  color: rgba(209,231,229,0.35);
 }
 
 .empty {
   font-size: 14px;
   font-weight: 700;
-  color: rgba(17, 24, 39, 0.38);
+  color: rgba(209,231,229,0.35);
   padding: 20px 4px;
   text-align: center;
 }
